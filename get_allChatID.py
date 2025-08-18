@@ -1,9 +1,17 @@
 from telethon import TelegramClient
+from dotenv import load_dotenv
+import os
 
-api_id = 20308310
-api_hash = 'd50674e451f373a5bde51e2f29c2e221'
+# =======================
+# Загружаем переменные из .env
+# =======================
+load_dotenv()
 
-client = TelegramClient('session_name', api_id, api_hash)
+api_id = int(os.getenv("API_ID"))
+api_hash = os.getenv("API_HASH")
+telegram_session_name = os.getenv("SESSION_NAME")
+
+client = TelegramClient(telegram_session_name, api_id, api_hash)
 
 async def main():
     await client.start()

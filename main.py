@@ -4,7 +4,22 @@ from datetime import datetime, timedelta
 import pytz
 from telethon import TelegramClient
 from telethon.errors import FloodWaitError, RPCError
-from config import TEST_TARGETS, TARGETS, MESSAGES
+from config_mes import MESSAGES
+from config_targ import TEST_TARGETS, TARGETS
+from update_config import update_config
+import schedule
+import time
+from dotenv import load_dotenv
+import os
+
+# =======================
+# Загружаем переменные из .env
+# =======================
+load_dotenv()
+
+api_id = int(os.getenv("API_ID"))
+api_hash = os.getenv("API_HASH")
+telegram_session_name = os.getenv("SESSION_NAME")
 
 # ==================
 # НАСТРОЙКА ЛОГГЕРА
@@ -20,26 +35,30 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-api_id = 20308310
-api_hash = 'd50674e451f373a5bde51e2f29c2e221'
 
-client = TelegramClient('session_name', api_id, api_hash)
+client = TelegramClient(telegram_session_name, api_id, api_hash)
 
 # Server: 87.248.134.64
 # Port: 8888
 # Secret: 79e344818749bd7ac519130220c25d09
 
 # Если хотите использовать MTProto Proxy:
-proxy = ('87.248.134.64', 8888, '79e344818749bd7ac519130220c25d09')  # пример формата (IP, порт, секрет)
+proxy = ('87.248.134.64', 8888, '79e344818749bd7ac519130220c25d09')  # (IP, порт, секрет)
 
 # Используем либо тестовые цели, либо реальные
-# targets = TEST_TARGETS  # можно заменить на TARGETS когда будем отправлять в реальные чаты
-targets = TARGETS  # можно заменить на TARGETS когда будем отправлять в реальные чаты
+targets = TEST_TARGETS  # можно заменить на TARGETS когда будем отправлять в реальные чаты
+# targets = TARGETS  # можно заменить на TARGETS когда будем отправлять в реальные чаты
 
 # ==================
 # ВРЕМЕННОЕ ОГРАНИЧЕНИЕ
 # ==================
 moscow_tz = pytz.timezone("Europe/Moscow")
+
+# Сразу обновим при старте
+update_config()
+
+# Планируем обновление каждый день в 03:00
+schedule.every().day.at("03:00").do(update_config)
 
 def wait_until_start_time():
     """Ждёт до 06:00 по Москве, если сейчас ночь."""
@@ -82,6 +101,7 @@ async def send_messages():
 
 async def main():
     while True:
+        # При тестах по ночам -> Закомментить что бы скрипт пошел ночью
         wait_time = wait_until_start_time()
         if wait_time > 0:
             await asyncio.sleep(wait_time)
@@ -100,6 +120,10 @@ async def main():
             print(f"Ошибка подключения или выполнения: {e}. Переподключаемся через 60 секунд...")
             logger.error(f"Ошибка подключения или выполнения: {e}. Переподключаемся через 60 секунд...")
             await asyncio.sleep(60)
+
+        # Проверка и запуск запланированных задач
+        schedule.run_pending()
+        time.sleep(1)  # ждем 1 секунду
 
 if __name__ == "__main__":
     with client:

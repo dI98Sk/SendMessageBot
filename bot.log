@@ -90,3 +90,117 @@
 2025-08-16 02:03:59,207 [INFO] Connecting to 149.154.167.51:443/TcpFull...
 2025-08-16 02:03:59,254 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
 2025-08-16 02:03:59,802 [INFO] Сейчас 02:03, ждём до 06:00 (236.0 мин.)
+2025-08-16 02:11:15,550 [INFO] Got difference for channel 2323347764 updates
+2025-08-16 02:12:19,718 [INFO] Disconnecting from 149.154.167.51:443/TcpFull...
+2025-08-16 02:12:19,719 [INFO] Disconnection from 149.154.167.51:443/TcpFull complete!
+2025-08-18 01:20:30,152 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-08-18 01:20:30,201 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-08-18 01:20:30,767 [INFO] Сейчас 01:20, ждём до 06:00 (279.5 мин.)
+2025-08-18 01:20:58,006 [INFO] Disconnecting from 149.154.167.51:443/TcpFull...
+2025-08-18 01:20:58,007 [INFO] Disconnection from 149.154.167.51:443/TcpFull complete!
+2025-08-18 01:46:57,296 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-08-18 01:46:57,350 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-08-18 01:46:57,891 [INFO] Подключаемся к Telegram...
+2025-08-18 01:46:58,009 [INFO] Подключение успешно!
+2025-08-18 01:46:58,009 [INFO] Начинаем рассылку сообщения №1
+2025-08-18 01:46:58,176 [INFO] Отправлено сообщение №1 в -1002679672234
+2025-08-18 01:47:03,272 [INFO] Отправлено сообщение №1 в -1002805990284
+2025-08-18 01:47:08,274 [INFO] Цикл завершён. Ждём 15 минут...
+2025-08-18 01:55:28,059 [INFO] Disconnecting from 149.154.167.51:443/TcpFull...
+2025-08-18 01:55:28,061 [INFO] Disconnection from 149.154.167.51:443/TcpFull complete!
+2025-08-18 01:55:31,168 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-08-18 01:55:31,219 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-08-18 01:56:00,435 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-08-18 01:56:00,489 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-08-18 01:57:18,018 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-08-18 01:57:20,111 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-08-18 01:58:38,469 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-08-18 01:58:38,560 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-08-18 02:00:07,654 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-08-18 02:00:07,703 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-08-18 02:00:40,908 [WARNING] Telegram is having internal issues AuthRestartError: Restart the authorization process (caused by SendCodeRequest)
+2025-08-18 02:03:32,646 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-08-18 02:03:32,728 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-08-18 02:03:33,174 [INFO] Подключаемся к Telegram...
+2025-08-18 02:03:33,242 [INFO] Подключение успешно!
+2025-08-18 02:03:33,244 [INFO] Начинаем рассылку сообщения №1
+2025-08-18 02:03:33,433 [INFO] Отправлено сообщение №1 в -1002679672234
+2025-08-18 02:03:38,741 [INFO] Отправлено сообщение №1 в -1002805990284
+2025-08-18 02:03:43,742 [INFO] Начинаем рассылку сообщения №2
+2025-08-18 02:03:43,937 [INFO] Отправлено сообщение №2 в -1002679672234
+2025-08-18 02:03:50,130 [INFO] Отправлено сообщение №2 в -1002805990284
+2025-08-18 02:03:55,133 [INFO] Начинаем рассылку сообщения №3
+2025-08-18 02:03:55,223 [INFO] Отправлено сообщение №3 в -1002679672234
+2025-08-18 02:03:59,445 [INFO] Disconnecting from 149.154.167.51:443/TcpFull...
+2025-08-18 02:03:59,445 [INFO] Disconnection from 149.154.167.51:443/TcpFull complete!
+2025-08-18 02:46:09,829 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-08-18 02:46:09,891 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-08-18 02:46:15,153 [ERROR] Task was destroyed but it is pending!
+task: <Task pending name='Task-2' coro=<Connection._send_loop() running at /Users/papaskakun/PycharmProjects/SendMessageBot/.venv/lib/python3.12/site-packages/telethon/network/connection/connection.py:322> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-08-18 02:46:15,153 [ERROR] Task was destroyed but it is pending!
+task: <Task pending name='Task-3' coro=<Connection._recv_loop() running at /Users/papaskakun/PycharmProjects/SendMessageBot/.venv/lib/python3.12/site-packages/telethon/network/connection/connection.py:341> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-08-18 02:46:15,153 [ERROR] Task was destroyed but it is pending!
+task: <Task pending name='Task-4' coro=<MTProtoSender._send_loop() running at /Users/papaskakun/PycharmProjects/SendMessageBot/.venv/lib/python3.12/site-packages/telethon/network/mtprotosender.py:464> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-08-18 02:46:15,153 [ERROR] Task was destroyed but it is pending!
+task: <Task pending name='Task-5' coro=<MTProtoSender._recv_loop() running at /Users/papaskakun/PycharmProjects/SendMessageBot/.venv/lib/python3.12/site-packages/telethon/network/mtprotosender.py:507> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-08-18 02:46:48,392 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-08-18 02:46:48,440 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-08-18 02:46:53,700 [ERROR] Task was destroyed but it is pending!
+task: <Task pending name='Task-2' coro=<Connection._send_loop() running at /Users/papaskakun/PycharmProjects/SendMessageBot/.venv/lib/python3.12/site-packages/telethon/network/connection/connection.py:322> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-08-18 02:46:53,700 [ERROR] Task was destroyed but it is pending!
+task: <Task pending name='Task-3' coro=<Connection._recv_loop() running at /Users/papaskakun/PycharmProjects/SendMessageBot/.venv/lib/python3.12/site-packages/telethon/network/connection/connection.py:341> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-08-18 02:46:53,700 [ERROR] Task was destroyed but it is pending!
+task: <Task pending name='Task-4' coro=<MTProtoSender._send_loop() running at /Users/papaskakun/PycharmProjects/SendMessageBot/.venv/lib/python3.12/site-packages/telethon/network/mtprotosender.py:464> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-08-18 02:46:53,700 [ERROR] Task was destroyed but it is pending!
+task: <Task pending name='Task-5' coro=<MTProtoSender._recv_loop() running at /Users/papaskakun/PycharmProjects/SendMessageBot/.venv/lib/python3.12/site-packages/telethon/network/mtprotosender.py:507> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-08-18 02:48:09,877 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-08-18 02:48:09,938 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-08-18 02:48:15,196 [ERROR] Task was destroyed but it is pending!
+task: <Task pending name='Task-2' coro=<Connection._send_loop() running at /Users/papaskakun/PycharmProjects/SendMessageBot/.venv/lib/python3.12/site-packages/telethon/network/connection/connection.py:322> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-08-18 02:48:15,196 [ERROR] Task was destroyed but it is pending!
+task: <Task pending name='Task-3' coro=<Connection._recv_loop() running at /Users/papaskakun/PycharmProjects/SendMessageBot/.venv/lib/python3.12/site-packages/telethon/network/connection/connection.py:341> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-08-18 02:48:15,196 [ERROR] Task was destroyed but it is pending!
+task: <Task pending name='Task-4' coro=<MTProtoSender._send_loop() running at /Users/papaskakun/PycharmProjects/SendMessageBot/.venv/lib/python3.12/site-packages/telethon/network/mtprotosender.py:464> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-08-18 02:48:15,196 [ERROR] Task was destroyed but it is pending!
+task: <Task pending name='Task-5' coro=<MTProtoSender._recv_loop() running at /Users/papaskakun/PycharmProjects/SendMessageBot/.venv/lib/python3.12/site-packages/telethon/network/mtprotosender.py:507> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-08-18 02:48:27,322 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-08-18 02:48:28,678 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-08-18 02:51:57,085 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-08-18 02:51:58,599 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-08-18 02:52:20,716 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-08-18 02:52:22,688 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-08-18 02:53:28,819 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-08-18 02:53:30,308 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-08-18 02:53:59,946 [INFO] Подключаемся к Telegram...
+2025-08-18 02:54:00,016 [INFO] Подключение успешно!
+2025-08-18 02:54:00,016 [INFO] Начинаем рассылку сообщения №1
+2025-08-18 02:54:00,173 [INFO] Отправлено сообщение №1 в -1002679672234
+2025-08-18 02:54:05,491 [INFO] Отправлено сообщение №1 в -1002805990284
+2025-08-18 02:54:10,492 [INFO] Начинаем рассылку сообщения №2
+2025-08-18 02:54:10,577 [INFO] Отправлено сообщение №2 в -1002679672234
+2025-08-18 02:54:15,679 [INFO] Отправлено сообщение №2 в -1002805990284
+2025-08-18 02:54:19,883 [INFO] Disconnecting from 149.154.167.51:443/TcpFull...
+2025-08-18 02:54:19,883 [INFO] Disconnection from 149.154.167.51:443/TcpFull complete!
+2025-08-18 02:58:01,377 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-08-18 02:58:01,449 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-08-18 02:58:01,766 [INFO] Подключаемся к Telegram...
+2025-08-18 02:58:01,829 [INFO] Подключение успешно!
+2025-08-18 02:58:01,829 [INFO] Начинаем рассылку сообщения №1
+2025-08-18 02:58:01,924 [INFO] Отправлено сообщение №1 в -1002679672234
+2025-08-18 02:58:07,079 [INFO] Отправлено сообщение №1 в -1002805990284
+2025-08-18 02:58:07,647 [INFO] Got difference for channel 2805990284 updates
+2025-08-18 02:58:12,081 [INFO] Начинаем рассылку сообщения №2
+2025-08-18 02:58:12,203 [INFO] Отправлено сообщение №2 в -1002679672234
+2025-08-18 02:58:17,289 [INFO] Отправлено сообщение №2 в -1002805990284
+2025-08-18 02:58:20,911 [INFO] Disconnecting from 149.154.167.51:443/TcpFull...
+2025-08-18 02:58:20,912 [INFO] Disconnection from 149.154.167.51:443/TcpFull complete!
+2025-08-18 02:58:36,636 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-08-18 02:58:36,683 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-08-18 02:58:37,038 [INFO] Сейчас 02:58, ждём до 06:00 (181.4 мин.)
+2025-08-18 02:59:00,120 [INFO] Disconnecting from 149.154.167.51:443/TcpFull...
+2025-08-18 02:59:00,121 [INFO] Disconnection from 149.154.167.51:443/TcpFull complete!
+2025-08-18 03:01:21,947 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-08-18 03:01:22,029 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-08-18 03:01:22,669 [INFO] Сейчас 03:01, ждём до 06:00 (178.6 мин.)
+2025-08-18 03:01:26,006 [INFO] Disconnecting from 149.154.167.51:443/TcpFull...
+2025-08-18 03:01:26,007 [INFO] Disconnection from 149.154.167.51:443/TcpFull complete!
