@@ -204,3 +204,203 @@ task: <Task pending name='Task-5' coro=<MTProtoSender._recv_loop() running at /U
 2025-08-18 03:01:22,669 [INFO] Сейчас 03:01, ждём до 06:00 (178.6 мин.)
 2025-08-18 03:01:26,006 [INFO] Disconnecting from 149.154.167.51:443/TcpFull...
 2025-08-18 03:01:26,007 [INFO] Disconnection from 149.154.167.51:443/TcpFull complete!
+2025-08-19 10:12:19,315 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-08-19 10:12:19,360 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-08-19 10:12:19,696 [INFO] Подключаемся к Telegram...
+2025-08-19 10:12:19,759 [INFO] Подключение успешно!
+2025-08-19 10:12:19,760 [INFO] Цикл завершён. Ждём 15 минут...
+2025-08-19 10:13:38,050 [INFO] Disconnecting from 149.154.167.51:443/TcpFull...
+2025-08-19 10:13:38,051 [INFO] Disconnection from 149.154.167.51:443/TcpFull complete!
+2025-08-19 10:13:43,108 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-08-19 10:13:43,156 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-08-19 10:13:43,902 [INFO] Подключаемся к Telegram...
+2025-08-19 10:13:44,037 [INFO] Подключение успешно!
+2025-08-19 10:13:44,037 [INFO] Начинаем рассылку сообщения №1
+2025-08-19 10:13:44,222 [INFO] Отправлено сообщение №1 в -1002679672234
+2025-08-19 10:13:49,365 [INFO] Отправлено сообщение №1 в -1002805990284
+2025-08-19 10:13:54,366 [INFO] Начинаем рассылку сообщения №2
+2025-08-19 10:13:54,555 [INFO] Отправлено сообщение №2 в -1002679672234
+2025-08-19 10:13:59,773 [INFO] Отправлено сообщение №2 в -1002805990284
+2025-08-19 10:14:04,775 [INFO] Начинаем рассылку сообщения №3
+2025-08-19 10:14:04,941 [INFO] Отправлено сообщение №3 в -1002679672234
+2025-08-19 10:14:10,082 [INFO] Отправлено сообщение №3 в -1002805990284
+2025-08-19 10:14:15,084 [INFO] Начинаем рассылку сообщения №4
+2025-08-19 10:14:15,210 [INFO] Отправлено сообщение №4 в -1002679672234
+2025-08-19 10:14:20,312 [INFO] Отправлено сообщение №4 в -1002805990284
+2025-08-19 10:14:25,313 [INFO] Начинаем рассылку сообщения №5
+2025-08-19 10:14:25,484 [INFO] Отправлено сообщение №5 в -1002679672234
+2025-08-19 10:14:30,586 [INFO] Отправлено сообщение №5 в -1002805990284
+2025-08-19 10:14:35,588 [INFO] Начинаем рассылку сообщения №6
+2025-08-19 10:14:35,735 [INFO] Отправлено сообщение №6 в -1002679672234
+2025-08-19 10:14:40,841 [INFO] Отправлено сообщение №6 в -1002805990284
+2025-08-19 10:14:45,843 [INFO] Начинаем рассылку сообщения №7
+2025-08-19 10:14:45,950 [INFO] Отправлено сообщение №7 в -1002679672234
+2025-08-19 10:14:51,137 [INFO] Отправлено сообщение №7 в -1002805990284
+2025-08-19 10:14:56,139 [INFO] Начинаем рассылку сообщения №8
+2025-08-19 10:14:56,241 [INFO] Отправлено сообщение №8 в -1002679672234
+2025-08-19 10:15:01,470 [INFO] Отправлено сообщение №8 в -1002805990284
+2025-08-19 10:15:06,471 [INFO] Начинаем рассылку сообщения №9
+2025-08-19 10:15:06,637 [INFO] Отправлено сообщение №9 в -1002679672234
+2025-08-19 10:15:11,798 [INFO] Отправлено сообщение №9 в -1002805990284
+2025-08-19 10:15:16,798 [INFO] Начинаем рассылку сообщения №10
+2025-08-19 10:15:17,015 [INFO] Отправлено сообщение №10 в -1002679672234
+2025-08-19 10:15:22,170 [INFO] Отправлено сообщение №10 в -1002805990284
+2025-08-19 10:15:27,172 [INFO] Начинаем рассылку сообщения №11
+2025-08-19 10:15:27,276 [INFO] Отправлено сообщение №11 в -1002679672234
+2025-08-19 10:15:32,391 [INFO] Отправлено сообщение №11 в -1002805990284
+2025-08-19 10:15:37,393 [INFO] Цикл завершён. Ждём 15 минут...
+2025-08-19 10:15:40,809 [INFO] Disconnecting from 149.154.167.51:443/TcpFull...
+2025-08-19 10:15:40,810 [INFO] Disconnection from 149.154.167.51:443/TcpFull complete!
+2025-09-18 22:44:28,273 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-09-18 22:44:29,783 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-09-18 23:10:09,361 [WARNING] Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2025-09-18 23:10:09,363 [INFO] Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2025-09-18 23:10:09,364 [INFO] Closing current connection to begin reconnect...
+2025-09-18 23:10:09,364 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-09-18 23:10:09,421 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-09-18 23:10:09,479 [WARNING] Security error while unpacking a received message: Server replied with a wrong session ID (see FAQ for details)
+2025-09-18 23:10:36,500 [INFO] Подключаемся к Telegram...
+2025-09-18 23:10:36,580 [INFO] Подключение успешно!
+2025-09-18 23:10:36,580 [INFO] Начинаем рассылку сообщения №1
+2025-09-18 23:10:36,711 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001459724536: You're banned from sending messages in supergroups/channels (caused by SendMessageRequest)
+2025-09-18 23:10:41,879 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001465386299: You're banned from sending messages in supergroups/channels (caused by SendMessageRequest)
+2025-09-18 23:10:47,046 [ERROR] Ошибка RPC при отправке сообщения №1 в -1002814695489: You're banned from sending messages in supergroups/channels (caused by SendMessageRequest)
+2025-09-18 23:10:52,336 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001334460573: You're banned from sending messages in supergroups/channels (caused by SendMessageRequest)
+2025-09-18 23:10:57,491 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001260508096: You're banned from sending messages in supergroups/channels (caused by SendMessageRequest)
+2025-09-18 23:11:02,700 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001201314067: You're banned from sending messages in supergroups/channels (caused by SendMessageRequest)
+2025-09-18 23:11:07,870 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001344677793: You're banned from sending messages in supergroups/channels (caused by SendMessageRequest)
+2025-09-18 23:11:13,063 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001205203973: You're banned from sending messages in supergroups/channels (caused by SendMessageRequest)
+2025-09-18 23:11:18,192 [ERROR] Неизвестная ошибка при отправке сообщения №1 в -1002217655560: Could not find the input entity for PeerChannel(channel_id=2217655560) (PeerChannel). Please read https://docs.telethon.dev/en/stable/concepts/entities.html to find out more details.
+2025-09-18 23:11:23,349 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001673828053: You're banned from sending messages in supergroups/channels (caused by SendMessageRequest)
+2025-09-18 23:11:28,587 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001264785143: You're banned from sending messages in supergroups/channels (caused by SendMessageRequest)
+2025-09-18 23:11:33,764 [ERROR] Ошибка RPC при отправке сообщения №1 в -1002323347764: You're banned from sending messages in supergroups/channels (caused by SendMessageRequest)
+2025-09-18 23:11:38,932 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001055908983: You're banned from sending messages in supergroups/channels (caused by SendMessageRequest)
+2025-09-18 23:11:44,125 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001430610351: You're banned from sending messages in supergroups/channels (caused by SendMessageRequest)
+2025-09-18 23:11:46,024 [INFO] Got difference for channel 2837906582 updates
+2025-09-18 23:11:49,366 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001247235081: You're banned from sending messages in supergroups/channels (caused by SendMessageRequest)
+2025-09-18 23:11:54,550 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001426023232: You're banned from sending messages in supergroups/channels (caused by SendMessageRequest)
+2025-09-18 23:11:59,728 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001167575256: You're banned from sending messages in supergroups/channels (caused by SendMessageRequest)
+2025-09-18 23:12:04,883 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001202385106: You're banned from sending messages in supergroups/channels (caused by SendMessageRequest)
+2025-09-18 23:12:10,163 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001247724666: You're banned from sending messages in supergroups/channels (caused by SendMessageRequest)
+2025-09-18 23:12:15,351 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001419588487: You're banned from sending messages in supergroups/channels (caused by SendMessageRequest)
+2025-09-18 23:12:20,545 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001650533724: You're banned from sending messages in supergroups/channels (caused by SendMessageRequest)
+2025-09-18 23:12:24,400 [INFO] Disconnecting from 149.154.167.51:443/TcpFull...
+2025-09-18 23:12:24,400 [INFO] Disconnection from 149.154.167.51:443/TcpFull complete!
+2025-09-18 23:14:11,295 [INFO] Connecting to 149.154.167.51:443/TcpFull...
+2025-09-18 23:14:11,374 [INFO] Connection to 149.154.167.51:443/TcpFull complete!
+2025-09-18 23:14:11,887 [INFO] Подключаемся к Telegram...
+2025-09-18 23:14:11,962 [INFO] Подключение успешно!
+2025-09-18 23:14:11,963 [INFO] Начинаем рассылку сообщения №1
+2025-09-18 23:14:12,122 [INFO] Отправлено сообщение №1 в -1001459724536
+2025-09-18 23:14:17,342 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001465386299: You can't write in this chat (caused by SendMessageRequest)
+2025-09-18 23:14:22,452 [ERROR] Ошибка RPC при отправке сообщения №1 в -1002814695489: You can't write in this chat (caused by SendMessageRequest)
+2025-09-18 23:14:27,559 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001334460573: You can't write in this chat (caused by SendMessageRequest)
+2025-09-18 23:14:32,715 [INFO] Отправлено сообщение №1 в -1001260508096
+2025-09-18 23:14:37,887 [INFO] Отправлено сообщение №1 в -1001201314067
+2025-09-18 23:14:43,037 [INFO] Отправлено сообщение №1 в -1001344677793
+2025-09-18 23:14:43,690 [INFO] Got difference for channel 1344677793 updates
+2025-09-18 23:14:48,221 [INFO] Отправлено сообщение №1 в -1001205203973
+2025-09-18 23:14:53,326 [ERROR] Неизвестная ошибка при отправке сообщения №1 в -1002217655560: Could not find the input entity for PeerChannel(channel_id=2217655560) (PeerChannel). Please read https://docs.telethon.dev/en/stable/concepts/entities.html to find out more details.
+2025-09-18 23:14:58,540 [INFO] Отправлено сообщение №1 в -1001673828053
+2025-09-18 23:15:03,836 [INFO] Отправлено сообщение №1 в -1001264785143
+2025-09-18 23:15:09,085 [ERROR] Ошибка RPC при отправке сообщения №1 в -1002323347764: You can't write in this chat (caused by SendMessageRequest)
+2025-09-18 23:15:14,294 [INFO] Отправлено сообщение №1 в -1001055908983
+2025-09-18 23:15:19,436 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001430610351: You can't write in this chat (caused by SendMessageRequest)
+2025-09-18 23:15:24,647 [INFO] Got difference for account updates
+2025-09-18 23:15:24,659 [INFO] Отправлено сообщение №1 в -1001247235081
+2025-09-18 23:15:29,900 [INFO] Отправлено сообщение №1 в -1001426023232
+2025-09-18 23:15:32,224 [INFO] Got difference for channel 1233411209 updates
+2025-09-18 23:15:34,970 [INFO] Got difference for channel 1339705325 updates
+2025-09-18 23:15:35,123 [INFO] Отправлено сообщение №1 в -1001167575256
+2025-09-18 23:15:40,287 [INFO] Отправлено сообщение №1 в -1001202385106
+2025-09-18 23:15:40,893 [INFO] Got difference for channel 1202385106 updates
+2025-09-18 23:15:44,774 [INFO] Got difference for channel 1339705325 updates
+2025-09-18 23:15:45,451 [INFO] Отправлено сообщение №1 в -1001247724666
+2025-09-18 23:15:46,048 [INFO] Got difference for channel 1247724666 updates
+2025-09-18 23:15:50,625 [INFO] Отправлено сообщение №1 в -1001419588487
+2025-09-18 23:15:54,729 [INFO] Got difference for account updates
+2025-09-18 23:15:54,801 [INFO] Got difference for channel 1233411209 updates
+2025-09-18 23:15:54,897 [INFO] Got difference for channel 1733996046 updates
+2025-09-18 23:15:55,738 [ERROR] Ошибка RPC при отправке сообщения №1 в -1001650533724: You can't write in this chat (caused by SendMessageRequest)
+2025-09-18 23:16:00,921 [INFO] Отправлено сообщение №1 в -1002424091888
+2025-09-18 23:16:06,195 [INFO] Отправлено сообщение №1 в -1001741002498
+2025-09-18 23:16:11,197 [INFO] Начинаем рассылку сообщения №2
+2025-09-18 23:16:11,369 [INFO] Отправлено сообщение №2 в -1001459724536
+2025-09-18 23:16:16,535 [ERROR] Ошибка RPC при отправке сообщения №2 в -1001465386299: You can't write in this chat (caused by SendMessageRequest)
+2025-09-18 23:16:19,142 [INFO] Got difference for channel 1176964113 updates
+2025-09-18 23:16:21,720 [ERROR] Ошибка RPC при отправке сообщения №2 в -1002814695489: You can't write in this chat (caused by SendMessageRequest)
+2025-09-18 23:16:22,297 [INFO] Got difference for channel 1339705325 updates
+2025-09-18 23:16:26,651 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:16:26,719 [INFO] Got difference for channel 1176964113 updates
+2025-09-18 23:16:26,789 [ERROR] Ошибка RPC при отправке сообщения №2 в -1001334460573: You can't write in this chat (caused by SendMessageRequest)
+2025-09-18 23:16:30,325 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:16:31,960 [INFO] Отправлено сообщение №2 в -1001260508096
+2025-09-18 23:16:32,456 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:16:34,959 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:16:37,762 [INFO] Отправлено сообщение №2 в -1001201314067
+2025-09-18 23:16:42,993 [INFO] Отправлено сообщение №2 в -1001344677793
+2025-09-18 23:16:43,447 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:16:43,530 [INFO] Got difference for channel 1339705325 updates
+2025-09-18 23:16:43,611 [INFO] Got difference for channel 1344677793 updates
+2025-09-18 23:16:45,017 [INFO] Got difference for channel 1176964113 updates
+2025-09-18 23:16:48,182 [INFO] Отправлено сообщение №2 в -1001205203973
+2025-09-18 23:16:48,671 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:16:53,288 [ERROR] Неизвестная ошибка при отправке сообщения №2 в -1002217655560: Could not find the input entity for PeerChannel(channel_id=2217655560) (PeerChannel). Please read https://docs.telethon.dev/en/stable/concepts/entities.html to find out more details.
+2025-09-18 23:16:53,885 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:16:57,010 [INFO] Got difference for channel 1373527930 updates
+2025-09-18 23:16:57,094 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:16:57,169 [INFO] Got difference for channel 1339705325 updates
+2025-09-18 23:17:01,965 [INFO] Отправлено сообщение №2 в -1001673828053
+2025-09-18 23:17:02,026 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:17:07,187 [INFO] Отправлено сообщение №2 в -1001264785143
+2025-09-18 23:17:07,687 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:17:11,125 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:17:11,216 [INFO] Got difference for channel 1339705325 updates
+2025-09-18 23:17:12,273 [ERROR] Ошибка RPC при отправке сообщения №2 в -1002323347764: You can't write in this chat (caused by SendMessageRequest)
+2025-09-18 23:17:12,938 [INFO] Got difference for channel 1233411209 updates
+2025-09-18 23:17:15,139 [INFO] Got difference for channel 1339705325 updates
+2025-09-18 23:17:16,269 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:17:17,458 [INFO] Отправлено сообщение №2 в -1001055908983
+2025-09-18 23:17:17,941 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:17:18,037 [INFO] Got difference for channel 1055908983 updates
+2025-09-18 23:17:19,976 [INFO] Got difference for channel 1233411209 updates
+2025-09-18 23:17:21,481 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:17:22,537 [ERROR] Ошибка RPC при отправке сообщения №2 в -1001430610351: You can't write in this chat (caused by SendMessageRequest)
+2025-09-18 23:17:25,546 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:17:25,612 [INFO] Got difference for channel 1907879847 updates
+2025-09-18 23:17:27,701 [INFO] Отправлено сообщение №2 в -1001247235081
+2025-09-18 23:17:29,671 [INFO] Got difference for channel 1438892351 updates
+2025-09-18 23:17:32,874 [INFO] Отправлено сообщение №2 в -1001426023232
+2025-09-18 23:17:33,365 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:17:38,062 [INFO] Отправлено сообщение №2 в -1001167575256
+2025-09-18 23:17:42,315 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:17:43,235 [INFO] Отправлено сообщение №2 в -1001202385106
+2025-09-18 23:17:45,347 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:17:47,829 [INFO] Got difference for channel 1373527930 updates
+2025-09-18 23:17:47,923 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:17:48,460 [INFO] Отправлено сообщение №2 в -1001247724666
+2025-09-18 23:17:50,329 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:17:53,684 [INFO] Отправлено сообщение №2 в -1001419588487
+2025-09-18 23:17:54,151 [INFO] Got difference for channel 1339705325 updates
+2025-09-18 23:17:56,050 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:17:58,787 [ERROR] Ошибка RPC при отправке сообщения №2 в -1001650533724: You can't write in this chat (caused by SendMessageRequest)
+2025-09-18 23:18:04,265 [INFO] Отправлено сообщение №2 в -1002424091888
+2025-09-18 23:18:04,471 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:18:08,708 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:18:08,789 [INFO] Got difference for channel 1176964113 updates
+2025-09-18 23:18:09,485 [INFO] Отправлено сообщение №2 в -1001741002498
+2025-09-18 23:18:11,955 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:18:14,487 [INFO] Начинаем рассылку сообщения №3
+2025-09-18 23:18:14,668 [INFO] Отправлено сообщение №3 в -1001459724536
+2025-09-18 23:18:15,174 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:18:17,330 [INFO] Got difference for channel 1373527930 updates
+2025-09-18 23:18:19,837 [ERROR] Ошибка RPC при отправке сообщения №3 в -1001465386299: You can't write in this chat (caused by SendMessageRequest)
+2025-09-18 23:18:20,151 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:18:25,638 [ERROR] Ошибка RPC при отправке сообщения №3 в -1002814695489: You can't write in this chat (caused by SendMessageRequest)
+2025-09-18 23:18:25,850 [INFO] Got difference for channel 1339705325 updates
+2025-09-18 23:18:26,463 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:18:31,084 [ERROR] Ошибка RPC при отправке сообщения №3 в -1001334460573: You can't write in this chat (caused by SendMessageRequest)
+2025-09-18 23:18:31,334 [INFO] Got difference for channel 1756683461 updates
+2025-09-18 23:18:31,414 [INFO] Got difference for channel 1380515487 updates
+2025-09-18 23:18:36,019 [INFO] Disconnecting from 149.154.167.51:443/TcpFull...
+2025-09-18 23:18:36,020 [INFO] Disconnection from 149.154.167.51:443/TcpFull complete!
