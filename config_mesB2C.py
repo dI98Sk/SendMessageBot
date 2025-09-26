@@ -1,0 +1,3 @@
+MESSAGESB2C = [
+
+]
