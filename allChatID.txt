@@ -3,13 +3,23 @@
 Стоп лист :
 Name: ПИТЕР ЭСКОРТ ЗНАКОМСТВА 18+, ID: -1001756683461, Username: ESCORT_PITER_GO
 Name: Работа/Подработка Киев, ID: -1001261758415, Username: rabota_kiev7
+Name: Реальный Фриланс, вакансии, работа, удаленка, ID: -1001487502707, Username: Happy_Freelanc
+Name: ХУ иЗ нас СЕКСИ фрАу, ID: -1001889869928, Username: DVIZH_TOMSK_AE
+Name: Общение дружба секс краснодар, ID: -1001941771047, Username: barahlo193
+Name: Фриланс Форекс и Удаленная Работа Вакансии, ID: -1001281981623, Username: CoronaJobsKiev
+Name: МОСКВА купи-продай, ID: -1001802665659, Username: moscow_chat_ru
+Name: ОБЪЯВЛЕНИЯ АСТАНА, ID: -1001186839946, Username: astolx
+Name: РАБОТА КИЕВ💰, ID: -1001326125535, Username: rabota_kiev_vsem
+Name: Работа Киев • Подработка • Вакансии • Работа Украина • Поиск работы, ID: -1001212896380, Username: rabota_kiev_ukraina
+Name: Работа Форекс Удаленка Онлайн, ID: -1001208001128, Username: ForexWorkKiev
+Name: Mobile5G - телефоны и планшеты оптом, ID: -1001146100283, Username: Mobile5G_M5G
+Name: 💰Темы💰💸, ID: -1001339038917, Username: temisng
+Name: РАБОТА ДЛЯ ДЕВУШЕК🔞Поиск Работы, ID: -1001910280482, Username: VIP_escorttur
+Name: Темы#форекс#гарант#работа#, ID: -1001392079183, Username: privetbroker1
+
+
 
 В работе (ОПТ / Частые / Вова):
-Name: БЫСТРЫЙ ЗАРАБОТОК, ID: -1001605401722, Username: rabotka_RF_RB_KZ
-Name: Заработок в интернете, ID: -1001943876912, Username: legkie_money_v_internete
-Name: Дубай / ОАЭ / СНГ/ Россия / Обмен / покупка / продажа / перестановка / перевод, ID: -1001268649912, Username: obmen_Dubai11
-Name: Обмен валют Беларусь Минск, ID: -1001774846066, Username: exchange_minsk
-Name: Объявления Староминская, ID: -1001755095466, Username: adstarTG
 
 
 
@@ -35,10 +45,95 @@ Name: Дубай / ОАЭ / СНГ/ Россия / Обмен / покупка /
 Name: Обмен валют Беларусь Минск, ID: -1001774846066, Username: exchange_minsk
 Name: Объявления Староминская, ID: -1001755095466, Username: adstarTG
 Name: Барахолка 💤ᴋᴜʀsᴋ sʜᴏᴘ💙, ID: -1002439731951, Username: KURSK_BANDIT
+Name: Чат⛑️*SMSK*🏗️Работа🌐Москва, ID: -1001176964113, Username: smsk2020
+Name: РАБОТА МОСКВА СНГ, ID: -1001461589998, Username: Jerdesh_Moskva2
+Name: Работа Подработка Услуги ONLINE РнД, ID: -1001243018622, Username: RabotaPodrabotkaRostovDon161
+Name: 📱 ГОРБУШКА | ГЛАВ. ЧАТ 📱, ID: -1002814695489, Username: gorbushka_digital
+Name: OTC-BTC USDT数学加密货币交流群, ID: -1001274869765, Username: ydotc8
+Name: РАБОТА В ПИТЕР МОСКВА, ID: -1001438892351, Username: rabota_vpitere
+Name: ТОЛЬКО РОБОТА И ПОДРАБОТКА МОСКВА, ID: -1001606152912, Username: moskva1717
+Name: Работа Онлайн | Чат, ID: -1001742896659, Username: rabota_onlliine
+Name: Работа Екатеринбург, ID: -1001190593569, Username: Rabota2020g
+Name: Пятигорск Онлайн Продажи/Услуги /Работа/Вакансии., ID: -1001524153328, Username: PytigorskOnlain
+Name: Mосква иш элон квартыра 💲, ID: -1001870505680, Username: maskva_tayanch_Nomer1
+Name: Работа Халтура ЕКБ, ID: -1001307507940, Username: YesRabotaEKB
+Name: РОССИЯ РАБОТА, ID: -1001570343049, Username: ROSSIARABOTA
+Name: Работа/ Подработка Санкт-Петербург, ID: -1001957762401, Username: Work_woRkSPB
+Name: Forex Работа, Crypto, Binare ^_^, ID: -1001238925040, Username: KiEv_Forex
+Name: «М» Работа/Подработка МОСКВА / Открытая группа, ID: -1001141096187, Username: m_worker_open
+Name: Вакансии . Работа . Чат . Москва, ID: -1001875138467, Username: Bakansii
+Name: Горбушка Чат, ID: -1001344677793, Username: gorbushka_chat
+Name: Авито Россия, ID: -1001679274345, Username: avito_rf_yk
+Name: 🇧🇾ИЩУ РАБОТУ МИНСК 🇧🇾, ID: -1001123768834, Username: rabotaMinskRB
+Name: ВОРК КИНГ|#вакансии #фриланс #работа #фрилансер #удаленка, ID: -1001606070540, Username: freelance_freelancer
+Name: Работа Сарапул, ID: -1001318910857, Username: rabota_sarapul_chat
+Name: Подработка Екатеринбург, ID: -1001846121752, Username: podrabotka_v_ekaterenburge
+Name: Ищу работу. Удаленка. Фриланс. Вакансии. Резюме. Удаленная работа., ID: -1001792178005, Username: ihavejobwork
+Name: Грузия Обмен P2P, ID: -1001177510307, Username: gruziya_p2p
+Name: Работа. Ростов - Батайск- АКСАЙ, ID: -1001731231107, Username: rabotaBTS
+Name: BITCOIN БЕЛАРУСЬ, ID: -1001157583151, Username: BITCOIN_BELARUS_BY
+Name: Барахолка Все Города, ID: -1001362511159, Username: baraxolka_vsegoroda
+Name: Archipelag marketplace, ID: -1002232766224, Username: ArchipelagMarket
+Name: Работа Волгоград, ID: -1001756458691, Username: volgograd_works
+Name: Санкт-Петербург работа, ID: -1001261829649, Username: uzbekmahalla1
+Name: Арбитраж - Марафон по фэйсбуку, ID: -1001267147753, Username: Arbitragefbru_chat
+Name: Жердеш Москва халтура, ID: -1001380515487, Username: Adz5b1gNyVE2NzA6
+Name: КУПЛЮ&ПРОДАМ 03, ID: -1001349773604, Username: prodayou03
+Name: ФРИЛАНС УДАЛЕНКА РАБОТА В ИНТЕРНЕТЕ, ID: -1001402231783, Username: frilansinet
+Name: МОСКВА РАБОТА, ID: -1001591054676, Username: rabotamskkg
+Name: РАБОТА ВАКАНСИИ УДАЛЕНКА ФРИЛАНС Chat, ID: -1001589332598, Username: rabota_esttt
+Name: ФРИЛАНС ЧАТ | ФРИЛАНС БИРЖА, ID: -1001289147868, Username: frilancru
+Name: МОСКВА ИШЛАРИИ, ID: -1001367441473, Username: Moskva_ishlarii
+Name: Арбитраж | Форекс | Горячий трафик | Крипта | Лиды, ID: -1001608788213, Username: ArbitrTeamChat
+Name: УДАЛЕНКА I БЕЗЛИМИТ, ID: -1001442937604, Username: freelancenolimit
+Name: Работа Спб | Подработка | Халтура | Работа в Питере |Работа в Санкт-Петербурге Вакансии|, ID: -1001883645674, Username: rabotaspb63
+Name: Удаленка | Чат, ID: -1001337404773, Username: udalenka_chatt
+Name: Чат телефонных мастерOFF, ID: -1001430610351, Username: telefon_mastera
+Name: Горбушка чат⚜️, ID: -1001055908983, Username: gorbushka_77
+Name: Работа в Москве 🇷🇺 Чат Москва, ID: -1001292798071, Username: RabotaVMoskvie
+Name: Недвижимость Москва, ID: -1001579496446, Username: nedviga_msk
+Name: Чат Apple, ID: -1001673828053, Username: applechatsale
+Name: РАБОТА Екатеринбург, Вакансии, Бесплатно, ID: -1001101917075, Username: rabotaekb2021
+Name: Удаленная Работа, ID: -1001585043637, Username: Vakansi_chat
+Name: КРИПТОЛЕВ/ОБМЕН КРИПТЫ ПО P2P, ID: -1001303386637, Username: CrLev
+Name: Работа и Подработка в Санкт-Петербурге Спб, ID: -1002020564302, Username: rabota_Sankt_Peterburg24
 
 
 
-В работе (Розница / Частые/Тати):
+
+
+
+В работе (Розница / Средние+ / Гусь) :
+Name: Do.kg - Работа,Вакансия,Услуги,Авто,Недвижимость,Халтура,Подработка,Барахолка,Перевозка,Аренда,Продажа,Россия,Москва,Кыргызстан, ID: -1001214539941, Username: zherdesh
+Name: Вакансии SMM| Удаленка, ID: -1001180935802, Username: vacancies_smm
+Name: FASHIONHUB chat, ID: -1002030303129, Username: fashionhubchat
+Name: Биржа труда Ростов (подработка), ID: -1001476442913, Username: rostov_rabotaet
+Name: Работа Онлайн, ID: -1001709846413, Username: rabotaonlainv
+Name: KILLA sell chat, ID: -1002392562510, Username: killasellchat
+Name: ВОЛГОГРАД | ПОДРАБОТКА | ХАЛТУРА | ШАБАШКА, ID: -1002227608680, Username: Volgograd_Podrabotka34
+Name: Биржа труда Волгоград (подработка), ID: -1001799936346, Username: vlg_rabota_134
+Name: Memphis chat 🙌, ID: -1002086465557, Username: memphismarket
+Name: Фриланс. Удаленная работа. Freelance, ID: -1001270813957, Username: freelance_work
+Name: ФРИЛАНС! УДАЛЁНКА.SlavynskiiMir, ID: -1001375624726, Username: frilans_slavynskiimir
+Name: Работа Санкт-Петербург, ID: -1001350212970, Username: WorkSPB_REP
+Name: Работа Москва | Подработка |Шабашка, ID: -1002158269198, Username: jobss_moscow
+Name: OTC MARKET CRYPTOS, ID: -1001196555822, Username: otc_market_cryptos
+Name: кирпич sellers, ID: -1001979543342, Username: kirpichsellers
+Name: ТАЯНЧИМ МОСКВА, ID: -1001513757228, Username: Moskva_rabota_kvartira
+Name: Чат CRYPTO | Арбитраж трафика | Я - рядом!, ID: -1001427703162, Username: None
+Name: BS | Чат продаж 🛒, ID: -1002021245915, Username: BSsellers
+Name: CASUAL HOOLIGANS, ID: -1001785656236, Username: casualhooligansss
+Name: DOPEWEARMARKET🇧🇾🇷🇺, ID: -1002122666758, Username: marketplacesk8
+Name: GG CHAT, ID: -1002475644999, Username: gogasale
+Name: РАБОТА и ВАКАНСИИ 🇰🇿, ID: -1001294774305, Username: QSTjob
+Name: RUMARKET, ID: -1002106869165, Username: rumarketgg
+Name: FAST SELL | ресейл чат, ID: -1002090954759, Username: fastsell_chat
+Name: Барахолка Sheksna, ID: -1002341416269, Username: skeksna
+
+
+
+
+В работе (Розница / Средние+ /Тати):
 Name: Царицынский радиорынок, ID: -1001426023232, Username: Tk_Tsaritsyno
 Name: 🎱РЫНОК🎱, ID: -1001400703236, Username: rinok_tbk
 Name: Обмен валюты Москва Воронеж Ростов Краснодар, ID: -1001735273217, Username: obmenka_russia
@@ -52,19 +147,7 @@ Name: Дубай / ОАЭ / СНГ/ Россия / Обмен / покупка /
 Name: Обмен валют Беларусь Минск, ID: -1001774846066, Username: exchange_minsk
 Name: Объявления Староминская, ID: -1001755095466, Username: adstarTG
 Name: Барахолка 💤ᴋᴜʀsᴋ sʜᴏᴘ💙, ID: -1002439731951, Username: KURSK_BANDIT
-
-
-
-
-
-
-Name: Чат⛑️*SMSK*🏗️Работа🌐Москва, ID: -1001176964113, Username: smsk2020
-Name: Реальный Фриланс, вакансии, работа, удаленка, ID: -1001487502707, Username: Happy_Freelanc
-Name: РАБОТА МОСКВА СНГ, ID: -1001461589998, Username: Jerdesh_Moskva2
-Name: Работа в Москве, ID: -1001179870228, Username: rabota_vahta_msk
-Name: Do.kg - Работа,Вакансия,Услуги,Авто,Недвижимость,Халтура,Подработка,Барахолка,Перевозка,Аренда,Продажа,Россия,Москва,Кыргызстан, ID: -1001214539941, Username: zherdesh
 Name: Работа Подработка Услуги ONLINE РнД, ID: -1001243018622, Username: RabotaPodrabotkaRostovDon161
-Name: ХУ иЗ нас СЕКСИ фрАу, ID: -1001889869928, Username: DVIZH_TOMSK_AE
 Name: Вакансии SMM| Удаленка, ID: -1001180935802, Username: vacancies_smm
 Name: FASHIONHUB chat, ID: -1002030303129, Username: fashionhubchat
 Name: 📱 ГОРБУШКА | ГЛАВ. ЧАТ 📱, ID: -1002814695489, Username: gorbushka_digital
@@ -87,35 +170,20 @@ Name: Вакансии . Работа . Чат . Москва, ID: -100187513846
 Name: Горбушка Чат, ID: -1001344677793, Username: gorbushka_chat
 Name: Авито Россия, ID: -1001679274345, Username: avito_rf_yk
 Name: 🇧🇾ИЩУ РАБОТУ МИНСК 🇧🇾, ID: -1001123768834, Username: rabotaMinskRB
-Name: Общение дружба секс краснодар, ID: -1001941771047, Username: barahlo193
 Name: ВОРК КИНГ|#вакансии #фриланс #работа #фрилансер #удаленка, ID: -1001606070540, Username: freelance_freelancer
 Name: ВОЛГОГРАД | ПОДРАБОТКА | ХАЛТУРА | ШАБАШКА, ID: -1002227608680, Username: Volgograd_Podrabotka34
 Name: Биржа труда Волгоград (подработка), ID: -1001799936346, Username: vlg_rabota_134
 Name: Memphis chat 🙌, ID: -1002086465557, Username: memphismarket
 Name: Работа Сарапул, ID: -1001318910857, Username: rabota_sarapul_chat
-Name: Фриланс Форекс и Удаленная Работа Вакансии, ID: -1001281981623, Username: CoronaJobsKiev
 Name: Фриланс. Удаленная работа. Freelance, ID: -1001270813957, Username: freelance_work
 Name: ФРИЛАНС! УДАЛЁНКА.SlavynskiiMir, ID: -1001375624726, Username: frilans_slavynskiimir
-Name: МОСКВА купи-продай, ID: -1001802665659, Username: moscow_chat_ru
-Name: ОБЪЯВЛЕНИЯ АСТАНА, ID: -1001186839946, Username: astolx
 Name: Подработка Екатеринбург, ID: -1001846121752, Username: podrabotka_v_ekaterenburge
-Name: РАБОТА КИЕВ💰, ID: -1001326125535, Username: rabota_kiev_vsem
 Name: Работа Санкт-Петербург, ID: -1001350212970, Username: WorkSPB_REP
 Name: Ищу работу. Удаленка. Фриланс. Вакансии. Резюме. Удаленная работа., ID: -1001792178005, Username: ihavejobwork
 Name: Работа для девушек Темы Москва, ID: -1001254704045, Username: rabotamsk777girl
-Name: Fast Check Marketplace, ID: -1002052858734, Username: FastCheck_Sell
-Name: Работа Киев • Подработка • Вакансии • Работа Украина • Поиск работы, ID: -1001212896380, Username: rabota_kiev_ukraina
-Name: Работа Москва | Подработка |Шабашка, ID: -1002158269198, Username: jobss_moscow
-Name: OTC MARKET CRYPTOS, ID: -1001196555822, Username: otc_market_cryptos
-Name: Работа Форекс Удаленка Онлайн, ID: -1001208001128, Username: ForexWorkKiev
-Name: Mobile5G - телефоны и планшеты оптом, ID: -1001146100283, Username: Mobile5G_M5G
 Name: Грузия Обмен P2P, ID: -1001177510307, Username: gruziya_p2p
 Name: Работа. Ростов - Батайск- АКСАЙ, ID: -1001731231107, Username: rabotaBTS
-Name: 💰Темы💰💸, ID: -1001339038917, Username: temisng
 Name: BITCOIN БЕЛАРУСЬ, ID: -1001157583151, Username: BITCOIN_BELARUS_BY
-Name: кирпич sellers, ID: -1001979543342, Username: kirpichsellers
-Name: ТАЯНЧИМ МОСКВА, ID: -1001513757228, Username: Moskva_rabota_kvartira
-Name: Чат CRYPTO | Арбитраж трафика | Я - рядом!, ID: -1001427703162, Username: None
 Name: Барахолка Все Города, ID: -1001362511159, Username: baraxolka_vsegoroda
 Name: Archipelag marketplace, ID: -1002232766224, Username: ArchipelagMarket
 Name: Работа Волгоград, ID: -1001756458691, Username: volgograd_works
@@ -123,11 +191,8 @@ Name: Санкт-Петербург работа, ID: -1001261829649, Username: 
 Name: Арбитраж - Марафон по фэйсбуку, ID: -1001267147753, Username: Arbitragefbru_chat
 Name: Жердеш Москва халтура, ID: -1001380515487, Username: Adz5b1gNyVE2NzA6
 Name: КУПЛЮ&ПРОДАМ 03, ID: -1001349773604, Username: prodayou03
-Name: BS | Чат продаж 🛒, ID: -1002021245915, Username: BSsellers
 Name: ФРИЛАНС УДАЛЕНКА РАБОТА В ИНТЕРНЕТЕ, ID: -1001402231783, Username: frilansinet
 Name: МОСКВА РАБОТА, ID: -1001591054676, Username: rabotamskkg
-Name: РАБОТА ДЛЯ ДЕВУШЕК🔞Поиск Работы, ID: -1001910280482, Username: VIP_escorttur
-Name: CASUAL HOOLIGANS, ID: -1001785656236, Username: casualhooligansss
 Name: РАБОТА ВАКАНСИИ УДАЛЕНКА ФРИЛАНС Chat, ID: -1001589332598, Username: rabota_esttt
 Name: ФРИЛАНС ЧАТ | ФРИЛАНС БИРЖА, ID: -1001289147868, Username: frilancru
 Name: МОСКВА ИШЛАРИИ, ID: -1001367441473, Username: Moskva_ishlarii
@@ -136,22 +201,71 @@ Name: УДАЛЕНКА I БЕЗЛИМИТ, ID: -1001442937604, Username: freelan
 Name: Работа Спб | Подработка | Халтура | Работа в Питере |Работа в Санкт-Петербурге Вакансии|, ID: -1001883645674, Username: rabotaspb63
 Name: Удаленка | Чат, ID: -1001337404773, Username: udalenka_chatt
 Name: Чат телефонных мастерOFF, ID: -1001430610351, Username: telefon_mastera
-Name: DOPEWEARMARKET🇧🇾🇷🇺, ID: -1002122666758, Username: marketplacesk8
-Name: GG CHAT, ID: -1002475644999, Username: gogasale
-Name: Горбушка чат⚜️, ID: -1001055908983, Username: gorbushka_77
 Name: Работа в Москве 🇷🇺 Чат Москва, ID: -1001292798071, Username: RabotaVMoskvie
 Name: Недвижимость Москва, ID: -1001579496446, Username: nedviga_msk
-Name: РАБОТА и ВАКАНСИИ 🇰🇿, ID: -1001294774305, Username: QSTjob
-Name: RUMARKET, ID: -1002106869165, Username: rumarketgg
 Name: Чат Apple, ID: -1001673828053, Username: applechatsale
-Name: ЧАТ ВАКАНСИЙ РАБОТА УДАЛЕНКА ФРИЛАНС, ID: -1001299340588, Username: mari_vakansi
-Name: FAST SELL | ресейл чат, ID: -1002090954759, Username: fastsell_chat
 Name: РАБОТА Екатеринбург, Вакансии, Бесплатно, ID: -1001101917075, Username: rabotaekb2021
 Name: Удаленная Работа, ID: -1001585043637, Username: Vakansi_chat
 Name: КРИПТОЛЕВ/ОБМЕН КРИПТЫ ПО P2P, ID: -1001303386637, Username: CrLev
-Name: Темы#форекс#гарант#работа#, ID: -1001392079183, Username: privetbroker1
 Name: Работа и Подработка в Санкт-Петербурге Спб, ID: -1002020564302, Username: rabota_Sankt_Peterburg24
+
+
+
+
+
+
+
+
+В работе (Розница / Редкий /Тати):
+Name: Fast Check Marketplace, ID: -1002052858734, Username: FastCheck_Sell
+Name: Работа Москва | Подработка |Шабашка, ID: -1002158269198, Username: jobss_moscow
+Name: OTC MARKET CRYPTOS, ID: -1001196555822, Username: otc_market_cryptos
+Name: кирпич sellers, ID: -1001979543342, Username: kirpichsellers
+Name: ТАЯНЧИМ МОСКВА, ID: -1001513757228, Username: Moskva_rabota_kvartira
+Name: Чат CRYPTO | Арбитраж трафика | Я - рядом!, ID: -1001427703162, Username: None
+Name: BS | Чат продаж 🛒, ID: -1002021245915, Username: BSsellers
+Name: CASUAL HOOLIGANS, ID: -1001785656236, Username: casualhooligansss
+Name: DOPEWEARMARKET🇧🇾🇷🇺, ID: -1002122666758, Username: marketplacesk8
+Name: GG CHAT, ID: -1002475644999, Username: gogasale
+Name: РАБОТА и ВАКАНСИИ 🇰🇿, ID: -1001294774305, Username: QSTjob
+Name: RUMARKET, ID: -1002106869165, Username: rumarketgg
+Name: ЧАТ ВАКАНСИЙ РАБОТА УДАЛЕНКА ФРИЛАНС, ID: -1001299340588, Username: mari_vakansi
 Name: Барахолка Sheksna, ID: -1002341416269, Username: skeksna
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Все, отсюда потом :
 Name: Робота Подработка Вакансії, ID: -1001192250225, Username: work_rabota_ua
 Name: Работа Воронеж, ID: -1001969562310, Username: voronej_work
 Name: БАРАХОЛКА SWAG🥷🦹‍♂, ID: -1002413786869, Username: Swag_Baraxolkaa
