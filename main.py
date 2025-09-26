@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 
 from config_mesВ2B import MESSAGESB2B
+from config_mesВ2C import MESSAGESB2C
 from config_targ import TEST_TARGETS, TARGETS
 from broadcasterB2B import Broadcaster
 
@@ -47,7 +48,7 @@ configs = [
         "api_id": API_ID,
         "api_hash": API_HASH,
         "targets": TEST_TARGETS,
-        "messages": MESSAGESB2B,
+        "messages": MESSAGESB2C,
         "proxy": {
             "mtproto": True,
             "addr": "87.248.134.64",

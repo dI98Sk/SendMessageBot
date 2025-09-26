@@ -6464,3 +6464,34 @@
 2025-09-27 01:02:53 [INFO] telethon.network.mtprotosender: Connecting to 87.248.134.64:8888/TcpMTProxyIntermediate...
 2025-09-27 01:02:56 [INFO] telethon.network.mtprotosender: Connection to 87.248.134.64:8888/TcpMTProxyIntermediate complete!
 2025-09-27 01:05:07 [INFO] telethon.client.updates: Got difference for channel 1212896380 updates
+2025-09-27 01:32:31 [INFO] broadcaster.acc1: acc1: Подключаемся к Telegram...
+2025-09-27 01:32:31 [INFO] telethon.network.mtprotosender: Connecting to 149.154.167.51:443/TcpFull...
+2025-09-27 01:32:34 [INFO] broadcaster.acc2: acc2: Подключаемся к Telegram...
+2025-09-27 01:32:34 [INFO] telethon.network.mtprotosender: Connecting to 87.248.134.64:8888/TcpMTProxyIntermediate...
+2025-09-27 01:32:34 [INFO] telethon.network.mtprotosender: Connection to 149.154.167.51:443/TcpFull complete!
+2025-09-27 01:32:36 [INFO] telethon.network.mtprotosender: Connection to 87.248.134.64:8888/TcpMTProxyIntermediate complete!
+2025-09-27 01:32:37 [INFO] broadcaster.acc1: acc1: Подключено
+2025-09-27 01:32:37 [INFO] broadcaster.acc1: acc1: Начинаем рассылку сообщения №1
+2025-09-27 01:32:37 [INFO] broadcaster.acc1: acc1: Отправлено сообщение №1 в -1002679672234
+2025-09-27 01:32:39 [INFO] broadcaster.acc2: acc2: Подключено
+2025-09-27 01:32:39 [INFO] broadcaster.acc2: acc2: Начинаем рассылку сообщения №1
+2025-09-27 01:32:39 [INFO] broadcaster.acc2: acc2: Отправлено сообщение №1 в -1002679672234
+2025-09-27 01:32:43 [INFO] broadcaster.acc1: acc1: Отправлено сообщение №1 в -1002805990284
+2025-09-27 01:32:45 [INFO] broadcaster.acc2: acc2: Отправлено сообщение №1 в -1002805990284
+2025-09-27 01:32:48 [INFO] broadcaster.acc1: acc1: Начинаем рассылку сообщения №2
+2025-09-27 01:32:48 [INFO] broadcaster.acc1: acc1: Отправлено сообщение №2 в -1002679672234
+2025-09-27 01:32:50 [INFO] broadcaster.acc2: acc2: Начинаем рассылку сообщения №2
+2025-09-27 01:32:50 [INFO] broadcaster.acc2: acc2: Отправлено сообщение №2 в -1002679672234
+2025-09-27 01:32:54 [INFO] broadcaster.acc1: acc1: Отправлено сообщение №2 в -1002805990284
+2025-09-27 01:32:56 [INFO] broadcaster.acc2: acc2: Отправлено сообщение №2 в -1002805990284
+2025-09-27 01:32:59 [INFO] broadcaster.acc1: acc1: Начинаем рассылку сообщения №3
+2025-09-27 01:33:00 [INFO] broadcaster.acc1: acc1: Отправлено сообщение №3 в -1002679672234
+2025-09-27 01:33:01 [INFO] broadcaster.acc2: acc2: Начинаем рассылку сообщения №3
+2025-09-27 01:33:01 [INFO] broadcaster.acc2: acc2: Отправлено сообщение №3 в -1002679672234
+2025-09-27 01:33:05 [INFO] broadcaster.acc1: acc1: Отправлено сообщение №3 в -1002805990284
+2025-09-27 01:33:07 [WARNING] broadcaster.acc2: acc2: FloodWait: ждём 274 секунд
+2025-09-27 01:33:10 [INFO] broadcaster.acc1: acc1: Начинаем рассылку сообщения №4
+2025-09-27 01:33:11 [INFO] broadcaster.acc1: acc1: Отправлено сообщение №4 в -1002679672234
+2025-09-27 01:33:16 [INFO] broadcaster.acc1: acc1: Отправлено сообщение №4 в -1002805990284
+2025-09-27 01:33:21 [INFO] broadcaster.acc1: acc1: Начинаем рассылку сообщения №5
+2025-09-27 01:33:22 [INFO] broadcaster.acc1: acc1: Отправлено сообщение №5 в -1002679672234
