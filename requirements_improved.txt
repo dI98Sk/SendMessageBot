@@ -1,0 +1,49 @@
+# Основные зависимости
+telethon>=1.28.5
+pytz>=2023.3
+python-dotenv>=1.0.0
+
+# Безопасность
+cryptography>=41.0.0
+
+# HTTP клиенты
+aiohttp>=3.8.0
+requests>=2.31.0
+
+# Google Sheets интеграция
+gspread>=5.12.0
+oauth2client>=4.1.3
+
+# Логирование и мониторинг
+structlog>=23.1.0
+
+# Валидация данных
+pydantic>=2.0.0
+marshmallow>=3.20.0
+
+# Асинхронность и производительность
+aiofiles>=23.1.0
+asyncio-throttle>=1.0.2
+
+# Утилиты
+click>=8.1.0
+rich>=13.0.0
+typer>=0.9.0
+
+# Тестирование (опционально)
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+
+# Документация (опционально)
+sphinx>=7.0.0
+sphinx-rtd-theme>=1.3.0
+
+# Форматирование кода (опционально)
+black>=23.0.0
+isort>=5.12.0
+flake8>=6.0.0
+
+# Типизация (опционально)
+mypy>=1.5.0
+types-requests>=2.31.0
