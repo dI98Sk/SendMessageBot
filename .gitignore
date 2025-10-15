@@ -1,0 +1,56 @@
+# Старые файлы (удалены при миграции)
+broadcasterB2B.py
+main.py
+config_mesВ2B.py
+config_mesВ2C.py
+config_targ.py
+update_configB2B.py
+update_configB2C.py
+
+# Сессии Telegram
+sessions/
+*.session
+
+# Логи
+logs/
+*.log
+
+# Данные
+data/
+allChatID.txt
+dict.txt
+
+# Резервные копии
+backup/
+
+# Переменные окружения
+.env
+.env.local
+
+# Секретные файлы и ключи
+credentials.json
+*.json
+service-account*.json
+google-credentials*.json
+secrets.json
+config/secrets.py
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
