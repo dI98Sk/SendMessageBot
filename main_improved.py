@@ -44,6 +44,9 @@ class SendMessageBotApp:
 
         # Система отчетов
         self.telegram_reporter = None
+        
+        # Система уведомлений
+        self.notification_client = None
 
 
 
@@ -107,25 +110,78 @@ class SendMessageBotApp:
 
     async def _setup_notifications(self):
         """Настройка системы уведомлений"""
-        admin_id = self.config.telegram.api_id  # В реальном приложении должен быть отдельный параметр
-
+        self.logger.info("Настройка системы уведомлений...")
+        
         # Telegram уведомления
-        if admin_id:
-            # Здесь нужен клиент для отправки уведомлений
-            # Для упрощения пропускаем
-            pass
-
-        # Webhook уведомления (отключены для тестирования)
-        webhook_url = self.config.notifications.webhook_url
-        if webhook_url and webhook_url != "https://your-webhook-url.com":
-            webhook_channel = WebhookNotificationChannel(webhook_url)
-            notification_manager.add_channel(webhook_channel)
-            self.logger.info(f"Webhook уведомления включены: {webhook_url}")
+        if self.config.notifications.enable_telegram_notifications:
+            admin_id = self.config.notifications.admin_telegram_id
+            
+            if admin_id:
+                try:
+                    # Создаем отдельный Telegram клиент для уведомлений
+                    from telethon import TelegramClient
+                    
+                    self.logger.info(f"Создание Telegram клиента для уведомлений...")
+                    
+                    notification_client = TelegramClient(
+                        f"notification_session",
+                        self.config.telegram.api_id,
+                        self.config.telegram.api_hash
+                    )
+                    
+                    # Запускаем клиент
+                    await notification_client.start(phone=self.config.telegram.phone)
+                    
+                    # Создаем канал уведомлений
+                    telegram_channel = TelegramNotificationChannel(
+                        client=notification_client,
+                        admin_chat_id=admin_id
+                    )
+                    
+                    # Добавляем канал в менеджер
+                    notification_manager.add_channel(telegram_channel)
+                    
+                    # Сохраняем клиент для корректного закрытия
+                    self.notification_client = notification_client
+                    
+                    self.logger.info(f"✅ Telegram уведомления включены для admin: {admin_id}")
+                    
+                except Exception as e:
+                    self.logger.error(f"❌ Ошибка настройки Telegram уведомлений: {e}")
+                    self.logger.warning("Продолжаем работу без Telegram уведомлений")
+            else:
+                self.logger.warning("⚠️ ADMIN_TELEGRAM_ID не настроен - Telegram уведомления отключены")
+                self.logger.info("Для включения уведомлений установите переменную окружения ADMIN_TELEGRAM_ID")
         else:
-            self.logger.info("Webhook уведомления отключены")
+            self.logger.info("📱 Telegram уведомления отключены в конфигурации")
+
+        # Webhook уведомления
+        if self.config.notifications.enable_webhook_notifications:
+            webhook_url = self.config.notifications.webhook_url
+            if webhook_url and webhook_url != "https://your-webhook-url.com":
+                try:
+                    webhook_channel = WebhookNotificationChannel(webhook_url)
+                    notification_manager.add_channel(webhook_channel)
+                    self.logger.info(f"✅ Webhook уведомления включены: {webhook_url}")
+                except Exception as e:
+                    self.logger.error(f"❌ Ошибка настройки Webhook уведомлений: {e}")
+            else:
+                self.logger.info("📡 Webhook уведомления отключены - не настроен WEBHOOK_URL")
+        else:
+            self.logger.info("📡 Webhook уведомления отключены в конфигурации")
 
         # Настройка алертов
-        alert_manager.add_default_rules()
+        try:
+            alert_manager.add_default_rules()
+            self.logger.info("✅ Система алертов настроена")
+        except Exception as e:
+            self.logger.error(f"❌ Ошибка настройки алертов: {e}")
+        
+        # Проверяем общее состояние
+        if notification_manager.channels:
+            self.logger.info(f"📢 Система уведомлений готова: {len(notification_manager.channels)} каналов")
+        else:
+            self.logger.warning("⚠️ Система уведомлений не настроена - ни одного канала не добавлено")
 
     async def _setup_queues(self):
         """Настройка очередей"""
@@ -429,6 +485,14 @@ class SendMessageBotApp:
         # Остановка системы отчетов
         if self.telegram_reporter:
             await self.telegram_reporter.stop()
+
+        # Закрытие клиента уведомлений
+        if self.notification_client:
+            try:
+                await self.notification_client.disconnect()
+                self.logger.info("Telegram клиент уведомлений отключен")
+            except Exception as e:
+                self.logger.error(f"Ошибка отключения клиента уведомлений: {e}")
 
         # Отмена всех задач
         for task in self.tasks:
