@@ -76,8 +76,11 @@ class SendMessageBotApp:
             # Инициализация системы отчетов
             await self._setup_reports()
 
-            # Создание broadcaster'ов
-            await self._create_broadcasters()
+            # Создание broadcaster'ов (если еще не созданы)
+            if not self.broadcasters:
+                await self._create_broadcasters()
+            else:
+                self.logger.info(f"Broadcaster'ы уже созданы: {len(self.broadcasters)} шт.")
 
             # Настройка обработчиков сигналов
             self._setup_signal_handlers()
@@ -192,7 +195,11 @@ class SendMessageBotApp:
 
     async def _create_broadcasters(self):
         """Создание broadcaster'ов"""
-        print("📱 Создание broadcaster'ов...")
+        before_count = len(self.broadcasters)
+        print(f"📱 Создание broadcaster'ов... (текущее количество: {before_count})")
+        
+        if self.logger:
+            self.logger.info(f"Создание broadcaster'ов... (текущее количество: {before_count})")
 
         # B2B Broadcaster - использует аккаунт acc1 (ID: 8108419249)
         b2b_broadcaster = EnhancedBroadcaster(
@@ -215,6 +222,12 @@ class SendMessageBotApp:
         )
         self.broadcasters.append(b2c_broadcaster)
         print(f"✅ B2C Broadcaster создан (acc2): {len(self.config.test_targets)} чатов, {len(self.config.b2c_messages)} сообщений")
+        
+        after_count = len(self.broadcasters)
+        print(f"📊 Всего broadcaster'ов: {after_count}")
+        
+        if self.logger:
+            self.logger.info(f"Всего broadcaster'ов после создания: {after_count}")
 
     async def _setup_google_sheets(self):
         """Настройка Google Sheets интеграции"""
@@ -303,17 +316,22 @@ class SendMessageBotApp:
     async def _recreate_broadcasters(self):
         """Пересоздание broadcaster'ов с новыми сообщениями"""
         try:
+            old_count = len(self.broadcasters)
+            self.logger.info(f"Пересоздание broadcaster'ов: было {old_count} шт.")
+            
             # Останавливаем старые broadcaster'ы
             for broadcaster in self.broadcasters:
+                self.logger.info(f"Остановка broadcaster: {broadcaster.name}")
                 await broadcaster.stop()
 
             # Очищаем список
             self.broadcasters.clear()
+            self.logger.info("Список broadcaster'ов очищен")
 
             # Создаем новые broadcaster'ы
             await self._create_broadcasters()
 
-            self.logger.info("Broadcaster'ы пересозданы с новыми сообщениями")
+            self.logger.info(f"Broadcaster'ы пересозданы: теперь {len(self.broadcasters)} шт.")
 
         except Exception as e:
             self.logger.error(f"Ошибка пересоздания broadcaster'ов: {e}")
@@ -399,11 +417,13 @@ class SendMessageBotApp:
 
         self.running = True
         self.logger.info("Запуск SendMessageBot...")
+        self.logger.info(f"Количество broadcaster'ов для запуска: {len(self.broadcasters)}")
 
         try:
             # Запуск broadcaster'ов
             broadcaster_tasks = []
-            for broadcaster in self.broadcasters:
+            for idx, broadcaster in enumerate(self.broadcasters, 1):
+                self.logger.info(f"Запуск broadcaster {idx}/{len(self.broadcasters)}: {broadcaster.name}")
                 task = asyncio.create_task(broadcaster.start())
                 broadcaster_tasks.append(task)
                 self.tasks.append(task)
