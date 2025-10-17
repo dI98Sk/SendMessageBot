@@ -238,13 +238,16 @@ class SendMessageBotApp:
             # Первоначальное обновление сообщений, если нужно
             if (self.config.google_sheets.b2b_sheet_url or self.config.google_sheets.b2c_sheet_url):
                 try:
+                    self.logger.info("Попытка обновления сообщений из Google Sheets...")
                     await self._initial_message_update()
                 except Exception as e:
-                    self.logger.warning(f"Не удалось выполнить первоначальное обновление Google Sheets: {e}")
-                    self.logger.info("Продолжаем работу с текущими сообщениями")
+                    self.logger.warning(f"⚠️  Не удалось выполнить обновление Google Sheets: {e}")
+                    self.logger.info("ℹ️  Продолжаем работу с сообщениями из config/messages.py")
+                    self.logger.info("ℹ️  Вы можете исправить проблему с Google Sheets позже")
 
         except Exception as e:
-            self.logger.error(f"Ошибка настройки Google Sheets: {e}")
+            self.logger.error(f"⚠️  Ошибка настройки Google Sheets: {e}")
+            self.logger.info("ℹ️  Продолжаем работу без интеграции Google Sheets")
 
     async def _initial_message_update(self):
         """Первоначальное обновление сообщений"""

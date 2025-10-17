@@ -64,6 +64,23 @@ class EnhancedBroadcaster:
         try:
             telegram_config = self.config.telegram
             
+            # Проверяем и создаем директорию для сессий
+            from pathlib import Path
+            session_path = Path(self.session_name)
+            session_dir = session_path.parent
+            
+            if session_dir and str(session_dir) != '.':
+                session_dir.mkdir(parents=True, exist_ok=True)
+                self.logger.info(f"Директория для сессий: {session_dir}")
+            
+            # Проверяем существование файла сессии
+            session_file = Path(f"{self.session_name}.session")
+            if not session_file.exists():
+                self.logger.warning(f"⚠️  Файл сессии {session_file} не найден")
+                self.logger.warning(f"При первом запуске потребуется авторизация")
+            else:
+                self.logger.info(f"✅ Файл сессии найден: {session_file}")
+            
             if telegram_config.proxy and telegram_config.proxy.enabled:
                 if telegram_config.proxy.protocol == "mtproto":
                     self._client = TelegramClient(
@@ -96,6 +113,10 @@ class EnhancedBroadcaster:
             
         except Exception as e:
             self.logger.error(f"Ошибка инициализации клиента {self.name}: {e}")
+            self.logger.error(f"Проверьте:")
+            self.logger.error(f"  1. Существует ли директория для сессии")
+            self.logger.error(f"  2. Есть ли права на запись в директорию")
+            self.logger.error(f"  3. Правильно ли указан путь к сессии: {self.session_name}")
             raise BroadcastingError(f"Не удалось инициализировать клиент: {e}")
     
     def _setup_signal_handlers(self):

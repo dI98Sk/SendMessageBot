@@ -26,9 +26,22 @@ class GoogleSheetsManager:
     def _authenticate(self) -> bool:
         """Аутентификация в Google Sheets"""
         try:
-            if not Path(self.credentials_file).exists():
-                logger.error(f"Файл учетных данных не найден: {self.credentials_file}")
+            credentials_path = Path(self.credentials_file)
+            
+            if not credentials_path.exists():
+                logger.error(f"❌ Файл учетных данных не найден: {self.credentials_file}")
+                logger.error(f"Полный путь: {credentials_path.absolute()}")
+                logger.error(f"Текущая директория: {Path.cwd()}")
+                logger.error(f"Проверьте наличие файла credentials.json в корне проекта")
                 return False
+            
+            # Проверяем размер файла
+            file_size = credentials_path.stat().st_size
+            if file_size == 0:
+                logger.error(f"❌ Файл credentials.json пустой")
+                return False
+            
+            logger.info(f"✅ Файл credentials.json найден: {credentials_path.absolute()}")
 
             scope = [
                 'https://spreadsheets.google.com/feeds',
@@ -39,11 +52,30 @@ class GoogleSheetsManager:
                 self.credentials_file, scope
             )
             self.client = gspread.authorize(creds)
-            logger.info("Успешная аутентификация в Google Sheets")
+            logger.info("✅ Успешная аутентификация в Google Sheets")
             return True
 
         except Exception as e:
-            logger.error(f"Ошибка аутентификации Google Sheets: {e}")
+            logger.error(f"❌ Ошибка аутентификации Google Sheets: {e}")
+            
+            # Специфичные советы для разных типов ошибок
+            error_str = str(e).lower()
+            if 'invalid jwt signature' in error_str or 'invalid_grant' in error_str:
+                logger.error(f"")
+                logger.error(f"🔧 Проблема с JWT подписью. Возможные причины:")
+                logger.error(f"  1. Время на сервере не синхронизировано (проверьте: date)")
+                logger.error(f"  2. Файл credentials.json поврежден или неправильный")
+                logger.error(f"  3. Service Account удален или отозван")
+                logger.error(f"  4. Скачайте новый файл credentials.json из Google Cloud Console")
+                logger.error(f"")
+            elif 'permission denied' in error_str:
+                logger.error(f"")
+                logger.error(f"🔧 Проблема с правами доступа:")
+                logger.error(f"  1. Проверьте права на файл credentials.json")
+                logger.error(f"  2. Service Account должен иметь доступ к таблице")
+                logger.error(f"  3. Поделитесь таблицей с email из credentials.json")
+                logger.error(f"")
+            
             return False
 
     def _get_sheet_data(self, sheet_url: str, column: int = 1) -> List[str]:
