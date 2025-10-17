@@ -33,11 +33,12 @@ class MessageStats:
 class EnhancedBroadcaster:
     """Улучшенный класс для рассылки сообщений"""
     
-    def __init__(self, config: AppConfig, name: str, targets: List[int], messages: List[str]):
+    def __init__(self, config: AppConfig, name: str, targets: List[int], messages: List[str], session_name: Optional[str] = None):
         self.config = config
         self.name = name
         self.targets = targets
         self.messages = messages
+        self.session_name = session_name or config.telegram.session_name
         
         # Статистика
         self.stats = MessageStats()
@@ -66,7 +67,7 @@ class EnhancedBroadcaster:
             if telegram_config.proxy and telegram_config.proxy.enabled:
                 if telegram_config.proxy.protocol == "mtproto":
                     self._client = TelegramClient(
-                        telegram_config.session_name,
+                        self.session_name,
                         telegram_config.api_id,
                         telegram_config.api_hash,
                         connection=ConnectionTcpMTProxyIntermediate,
@@ -79,19 +80,19 @@ class EnhancedBroadcaster:
                 else:
                     # Поддержка других типов прокси
                     self._client = TelegramClient(
-                        telegram_config.session_name,
+                        self.session_name,
                         telegram_config.api_id,
                         telegram_config.api_hash,
                         proxy=telegram_config.proxy
                     )
             else:
                 self._client = TelegramClient(
-                    telegram_config.session_name,
+                    self.session_name,
                     telegram_config.api_id,
                     telegram_config.api_hash
                 )
                 
-            self.logger.info(f"Клиент {self.name} инициализирован")
+            self.logger.info(f"Клиент {self.name} инициализирован с сессией {self.session_name}")
             
         except Exception as e:
             self.logger.error(f"Ошибка инициализации клиента {self.name}: {e}")
@@ -267,7 +268,14 @@ class EnhancedBroadcaster:
         if not self._client or not self._client.is_connected():
             self.logger.info(f"Подключаемся к Telegram для {self.name}...")
             await self._client.start()
-            self.logger.info(f"Подключение {self.name} установлено")
+            
+            # Получаем информацию о текущем пользователе
+            me = await self._client.get_me()
+            account_id = me.id
+            account_name = f"{me.first_name or ''} {me.last_name or ''}".strip()
+            
+            self.logger.info(f"Подключение {self.name} установлено: ID={account_id}, Name={account_name}")
+            print(f"✅ {self.name} подключен: ID={account_id}, Name={account_name}")
     
     async def start(self):
         """Запуск broadcaster"""

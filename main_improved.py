@@ -194,25 +194,27 @@ class SendMessageBotApp:
         """Создание broadcaster'ов"""
         print("📱 Создание broadcaster'ов...")
 
-        # B2B Broadcaster
+        # B2B Broadcaster - использует аккаунт acc1 (ID: 8108419249)
         b2b_broadcaster = EnhancedBroadcaster(
             config=self.config,
             name="B2B_Broadcaster",
             targets=self.config.test_targets,  # В реальном приложении: TARGETS
-            messages=self.config.b2b_messages
+            messages=self.config.b2b_messages,
+            session_name="sessions/acc1"  # Первый аккаунт для B2B
         )
         self.broadcasters.append(b2b_broadcaster)
-        print(f"✅ B2B Broadcaster создан: {len(self.config.test_targets)} чатов, {len(self.config.b2b_messages)} сообщений")
+        print(f"✅ B2B Broadcaster создан (acc1): {len(self.config.test_targets)} чатов, {len(self.config.b2b_messages)} сообщений")
 
-        # B2C Broadcaster
+        # B2C Broadcaster - использует аккаунт acc2 (ID: 8497033180)
         b2c_broadcaster = EnhancedBroadcaster(
             config=self.config,
             name="B2C_Broadcaster",
             targets=self.config.test_targets,
-            messages=self.config.b2c_messages
+            messages=self.config.b2c_messages,
+            session_name="sessions/acc2"  # Второй аккаунт для B2C
         )
         self.broadcasters.append(b2c_broadcaster)
-        print(f"✅ B2C Broadcaster создан: {len(self.config.test_targets)} чатов, {len(self.config.b2c_messages)} сообщений")
+        print(f"✅ B2C Broadcaster создан (acc2): {len(self.config.test_targets)} чатов, {len(self.config.b2c_messages)} сообщений")
 
     async def _setup_google_sheets(self):
         """Настройка Google Sheets интеграции"""
