@@ -110,7 +110,7 @@ class AppConfig:
 
     # Списки целей и сообщений
     targets: List[int] = field(default_factory=list)
-    test_targets: List[int] = field(default_factory=list)
+    targets: List[int] = field(default_factory=list)
     b2b_messages: List[str] = field(default_factory=list)
     b2c_messages: List[str] = field(default_factory=list)
 
@@ -214,7 +214,7 @@ class ConfigManager:
             notifications=notifications_config,
             reports=reports_config,
             targets=TARGETS,
-            test_targets=TEST_TARGETS,
+            # targets=TEST_TARGETS,
             b2b_messages=MESSAGES_B2B,
             b2c_messages=MESSAGES_B2C
         )

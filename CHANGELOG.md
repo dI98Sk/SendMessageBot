@@ -40,12 +40,13 @@ else:
 - Добавлен параметр `session_name` в конструктор `EnhancedBroadcaster`
 
 **Код:**
+
 ```python
 # B2B Broadcaster
 b2b_broadcaster = EnhancedBroadcaster(
     config=self.config,
     name="B2B_Broadcaster",
-    targets=self.config.test_targets,
+    targets=self.config.targets,
     messages=self.config.b2b_messages,
     session_name="sessions/acc1"  # ID: 8108419249
 )
@@ -54,7 +55,7 @@ b2b_broadcaster = EnhancedBroadcaster(
 b2c_broadcaster = EnhancedBroadcaster(
     config=self.config,
     name="B2C_Broadcaster",
-    targets=self.config.test_targets,
+    targets=self.config.targets,
     messages=self.config.b2c_messages,
     session_name="sessions/acc2"  # ID: 8497033180
 )

@@ -51,7 +51,7 @@ async def test_telegram_reports():
             phone=config.telegram.phone,
             session_name="test_b2b_reports",
             messages=config.b2b_messages[:2],  # Берем только 2 сообщения для теста
-            targets=config.test_targets,
+            targets=config.targets,
             delay_between_messages=30,
             delay_between_cycles=60,
             max_retries=2,
@@ -67,7 +67,7 @@ async def test_telegram_reports():
             phone=config.telegram.phone,
             session_name="test_b2c_reports",
             messages=config.b2c_messages[:1],  # Берем только 1 сообщение для теста
-            targets=config.test_targets,
+            targets=config.targets,
             delay_between_messages=30,
             delay_between_cycles=60,
             max_retries=2,

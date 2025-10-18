@@ -205,23 +205,23 @@ class SendMessageBotApp:
         b2b_broadcaster = EnhancedBroadcaster(
             config=self.config,
             name="B2B_Broadcaster",
-            targets=self.config.test_targets,  # В реальном приложении: TARGETS
+            targets=self.config.targets,  # В реальном приложении: TARGETS
             messages=self.config.b2b_messages,
             session_name="sessions/acc1"  # Первый аккаунт для B2B
         )
         self.broadcasters.append(b2b_broadcaster)
-        print(f"✅ B2B Broadcaster создан (acc1): {len(self.config.test_targets)} чатов, {len(self.config.b2b_messages)} сообщений")
+        print(f"✅ B2B Broadcaster создан (acc1): {len(self.config.targets)} чатов, {len(self.config.b2b_messages)} сообщений")
 
         # B2C Broadcaster - использует аккаунт acc2 (ID: 8497033180)
         b2c_broadcaster = EnhancedBroadcaster(
             config=self.config,
             name="B2C_Broadcaster",
-            targets=self.config.test_targets,
+            targets=self.config.targets,
             messages=self.config.b2c_messages,
             session_name="sessions/acc2"  # Второй аккаунт для B2C
         )
         self.broadcasters.append(b2c_broadcaster)
-        print(f"✅ B2C Broadcaster создан (acc2): {len(self.config.test_targets)} чатов, {len(self.config.b2c_messages)} сообщений")
+        print(f"✅ B2C Broadcaster создан (acc2): {len(self.config.targets)} чатов, {len(self.config.b2c_messages)} сообщений")
         
         after_count = len(self.broadcasters)
         print(f"📊 Всего broadcaster'ов: {after_count}")
@@ -319,19 +319,32 @@ class SendMessageBotApp:
             old_count = len(self.broadcasters)
             self.logger.info(f"Пересоздание broadcaster'ов: было {old_count} шт.")
             
-            # Останавливаем старые broadcaster'ы
+            # Останавливаем старые broadcaster'ы и их задачи
             for broadcaster in self.broadcasters:
                 self.logger.info(f"Остановка broadcaster: {broadcaster.name}")
                 await broadcaster.stop()
 
-            # Очищаем список
+            # Очищаем список broadcaster'ов
             self.broadcasters.clear()
             self.logger.info("Список broadcaster'ов очищен")
+            
+            # Удаляем завершенные задачи из списка
+            self.tasks = [task for task in self.tasks if not task.done()]
+            self.logger.info(f"Активных задач после очистки: {len(self.tasks)}")
 
             # Создаем новые broadcaster'ы
             await self._create_broadcasters()
 
             self.logger.info(f"Broadcaster'ы пересозданы: теперь {len(self.broadcasters)} шт.")
+
+            # ВАЖНО: Запускаем новые broadcaster'ы
+            if self.running:
+                self.logger.info("Запуск пересозданных broadcaster'ов...")
+                for idx, broadcaster in enumerate(self.broadcasters, 1):
+                    self.logger.info(f"Запуск broadcaster {idx}/{len(self.broadcasters)}: {broadcaster.name}")
+                    task = asyncio.create_task(broadcaster.start())
+                    self.tasks.append(task)
+                self.logger.info("✅ Все broadcaster'ы запущены после пересоздания")
 
         except Exception as e:
             self.logger.error(f"Ошибка пересоздания broadcaster'ов: {e}")
@@ -443,7 +456,7 @@ class SendMessageBotApp:
             self.logger.info("SendMessageBot запущен успешно")
             print("🚀 SendMessageBot запущен успешно!")
             print(f"📊 Запущено broadcaster'ов: {len(self.broadcasters)}")
-            print(f"🎯 Используются тестовые чаты: {len(self.config.test_targets)}")
+            print(f"🎯 Используются тестовые чаты: {len(self.config.targets)}")
             print("💬 Начинаем рассылку...")
 
             print("\n💡 Для просмотра статистики в реальном времени запустите:")
@@ -553,7 +566,7 @@ class SendMessageBotApp:
                 total_failed = sum(b.stats.total_failed for b in self.broadcasters)
                 total_flood_waits = sum(b.stats.flood_waits for b in self.broadcasters)
 
-                print(f"🎯 Всего чатов: {len(self.config.test_targets)}")
+                print(f"🎯 Всего чатов: {len(self.config.targets)}")
                 print(f"✅ Отправлено: {total_sent}")
                 print(f"❌ Ошибок: {total_failed}")
                 print(f"⏳ FloodWait: {total_flood_waits}")

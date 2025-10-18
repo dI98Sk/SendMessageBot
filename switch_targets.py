@@ -17,11 +17,11 @@ def show_current_targets():
     print("🎯 Текущие настройки целей:")
     print("=" * 40)
     print(f"📱 Основные цели (TARGETS): {len(config.targets)} чатов")
-    print(f"🧪 Тестовые цели (TEST_TARGETS): {len(config.test_targets)} чатов")
+    print(f"🧪 Тестовые цели (TEST_TARGETS): {len(config.targets)} чатов")
     
-    if config.test_targets:
+    if config.targets:
         print(f"\n🧪 Тестовые чаты:")
-        for i, chat_id in enumerate(config.test_targets, 1):
+        for i, chat_id in enumerate(config.targets, 1):
             print(f"   {i}. {chat_id}")
     
     print(f"\n📱 Основные чаты (первые 5):")
