@@ -51,6 +51,9 @@ class BroadcastingConfig:
     retry_delay: int = 60
     start_time_hour: int = 6
     enable_scheduling: bool = True
+    quiet_hour_start: int = 0  # Начало тихого часа (00:00)
+    quiet_hour_end: int = 7    # Конец тихого часа (07:00)
+    enable_quiet_hours: bool = True  # Включить тихий час
 
 @dataclass
 class GoogleSheetsConfig:
@@ -75,7 +78,7 @@ class ReportsConfig:
     telegram_bot_token: Optional[str] = None
     telegram_channel_id: Optional[str] = None
     enable_reports: bool = False
-    report_interval_hours: int = 12
+    report_interval_hours: int = 3  # Отчеты каждые 3 часа
     timezone: str = "Europe/Moscow"
 
 @dataclass
@@ -157,7 +160,10 @@ class ConfigManager:
             max_retries=int(os.getenv("MAX_RETRIES", 3)),
             retry_delay=int(os.getenv("RETRY_DELAY", 60)),
             start_time_hour=int(os.getenv("START_TIME_HOUR", 6)),
-            enable_scheduling=os.getenv("ENABLE_SCHEDULING", "true").lower() == "true"
+            enable_scheduling=os.getenv("ENABLE_SCHEDULING", "true").lower() == "true",
+            quiet_hour_start=int(os.getenv("QUIET_HOUR_START", 0)),
+            quiet_hour_end=int(os.getenv("QUIET_HOUR_END", 7)),
+            enable_quiet_hours=os.getenv("ENABLE_QUIET_HOURS", "true").lower() == "true"
         )
 
         # Создание конфигурации Google Sheets
@@ -191,7 +197,7 @@ class ConfigManager:
             telegram_bot_token=os.getenv("REPORTS_BOT_TOKEN"),
             telegram_channel_id=os.getenv("REPORTS_CHANNEL_ID"),
             enable_reports=os.getenv("ENABLE_REPORTS", "false").lower() == "true",
-            report_interval_hours=int(os.getenv("REPORT_INTERVAL_HOURS", 12)),
+            report_interval_hours=int(os.getenv("REPORT_INTERVAL_HOURS", 3)),  # Отчеты каждые 3 часа
             timezone=os.getenv("REPORTS_TIMEZONE", "Europe/Moscow")
         )
 

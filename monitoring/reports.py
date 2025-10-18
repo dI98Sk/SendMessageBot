@@ -39,7 +39,7 @@ class TelegramReporter:
         self.channel_id = channel_id
         self.timezone = pytz.timezone(timezone)
         self.last_report_time: Optional[datetime] = None
-        self.report_interval_hours = 12
+        self.report_interval_hours = 3  # Отчеты каждые 3 часа
         self.running = False
         self.task: Optional[asyncio.Task] = None
         self.logger = get_logger("telegram_reporter", config.logging)

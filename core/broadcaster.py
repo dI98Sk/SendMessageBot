@@ -212,10 +212,20 @@ class EnhancedBroadcaster:
         flood_waits_count = 0
         
         for idx, message in enumerate(self.messages, start=1):
+            # Проверяем, не наступил ли тихий час во время рассылки
+            if self._is_quiet_hour():
+                self.logger.info(f"🌙 Наступил тихий час во время рассылки. Прерываем текущий цикл.")
+                break
+            
             self.logger.info(f"Отправляем сообщение №{idx} из {len(self.messages)}")
             
             # Отправляем во все целевые чаты
             for target in self.targets:
+                # Проверяем тихий час перед каждым сообщением
+                if self._is_quiet_hour():
+                    self.logger.info(f"🌙 Наступил тихий час. Останавливаем рассылку.")
+                    break
+                
                 success = await self._send_single_message(target, message, idx)
                 if success:
                     successful_messages += 1
@@ -283,6 +293,44 @@ class EnhancedBroadcaster:
         
         return 0
     
+    def _is_quiet_hour(self) -> bool:
+        """Проверка, находимся ли мы в тихом часе"""
+        if not self.config.broadcasting.enable_quiet_hours:
+            return False
+        
+        moscow_tz = pytz.timezone("Europe/Moscow")
+        now = datetime.now(moscow_tz)
+        current_hour = now.hour
+        
+        quiet_start = self.config.broadcasting.quiet_hour_start
+        quiet_end = self.config.broadcasting.quiet_hour_end
+        
+        # Проверка, находится ли текущее время в диапазоне тихого часа
+        return quiet_start <= current_hour < quiet_end
+    
+    def _wait_until_quiet_hour_ends(self) -> float:
+        """Вычисление времени ожидания до окончания тихого часа"""
+        if not self._is_quiet_hour():
+            return 0
+        
+        moscow_tz = pytz.timezone("Europe/Moscow")
+        now = datetime.now(moscow_tz)
+        end_time = now.replace(
+            hour=self.config.broadcasting.quiet_hour_end,
+            minute=0,
+            second=0,
+            microsecond=0
+        )
+        
+        seconds_to_wait = (end_time - now).total_seconds()
+        self.logger.info(
+            f"🌙 Тихий час (с {self.config.broadcasting.quiet_hour_start:02d}:00 до {self.config.broadcasting.quiet_hour_end:02d}:00). "
+            f"Сейчас {now.strftime('%H:%M')}, ждём до {end_time.strftime('%H:%M')} "
+            f"({seconds_to_wait/60:.1f} мин.)"
+        )
+        
+        return seconds_to_wait
+    
     @retry_with_backoff(max_retries=3, base_delay=5)
     async def _ensure_connection(self):
         """Обеспечение подключения к Telegram"""
@@ -316,6 +364,12 @@ class EnhancedBroadcaster:
             # Основной цикл
             while self._running:
                 try:
+                    # Проверка тихого часа перед началом цикла
+                    quiet_wait_time = self._wait_until_quiet_hour_ends()
+                    if quiet_wait_time > 0:
+                        await asyncio.sleep(quiet_wait_time)
+                        continue  # После окончания тихого часа начинаем новый цикл
+                    
                     await self._ensure_connection()
                     await self._send_messages_cycle()
                     
