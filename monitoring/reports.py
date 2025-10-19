@@ -47,6 +47,9 @@ class TelegramReporter:
         # Статистика отчетов
         self.reports_sent = 0
         self.last_report_data: Optional[ReportData] = None
+        
+        # Функция для получения актуального списка broadcaster'ов
+        self.get_broadcasters_func = None
     
     async def _send_telegram_message(self, message: str, parse_mode: str = "HTML") -> bool:
         """Отправка сообщения в Telegram канал"""
@@ -136,7 +139,7 @@ class TelegramReporter:
    • Активных broadcaster'ов: {report_data.active_broadcasters}
    • Последняя активность: {activity_text}
 {errors_text}{chats_text}
-💡 <i>Следующий отчет через 12 часов</i>
+💡 <i>Следующий отчет через {self.report_interval_hours} часа</i>
 """
         return message.strip()
     
@@ -231,7 +234,7 @@ class TelegramReporter:
         time_since_last = datetime.now(self.timezone) - self.last_report_time
         return time_since_last.total_seconds() >= (self.report_interval_hours * 3600)
     
-    async def _report_loop(self, broadcasters: List[Any]):
+    async def _report_loop(self):
         """Основной цикл отправки отчетов"""
         self.logger.info(f"Запуск системы отчетов (интервал: {self.report_interval_hours} часов)")
         
@@ -239,7 +242,12 @@ class TelegramReporter:
             try:
                 # Проверяем, нужно ли отправлять отчет
                 if self.should_send_report():
-                    await self.send_report(broadcasters)
+                    # Получаем актуальный список broadcaster'ов
+                    broadcasters = self.get_broadcasters_func() if self.get_broadcasters_func else []
+                    if broadcasters:
+                        await self.send_report(broadcasters)
+                    else:
+                        self.logger.warning("Нет broadcaster'ов для отчета")
                 
                 # Ждем 1 час до следующей проверки
                 await asyncio.sleep(3600)
@@ -251,8 +259,12 @@ class TelegramReporter:
                 self.logger.error(f"Ошибка в цикле отчетов: {e}")
                 await asyncio.sleep(3600)  # Ждем час при ошибке
     
-    async def start(self, broadcasters: List[Any]):
-        """Запуск системы отчетов"""
+    async def start(self, get_broadcasters_func):
+        """Запуск системы отчетов
+        
+        Args:
+            get_broadcasters_func: Функция, которая возвращает актуальный список broadcaster'ов
+        """
         if self.running:
             self.logger.warning("Система отчетов уже запущена")
             return
@@ -261,8 +273,9 @@ class TelegramReporter:
             self.logger.warning("Не настроены bot_token или channel_id для отчетов")
             return
         
+        self.get_broadcasters_func = get_broadcasters_func
         self.running = True
-        self.task = asyncio.create_task(self._report_loop(broadcasters))
+        self.task = asyncio.create_task(self._report_loop())
         self.logger.info("Система отчетов запущена")
     
     async def stop(self):
@@ -280,10 +293,11 @@ class TelegramReporter:
         
         self.logger.info("Система отчетов остановлена")
     
-    def force_send_report(self, broadcasters: List[Any]):
+    def force_send_report(self):
         """Принудительная отправка отчета"""
-        if self.running:
+        if self.running and self.get_broadcasters_func:
             self.logger.info("Запуск принудительного отчета")
+            broadcasters = self.get_broadcasters_func()
             asyncio.create_task(self.send_report(broadcasters))
     
     def get_status(self) -> Dict[str, Any]:

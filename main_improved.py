@@ -366,6 +366,8 @@ class SendMessageBotApp:
                 channel_id=self.config.reports.telegram_channel_id,
                 timezone=self.config.reports.timezone
             )
+            # Устанавливаем интервал из конфигурации
+            self.telegram_reporter.report_interval_hours = self.config.reports.report_interval_hours
 
             self.logger.info("Система отчетов настроена")
 
@@ -487,8 +489,9 @@ class SendMessageBotApp:
 
             # Запуск системы отчетов
             if self.telegram_reporter:
+                # Передаем функцию для получения актуального списка broadcaster'ов
                 report_task = asyncio.create_task(
-                    self.telegram_reporter.start(self.broadcasters)
+                    self.telegram_reporter.start(lambda: self.broadcasters)
                 )
                 self.tasks.append(report_task)
                 self.logger.info(
