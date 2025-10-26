@@ -45,8 +45,8 @@ class TelegramConfig:
 @dataclass
 class BroadcastingConfig:
     """Конфигурация рассылки"""
-    delay_between_chats: int = 5
-    cycle_delay: int = 900  # 15 минут
+    delay_between_chats: int = 15
+    cycle_delay: int = 1200  # 20 минут
     max_retries: int = 3
     retry_delay: int = 60
     start_time_hour: int = 6
@@ -54,6 +54,7 @@ class BroadcastingConfig:
     quiet_hour_start: int = 0  # Начало тихого часа (00:00)
     quiet_hour_end: int = 7    # Конец тихого часа (07:00)
     enable_quiet_hours: bool = True  # Включить тихий час
+    min_interval_per_chat: int = 120  # Минимальный интервал между отправками в один чат (секунды, по умолчанию 2 минуты)
 
 @dataclass
 class GoogleSheetsConfig:
@@ -61,6 +62,8 @@ class GoogleSheetsConfig:
     credentials_file: str = "credentials.json"
     b2b_sheet_url: Optional[str] = None
     b2c_sheet_url: Optional[str] = None
+    aaa_sheet_url: Optional[str] = None
+    gus_sheet_url: Optional[str] = None
     update_interval: int = 3600  # 1 час
 
 @dataclass
@@ -113,9 +116,10 @@ class AppConfig:
 
     # Списки целей и сообщений
     targets: List[int] = field(default_factory=list)
-    targets: List[int] = field(default_factory=list)
     b2b_messages: List[str] = field(default_factory=list)
     b2c_messages: List[str] = field(default_factory=list)
+    aaa_messages: List[str] = field(default_factory=list)
+    gus_messages: List[str] = field(default_factory=list)
 
 class ConfigManager:
     """Менеджер конфигурации"""
@@ -155,15 +159,16 @@ class ConfigManager:
 
         # Создание конфигурации рассылки
         broadcasting_config = BroadcastingConfig(
-            delay_between_chats=int(os.getenv("DELAY_BETWEEN_CHATS", 5)),
-            cycle_delay=int(os.getenv("CYCLE_DELAY", 900)),
+            delay_between_chats=int(os.getenv("DELAY_BETWEEN_CHATS", 15)),
+            cycle_delay=int(os.getenv("CYCLE_DELAY", 1200)),
             max_retries=int(os.getenv("MAX_RETRIES", 3)),
             retry_delay=int(os.getenv("RETRY_DELAY", 60)),
             start_time_hour=int(os.getenv("START_TIME_HOUR", 6)),
             enable_scheduling=os.getenv("ENABLE_SCHEDULING", "true").lower() == "true",
             quiet_hour_start=int(os.getenv("QUIET_HOUR_START", 0)),
             quiet_hour_end=int(os.getenv("QUIET_HOUR_END", 7)),
-            enable_quiet_hours=os.getenv("ENABLE_QUIET_HOURS", "true").lower() == "true"
+            enable_quiet_hours=os.getenv("ENABLE_QUIET_HOURS", "true").lower() == "true",
+            min_interval_per_chat=int(os.getenv("MIN_INTERVAL_PER_CHAT", 120))  # Интервал между отправками в один чат
         )
 
         # Создание конфигурации Google Sheets
@@ -171,6 +176,8 @@ class ConfigManager:
             credentials_file=os.getenv("GOOGLE_CREDENTIALS_FILE", "credentials.json"),
             b2b_sheet_url=os.getenv("SHEET_URL_B2B"),
             b2c_sheet_url=os.getenv("SHEET_URL_B2C"),
+            aaa_sheet_url=os.getenv("BUY_SELL_PRICE_AAA_SHEET_URL"),
+            gus_sheet_url=os.getenv("BUY_SELL_PRICE_GUS_SHEET_URL"),
             update_interval=int(os.getenv("GOOGLE_UPDATE_INTERVAL", 3600))
         )
 
@@ -205,12 +212,16 @@ class ConfigManager:
         try:
             from .targets import TARGETS, TEST_TARGETS
             from .messages import MESSAGES_B2B, MESSAGES_B2C
+            from .messages_aaa import MESSAGESAAA
+            from .messages_gus import MESSAGESGUS
         except ImportError:
             # Fallback если файлы не найдены
             TARGETS = []
             TEST_TARGETS = []
             MESSAGES_B2B = []
             MESSAGES_B2C = []
+            MESSAGESAAA = []
+            MESSAGESGUS = []
 
         self._config = AppConfig(
             telegram=telegram_config,
@@ -219,10 +230,12 @@ class ConfigManager:
             logging=logging_config,
             notifications=notifications_config,
             reports=reports_config,
-            targets=TARGETS,
-            # targets=TEST_TARGETS,
+            # targets=TARGETS,
+            targets=TEST_TARGETS,
             b2b_messages=MESSAGES_B2B,
-            b2c_messages=MESSAGES_B2C
+            b2c_messages=MESSAGES_B2C,
+            aaa_messages=MESSAGESAAA,
+            gus_messages=MESSAGESGUS,
         )
         
         return self._config

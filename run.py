@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+ #!/usr/bin/env python3
 """
 Быстрый запуск SendMessageBot с выбором режима
 """
@@ -22,6 +22,10 @@ def show_menu():
     print("8. 🧪 Тест Google Sheets")
     print("9. 📝 Обновление сообщений")
     print("10. 📈 Управление отчетами")
+    print("11. 🔥 Тест новых броудкастеров (AAA/GUS)")
+    print("12. 🔄 Обновление всех сообщений")
+    print("13. 🔐 Настройка новых Telegram аккаунтов")
+    print("14. 🌙 Ночное тестирование (игнорирует тихий час)")
     print("0. ❌ Выход")
     print("=" * 50)
 
@@ -35,7 +39,7 @@ def run_full():
     """Запуск полной версии"""
     print("🚀 Запуск полной версии...")
     import subprocess
-    subprocess.run([sys.executable, "main_improved.py"])
+    subprocess.run([sys.executable, "main.py"])
 
 def run_no_google():
     """Запуск версии без Google Sheets"""
@@ -47,7 +51,7 @@ def show_stats():
     """Показать статистику системы"""
     print("📊 Загрузка статистики системы...")
     import subprocess
-    subprocess.run([sys.executable, "show_stats.py"])
+    subprocess.run([sys.executable, "scripts/show_stats.py"])
 
 def watch_stats():
     """Интерактивный просмотр статистики"""
@@ -59,38 +63,62 @@ def switch_targets():
     """Переключение между чатами"""
     print("🔧 Запуск переключателя чатов...")
     import subprocess
-    subprocess.run([sys.executable, "switch_targets.py"])
+    subprocess.run([sys.executable, "scripts/switch_targets.py"])
 
 def migrate_files():
     """Миграция старых файлов"""
     print("📁 Запуск миграции файлов...")
     import subprocess
-    subprocess.run([sys.executable, "migrate_project.py"])
+    subprocess.run([sys.executable, "scripts/migrate_project.py"])
 
 def test_google_sheets():
     """Тестирование Google Sheets"""
     print("🧪 Запуск теста Google Sheets...")
     import subprocess
-    subprocess.run([sys.executable, "test_google_sheets.py"])
+    subprocess.run([sys.executable, "tests/test_google_sheets.py"])
 
 def update_messages():
     """Обновление сообщений"""
     print("📝 Запуск обновления сообщений...")
     import subprocess
-    subprocess.run([sys.executable, "update_messages.py"])
+    subprocess.run([sys.executable, "scripts/update_messages.py"])
 
 def manage_reports():
     """Управление отчетами"""
     print("📈 Запуск управления отчетами...")
     import subprocess
-    subprocess.run([sys.executable, "manage_reports.py"])
+    subprocess.run([sys.executable, "scripts/manage_reports.py"])
+
+def test_new_broadcasters():
+    """Тестирование новых броудкастеров"""
+    print("🔥 Запуск тестирования новых броудкастеров...")
+    import subprocess
+    subprocess.run([sys.executable, "scripts/test_broadcasters.py"])
+
+def update_all_messages():
+    """Обновление всех сообщений"""
+    print("🔄 Запуск обновления всех сообщений...")
+    import subprocess
+    subprocess.run([sys.executable, "scripts/update_messages.py"])
+
+def setup_new_accounts():
+    """Настройка новых аккаунтов"""
+    print("🔐 Запуск настройки новых аккаунтов...")
+    import subprocess
+    subprocess.run([sys.executable, "scripts/setup_accounts.py"])
+
+def night_test():
+    """Ночное тестирование"""
+    print("🌙 Запуск ночного тестирования...")
+    import subprocess
+    subprocess.run([sys.executable, "scripts/night_test.py"])
 
 def main():
     """Главная функция"""
     while True:
         try:
             show_menu()
-            choice = input("\nВыберите режим (0-10): ").strip()
+            choice = input("\nВыберите режим (0-14): ").strip()
             
             if choice == "0":
                 print("👋 До свидания!")
@@ -115,6 +143,14 @@ def main():
                 update_messages()
             elif choice == "10":
                 manage_reports()
+            elif choice == "11":
+                test_new_broadcasters()
+            elif choice == "12":
+                update_all_messages()
+            elif choice == "13":
+                setup_new_accounts()
+            elif choice == "14":
+                night_test()
             else:
                 print("❌ Неверный выбор. Попробуйте снова.")
             

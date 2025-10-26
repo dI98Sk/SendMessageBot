@@ -50,6 +50,10 @@ class EnhancedBroadcaster:
         self._task: Optional[asyncio.Task] = None
         self._cycle_start_time: Optional[datetime] = None
         
+        # 🕐 Rate limiting: отслеживание последних отправок в каждый чат
+        # Формат: {chat_id: datetime последней отправки}
+        self._last_send_times: Dict[int, datetime] = {}
+        
         # Логгер
         self.logger = get_logger(f"broadcaster.{name}", config.logging)
         
@@ -226,13 +230,27 @@ class EnhancedBroadcaster:
                     self.logger.info(f"🌙 Наступил тихий час. Останавливаем рассылку.")
                     break
                 
+                # 🕐 Проверка rate limiting: не отправляем в один чат чаще чем установленный интервал
+                min_interval = self.config.broadcasting.min_interval_per_chat
+                can_send, wait_time = self._can_send_to_chat(target, min_interval_seconds=min_interval)
+                if not can_send:
+                    self.logger.info(
+                        f"⏳ Пропускаем чат {target}: прошло только {min_interval - wait_time:.1f} сек с последней отправки. "
+                        f"Нужно подождать ещё {wait_time:.1f} сек. (Интервал: {min_interval} сек)"
+                    )
+                    continue
+                
                 success = await self._send_single_message(target, message, idx)
+                
+                # Обновляем время последней отправки и статистику только при успехе
                 if success:
+                    self._update_chat_send_time(target)
                     successful_messages += 1
                 else:
                     failed_messages += 1
                 
-                # Задержка между чатами
+                # 🕐 ЗАДЕРЖКА МЕЖДУ ЧАТАМИ - здесь примените задержку между отправками в разные чаты
+                # Используется значение из: config.broadcasting.delay_between_chats (по умолчанию 15 сек)
                 if self.config.broadcasting.delay_between_chats > 0:
                     await asyncio.sleep(self.config.broadcasting.delay_between_chats)
 
@@ -308,6 +326,39 @@ class EnhancedBroadcaster:
         # Проверка, находится ли текущее время в диапазоне тихого часа
         return quiet_start <= current_hour < quiet_end
     
+    def _can_send_to_chat(self, chat_id: int, min_interval_seconds: int = 120) -> tuple[bool, float]:
+        """
+        Проверка, можно ли отправить сообщение в чат (не чаще чем раз в N секунд)
+        
+        Args:
+            chat_id: ID чата
+            min_interval_seconds: Минимальный интервал между отправками в секундах (по умолчанию 120 = 2 минуты)
+        
+        Returns:
+            tuple[bool, float]: (можно ли отправить, сколько секунд нужно подождать)
+        """
+        now = datetime.now()
+        
+        # Если чат не в истории - можно отправлять сразу
+        if chat_id not in self._last_send_times:
+            return True, 0
+        
+        # Вычисляем время с последней отправки
+        last_send_time = self._last_send_times[chat_id]
+        time_since_last = (now - last_send_time).total_seconds()
+        
+        # Если прошло достаточно времени - можно отправлять
+        if time_since_last >= min_interval_seconds:
+            return True, 0
+        
+        # Нужно подождать
+        wait_time = min_interval_seconds - time_since_last
+        return False, wait_time
+    
+    def _update_chat_send_time(self, chat_id: int):
+        """Обновление времени последней отправки в чат"""
+        self._last_send_times[chat_id] = datetime.now()
+    
     def _wait_until_quiet_hour_ends(self) -> float:
         """Вычисление времени ожидания до окончания тихого часа"""
         if not self._is_quiet_hour():
@@ -342,9 +393,21 @@ class EnhancedBroadcaster:
             me = await self._client.get_me()
             account_id = me.id
             account_name = f"{me.first_name or ''} {me.last_name or ''}".strip()
+            username = me.username or "без username"
             
-            self.logger.info(f"Подключение {self.name} установлено: ID={account_id}, Name={account_name}")
-            print(f"✅ {self.name} подключен: ID={account_id}, Name={account_name}")
+            # Определяем тип аккаунта по имени broadcaster'а
+            account_type = "ОПТОВЫЙ" if "B2B" in self.name or "AAA" in self.name else "РОЗНИЧНЫЙ"
+            
+            self.logger.info(f"✅ Подключено как {account_name} (@{username})")
+            self.logger.info(f"📱 ID аккаунта: {account_id}")
+            self.logger.info(f"🏷️  Тип аккаунта: {account_type}")
+            self.logger.info(f"📊 Broadcaster: {self.name}")
+            self.logger.info(f"🎯 Целевых чатов: {len(self.targets)}")
+            self.logger.info(f"💬 Сообщений: {len(self.messages)}")
+            
+            print(f"✅ {self.name} подключен: {account_name} (@{username})")
+            print(f"📱 ID: {account_id} | Тип: {account_type}")
+            print(f"🎯 Чатов: {len(self.targets)} | 💬 Сообщений: {len(self.messages)}")
     
     async def start(self):
         """Запуск broadcaster"""
