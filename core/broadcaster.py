@@ -30,6 +30,16 @@ class MessageStats:
         if self.errors is None:
             self.errors = {}
 
+@dataclass
+class DeferredMessage:
+    """Отложенное сообщение для отправки в следующий цикл"""
+    chat_id: int
+    message: str
+    message_idx: int
+    created_at: datetime
+    attempts: int = 0
+    max_attempts: int = 3
+
 class EnhancedBroadcaster:
     """Улучшенный класс для рассылки сообщений"""
     
@@ -53,6 +63,9 @@ class EnhancedBroadcaster:
         # 🕐 Rate limiting: отслеживание последних отправок в каждый чат
         # Формат: {chat_id: datetime последней отправки}
         self._last_send_times: Dict[int, datetime] = {}
+        
+        # 📬 Очередь отложенных сообщений (для отправки в следующий цикл)
+        self._deferred_messages: List[DeferredMessage] = []
         
         # Логгер
         self.logger = get_logger(f"broadcaster.{name}", config.logging)
@@ -210,6 +223,55 @@ class EnhancedBroadcaster:
 
         self.logger.info(f"Начинаем цикл рассылки для {self.name}")
 
+        # 📬 Обработка отложенных сообщений из предыдущего цикла
+        if self._deferred_messages:
+            self.logger.info(f"📬 Обрабатываем {len(self._deferred_messages)} отложенных сообщений")
+            deferred_to_retry = []
+            
+            for deferred_msg in self._deferred_messages:
+                # Проверяем, прошло ли достаточно времени
+                can_send, wait_time = self._can_send_to_chat(
+                    deferred_msg.chat_id, 
+                    min_interval_seconds=self.config.broadcasting.min_interval_per_chat
+                )
+                
+                if can_send:
+                    # Пытаемся отправить
+                    deferred_msg.attempts += 1
+                    success = await self._send_single_message(
+                        deferred_msg.chat_id, 
+                        deferred_msg.message, 
+                        deferred_msg.message_idx
+                    )
+                    
+                    if success:
+                        self._update_chat_send_time(deferred_msg.chat_id)
+                        self.logger.info(
+                            f"✅ Отложенное сообщение для чата {deferred_msg.chat_id} успешно отправлено "
+                            f"(попытка {deferred_msg.attempts}/{deferred_msg.max_attempts})"
+                        )
+                    elif deferred_msg.attempts < deferred_msg.max_attempts:
+                        # Сохраняем для следующей попытки
+                        deferred_to_retry.append(deferred_msg)
+                        self.logger.warning(
+                            f"⚠️ Отложенное сообщение для чата {deferred_msg.chat_id} не отправлено. "
+                            f"Останется на попытку {deferred_msg.attempts}/{deferred_msg.max_attempts}"
+                        )
+                    else:
+                        self.logger.error(
+                            f"❌ Отложенное сообщение для чата {deferred_msg.chat_id} не удалось отправить "
+                            f"после {deferred_msg.max_attempts} попыток. Удаляется из очереди."
+                        )
+                else:
+                    # Ещё рано - оставляем в очереди
+                    deferred_to_retry.append(deferred_msg)
+            
+            # Обновляем очередь отложенных
+            self._deferred_messages = deferred_to_retry
+            
+            if deferred_to_retry:
+                self.logger.info(f"📬 В очереди осталось {len(deferred_to_retry)} отложенных сообщений")
+
         total_messages = len(self.messages) * len(self.targets)
         successful_messages = 0
         failed_messages = 0
@@ -238,6 +300,8 @@ class EnhancedBroadcaster:
                         f"⏳ Пропускаем чат {target}: прошло только {min_interval - wait_time:.1f} сек с последней отправки. "
                         f"Нужно подождать ещё {wait_time:.1f} сек. (Интервал: {min_interval} сек)"
                     )
+                    # 📬 Откладываем сообщение для отправки в следующем цикле
+                    self._defer_message(target, message, idx)
                     continue
                 
                 success = await self._send_single_message(target, message, idx)
@@ -280,7 +344,8 @@ class EnhancedBroadcaster:
             f"Статистика {self.name}: "
             f"отправлено: {self.stats.total_sent}, "
             f"ошибок: {self.stats.total_failed}, "
-            f"FloodWait: {self.stats.flood_waits}"
+            f"FloodWait: {self.stats.flood_waits}, "
+            f"отложенных: {len(self._deferred_messages)}"
         )
         
         if self.stats.errors:
@@ -358,6 +423,21 @@ class EnhancedBroadcaster:
     def _update_chat_send_time(self, chat_id: int):
         """Обновление времени последней отправки в чат"""
         self._last_send_times[chat_id] = datetime.now()
+    
+    def _defer_message(self, chat_id: int, message: str, message_idx: int):
+        """Сохранить сообщение в очередь отложенных для отправки в следующем цикле"""
+        deferred = DeferredMessage(
+            chat_id=chat_id,
+            message=message,
+            message_idx=message_idx,
+            created_at=datetime.now(),
+            attempts=0,
+            max_attempts=3
+        )
+        self._deferred_messages.append(deferred)
+        self.logger.info(
+            f"📬 Сообщение для чата {chat_id} отложено. Всего отложенных: {len(self._deferred_messages)}"
+        )
     
     def _wait_until_quiet_hour_ends(self) -> float:
         """Вычисление времени ожидания до окончания тихого часа"""
