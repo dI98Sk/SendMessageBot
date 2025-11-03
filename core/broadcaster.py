@@ -38,7 +38,7 @@ class DeferredMessage:
     message_idx: int
     created_at: datetime
     attempts: int = 0
-    max_attempts: int = 3
+    max_attempts: int = 5  # Увеличено с 3 до 5 попыток
 
 class EnhancedBroadcaster:
     """Улучшенный класс для рассылки сообщений"""
@@ -66,6 +66,15 @@ class EnhancedBroadcaster:
         
         # 📬 Очередь отложенных сообщений (для отправки в следующий цикл)
         self._deferred_messages: List[DeferredMessage] = []
+        
+        # 🎯 Адаптивная задержка: динамическое изменение задержек на основе ошибок
+        self._current_delay_between_chats: float = float(config.broadcasting.delay_between_chats)
+        self._error_streak: int = 0  # Количество последовательных ошибок
+        self._success_streak: int = 0  # Количество последовательных успешных отправок
+        self._last_flood_wait_time: Optional[datetime] = None
+        
+        # 📋 Список недоступных чатов (для пропуска в следующих циклах)
+        self._blocked_chats: Dict[int, str] = {}  # {chat_id: reason}
         
         # Логгер
         self.logger = get_logger(f"broadcaster.{name}", config.logging)
@@ -145,6 +154,95 @@ class EnhancedBroadcaster:
         signal.signal(signal.SIGINT, signal_handler)
         signal.signal(signal.SIGTERM, signal_handler)
     
+    def _is_valid_chat_id(self, chat_id: int) -> bool:
+        """
+        Валидация chat_id перед отправкой
+        
+        Args:
+            chat_id: ID чата для проверки
+            
+        Returns:
+            bool: True если chat_id валиден и не заблокирован
+        """
+        # Проверка что chat_id это число
+        if not isinstance(chat_id, int):
+            self.logger.error(f"❌ Невалидный chat_id: {chat_id} (не является числом)")
+            return False
+        
+        # Проверка что чат не в списке заблокированных
+        if chat_id in self._blocked_chats:
+            reason = self._blocked_chats[chat_id]
+            self.logger.debug(f"⏭️  Пропускаем заблокированный чат {chat_id}: {reason}")
+            return False
+        
+        return True
+    
+    def _adjust_delay_on_error(self):
+        """
+        Увеличение задержки после ошибки (адаптивная задержка)
+        """
+        if not self.config.broadcasting.adaptive_delay_enabled:
+            return
+        
+        self._error_streak += 1
+        self._success_streak = 0
+        
+        # Увеличиваем задержку при серии ошибок
+        if self._error_streak >= 3:
+            old_delay = self._current_delay_between_chats
+            self._current_delay_between_chats = min(
+                self._current_delay_between_chats * self.config.broadcasting.adaptive_delay_multiplier,
+                self.config.broadcasting.max_delay_between_chats
+            )
+            
+            if old_delay != self._current_delay_between_chats:
+                self.logger.warning(
+                    f"⚠️ Адаптивная задержка: увеличена с {old_delay:.1f}с до {self._current_delay_between_chats:.1f}с "
+                    f"(серия ошибок: {self._error_streak})"
+                )
+    
+    def _adjust_delay_on_success(self):
+        """
+        Уменьшение задержки после успешных отправок (адаптивная задержка)
+        """
+        if not self.config.broadcasting.adaptive_delay_enabled:
+            return
+        
+        self._success_streak += 1
+        self._error_streak = 0
+        
+        # Постепенно уменьшаем задержку при серии успехов
+        if self._success_streak >= 10:
+            old_delay = self._current_delay_between_chats
+            base_delay = float(self.config.broadcasting.delay_between_chats)
+            
+            # Уменьшаем задержку, но не ниже базовой
+            self._current_delay_between_chats = max(
+                self._current_delay_between_chats / self.config.broadcasting.adaptive_delay_multiplier,
+                base_delay
+            )
+            
+            if old_delay != self._current_delay_between_chats:
+                self.logger.info(
+                    f"✅ Адаптивная задержка: уменьшена с {old_delay:.1f}с до {self._current_delay_between_chats:.1f}с "
+                    f"(серия успехов: {self._success_streak})"
+                )
+            
+            # Сбрасываем счетчик успехов
+            self._success_streak = 0
+    
+    def _block_chat(self, chat_id: int, reason: str):
+        """
+        Добавление чата в список заблокированных (для пропуска в будущих циклах)
+        
+        Args:
+            chat_id: ID чата
+            reason: Причина блокировки
+        """
+        if chat_id not in self._blocked_chats:
+            self._blocked_chats[chat_id] = reason
+            self.logger.warning(f"🚫 Чат {chat_id} добавлен в список заблокированных: {reason}")
+    
     @retry_with_backoff(max_retries=3, base_delay=1)
     async def _send_single_message(self, target: int, message: str, message_idx: int) -> bool:
         """Отправка одного сообщения с retry логикой"""
@@ -154,6 +252,13 @@ class EnhancedBroadcaster:
         error_type = None
         success = False
 
+        # 🔍 Валидация chat_id перед отправкой
+        if not self._is_valid_chat_id(target):
+            self.stats.total_failed += 1
+            error_type = "InvalidChatId"
+            self.stats.errors[error_type] = self.stats.errors.get(error_type, 0) + 1
+            return False
+
         try:
             await self._client.send_message(target, message)
             self.stats.total_sent += 1
@@ -161,9 +266,12 @@ class EnhancedBroadcaster:
             success = True
             response_time = (datetime.now() - start_time).total_seconds()
             
+            # ✅ Адаптивная задержка при успехе
+            self._adjust_delay_on_success()
+            
             self.logger.info(
-                f"Отправлено сообщение №{message_idx} в {target} "
-                f"(всего отправлено: {self.stats.total_sent})"
+                f"✅ Отправлено сообщение №{message_idx} в {target} "
+                f"(всего отправлено: {self.stats.total_sent}, задержка: {self._current_delay_between_chats:.1f}с)"
             )
 
             
@@ -172,11 +280,15 @@ class EnhancedBroadcaster:
             wait_time = e.seconds
             flood_wait_duration = wait_time
             error_type = "FloodWaitError"
+            self._last_flood_wait_time = datetime.now()
             
             self.logger.warning(
-                f"FloodWait: ждём {wait_time} секунд для {target}. "
+                f"⏳ FloodWait: ждём {wait_time} секунд для {target}. "
                 f"Всего FloodWait: {self.stats.flood_waits}"
             )
+            
+            # 🎯 Увеличиваем задержку после FloodWait
+            self._adjust_delay_on_error()
             
             await asyncio.sleep(wait_time)
             # Повторяем отправку после ожидания
@@ -186,20 +298,47 @@ class EnhancedBroadcaster:
             self.stats.total_failed += 1
             self.stats.errors["ChatWriteForbidden"] = self.stats.errors.get("ChatWriteForbidden", 0) + 1
             error_type = "ChatWriteForbiddenError"
-            self.logger.error(f"Нет прав на отправку в чат {target}")
+            
+            # 🚫 Блокируем чат - нет смысла пытаться снова
+            self._block_chat(target, "Нет прав на отправку сообщений")
+            self._adjust_delay_on_error()
+            
+            self.logger.error(f"❌ Нет прав на отправку в чат {target}. Чат заблокирован.")
 
             
         except RPCError as e:
             self.stats.total_failed += 1
             error_type = f"RPCError_{e.code}"
             self.stats.errors[error_type] = self.stats.errors.get(error_type, 0) + 1
-            self.logger.error(f"RPC ошибка при отправке в {target}: {e}")
+            
+            # 🚫 Блокируем чат при определенных ошибках
+            if e.code == 400:
+                # Ошибка 400 часто означает невалидный чат или пользователь заблокировал бота
+                self._block_chat(target, f"RPC Error 400: {str(e)}")
+                self.logger.error(f"❌ RPC 400 ошибка для {target}: {e}. Чат заблокирован.")
+            else:
+                self.logger.error(f"❌ RPC ошибка при отправке в {target}: {e}")
+            
+            self._adjust_delay_on_error()
+            
+        except ValueError as e:
+            self.stats.total_failed += 1
+            error_type = "ValueError"
+            self.stats.errors[error_type] = self.stats.errors.get(error_type, 0) + 1
+            
+            # ValueError часто означает невалидные данные
+            self._block_chat(target, f"ValueError: {str(e)}")
+            self._adjust_delay_on_error()
+            
+            self.logger.error(f"❌ ValueError при отправке в {target}: {e}. Чат заблокирован.")
             
         except Exception as e:
             self.stats.total_failed += 1
             error_type = type(e).__name__
             self.stats.errors[error_type] = self.stats.errors.get(error_type, 0) + 1
-            self.logger.error(f"Неожиданная ошибка при отправке в {target}: {e}")
+            self._adjust_delay_on_error()
+            
+            self.logger.error(f"❌ Неожиданная ошибка при отправке в {target}: {e}")
 
         finally:
             # Записываем метрику
@@ -313,10 +452,10 @@ class EnhancedBroadcaster:
                 else:
                     failed_messages += 1
                 
-                # 🕐 ЗАДЕРЖКА МЕЖДУ ЧАТАМИ - здесь примените задержку между отправками в разные чаты
-                # Используется значение из: config.broadcasting.delay_between_chats (по умолчанию 15 сек)
-                if self.config.broadcasting.delay_between_chats > 0:
-                    await asyncio.sleep(self.config.broadcasting.delay_between_chats)
+                # 🕐 АДАПТИВНАЯ ЗАДЕРЖКА МЕЖДУ ЧАТАМИ
+                # Используется динамическая задержка, которая изменяется на основе ошибок и успехов
+                if self._current_delay_between_chats > 0:
+                    await asyncio.sleep(self._current_delay_between_chats)
 
 
 
@@ -341,15 +480,32 @@ class EnhancedBroadcaster:
     def _log_stats(self):
         """Логирование статистики"""
         self.logger.info(
-            f"Статистика {self.name}: "
-            f"отправлено: {self.stats.total_sent}, "
-            f"ошибок: {self.stats.total_failed}, "
-            f"FloodWait: {self.stats.flood_waits}, "
-            f"отложенных: {len(self._deferred_messages)}"
+            f"📊 Статистика {self.name}: "
+            f"✅ отправлено: {self.stats.total_sent}, "
+            f"❌ ошибок: {self.stats.total_failed}, "
+            f"⏳ FloodWait: {self.stats.flood_waits}, "
+            f"📬 отложенных: {len(self._deferred_messages)}"
         )
         
+        # Адаптивная задержка
+        if self.config.broadcasting.adaptive_delay_enabled:
+            base_delay = self.config.broadcasting.delay_between_chats
+            self.logger.info(
+                f"🎯 Адаптивная задержка: текущая={self._current_delay_between_chats:.1f}с, "
+                f"базовая={base_delay}с, "
+                f"серия ошибок={self._error_streak}, "
+                f"серия успехов={self._success_streak}"
+            )
+        
+        # Заблокированные чаты
+        if self._blocked_chats:
+            self.logger.warning(
+                f"🚫 Заблокировано чатов: {len(self._blocked_chats)} "
+                f"(из {len(self.targets)} целевых)"
+            )
+        
         if self.stats.errors:
-            self.logger.info(f"Типы ошибок: {dict(self.stats.errors)}")
+            self.logger.info(f"🚨 Типы ошибок: {dict(self.stats.errors)}")
     
     def _wait_until_start_time(self) -> float:
         """Ожидание времени начала рассылки"""
@@ -432,7 +588,7 @@ class EnhancedBroadcaster:
             message_idx=message_idx,
             created_at=datetime.now(),
             attempts=0,
-            max_attempts=3
+            max_attempts=5  # Увеличено до 5 попыток для большей надежности
         )
         self._deferred_messages.append(deferred)
         self.logger.info(
@@ -603,16 +759,23 @@ class EnhancedBroadcaster:
         # Базовая статистика
         basic = stats["basic"]
         print(f"🎯 Целевых чатов: {basic['targets_count']}")
+        print(f"🚫 Заблокированных чатов: {len(self._blocked_chats)}")
         print(f"💬 Сообщений: {basic['messages_count']}")
         print(f"✅ Отправлено: {basic['total_sent']}")
         print(f"❌ Ошибок: {basic['total_failed']}")
         print(f"⏳ FloodWait: {basic['flood_waits']}")
+        print(f"📬 Отложенных: {len(self._deferred_messages)}")
 
         # Производительность
         perf = stats["performance"]
         print(f"📈 Процент успешности: {perf['success_rate']:.1f}%")
         print(f"⚡ Среднее время ответа: {perf['avg_response_time']:.2f}с")
         print(f"🔄 Циклов завершено: {perf['cycles_completed']}")
+
+        # Адаптивная задержка
+        if self.config.broadcasting.adaptive_delay_enabled:
+            base_delay = self.config.broadcasting.delay_between_chats
+            print(f"🎯 Задержка между чатами: {self._current_delay_between_chats:.1f}с (базовая: {base_delay}с)")
 
         # Ошибки
         if basic['errors']:

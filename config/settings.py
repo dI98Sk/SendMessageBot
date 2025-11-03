@@ -45,16 +45,19 @@ class TelegramConfig:
 @dataclass
 class BroadcastingConfig:
     """Конфигурация рассылки"""
-    delay_between_chats: int = 15
-    cycle_delay: int = 1200  # 20 минут
-    max_retries: int = 3
+    delay_between_chats: int = 40  # Увеличено с 15 до 40 секунд для снижения нагрузки на API
+    cycle_delay: int = 3600  # Увеличено с 20 минут до 1 часа между циклами
+    max_retries: int = 5  # Увеличено с 3 до 5 попыток
     retry_delay: int = 60
     start_time_hour: int = 6
     enable_scheduling: bool = True
     quiet_hour_start: int = 0  # Начало тихого часа (00:00)
     quiet_hour_end: int = 7    # Конец тихого часа (07:00)
     enable_quiet_hours: bool = True  # Включить тихий час
-    min_interval_per_chat: int = 120  # Минимальный интервал между отправками в один чат (секунды, по умолчанию 2 минуты)
+    min_interval_per_chat: int = 600  # Увеличено с 2 до 10 минут между отправками в один чат
+    adaptive_delay_enabled: bool = True  # Адаптивная задержка при ошибках
+    adaptive_delay_multiplier: float = 1.5  # Множитель увеличения задержки при ошибках
+    max_delay_between_chats: int = 120  # Максимальная задержка между чатами (2 минуты)
 
 @dataclass
 class GoogleSheetsConfig:
@@ -159,16 +162,19 @@ class ConfigManager:
 
         # Создание конфигурации рассылки
         broadcasting_config = BroadcastingConfig(
-            delay_between_chats=int(os.getenv("DELAY_BETWEEN_CHATS", 15)),
-            cycle_delay=int(os.getenv("CYCLE_DELAY", 1200)),
-            max_retries=int(os.getenv("MAX_RETRIES", 3)),
+            delay_between_chats=int(os.getenv("DELAY_BETWEEN_CHATS", 40)),  # Обновлено: 40 секунд по умолчанию
+            cycle_delay=int(os.getenv("CYCLE_DELAY", 3600)),  # Обновлено: 1 час по умолчанию
+            max_retries=int(os.getenv("MAX_RETRIES", 5)),  # Обновлено: 5 попыток по умолчанию
             retry_delay=int(os.getenv("RETRY_DELAY", 60)),
             start_time_hour=int(os.getenv("START_TIME_HOUR", 6)),
             enable_scheduling=os.getenv("ENABLE_SCHEDULING", "true").lower() == "true",
             quiet_hour_start=int(os.getenv("QUIET_HOUR_START", 0)),
             quiet_hour_end=int(os.getenv("QUIET_HOUR_END", 7)),
             enable_quiet_hours=os.getenv("ENABLE_QUIET_HOURS", "true").lower() == "true",
-            min_interval_per_chat=int(os.getenv("MIN_INTERVAL_PER_CHAT", 120))  # Интервал между отправками в один чат
+            min_interval_per_chat=int(os.getenv("MIN_INTERVAL_PER_CHAT", 600)),  # Обновлено: 10 минут по умолчанию
+            adaptive_delay_enabled=os.getenv("ADAPTIVE_DELAY_ENABLED", "true").lower() == "true",
+            adaptive_delay_multiplier=float(os.getenv("ADAPTIVE_DELAY_MULTIPLIER", 1.5)),
+            max_delay_between_chats=int(os.getenv("MAX_DELAY_BETWEEN_CHATS", 120))
         )
 
         # Создание конфигурации Google Sheets
