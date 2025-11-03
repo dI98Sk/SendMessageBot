@@ -65,8 +65,10 @@ class GoogleSheetsConfig:
     credentials_file: str = "credentials.json"
     b2b_sheet_url: Optional[str] = None
     b2c_sheet_url: Optional[str] = None
-    aaa_sheet_url: Optional[str] = None
-    gus_sheet_url: Optional[str] = None
+    aaa_sheet_url: Optional[str] = None  # Прайсы AAA
+    gus_sheet_url: Optional[str] = None  # Прайсы GUS
+    aaa_ads_sheet_url: Optional[str] = None  # Реклама AAA
+    gus_ads_sheet_url: Optional[str] = None  # Реклама GUS
     update_interval: int = 3600  # 1 час
 
 @dataclass
@@ -84,7 +86,7 @@ class ReportsConfig:
     telegram_bot_token: Optional[str] = None
     telegram_channel_id: Optional[str] = None
     enable_reports: bool = False
-    report_interval_hours: int = 3  # Отчеты каждые 3 часа
+    report_interval_hours: float = 3.0  # Отчеты каждые 3 часа (поддержка дробных значений)
     timezone: str = "Europe/Moscow"
 
 @dataclass
@@ -119,10 +121,15 @@ class AppConfig:
 
     # Списки целей и сообщений
     targets: List[int] = field(default_factory=list)
+    targets_ads: List[int] = field(default_factory=list)
+    targets_prices: List[int] = field(default_factory=list)
+    targets_ads_test: List[int] = field(default_factory=list)  # Тестовые чаты для рекламы
     b2b_messages: List[str] = field(default_factory=list)
     b2c_messages: List[str] = field(default_factory=list)
-    aaa_messages: List[str] = field(default_factory=list)
-    gus_messages: List[str] = field(default_factory=list)
+    aaa_messages: List[str] = field(default_factory=list)  # Прайсы AAA
+    gus_messages: List[str] = field(default_factory=list)  # Прайсы GUS
+    aaa_ads_messages: List[str] = field(default_factory=list)  # Реклама AAA
+    gus_ads_messages: List[str] = field(default_factory=list)  # Реклама GUS
 
 class ConfigManager:
     """Менеджер конфигурации"""
@@ -184,6 +191,8 @@ class ConfigManager:
             b2c_sheet_url=os.getenv("SHEET_URL_B2C"),
             aaa_sheet_url=os.getenv("BUY_SELL_PRICE_AAA_SHEET_URL"),
             gus_sheet_url=os.getenv("BUY_SELL_PRICE_GUS_SHEET_URL"),
+            aaa_ads_sheet_url=os.getenv("ADS_AAA_SHEET_URL"),
+            gus_ads_sheet_url=os.getenv("ADS_GUS_SHEET_URL"),
             update_interval=int(os.getenv("GOOGLE_UPDATE_INTERVAL", 3600))
         )
 
@@ -210,24 +219,32 @@ class ConfigManager:
             telegram_bot_token=os.getenv("REPORTS_BOT_TOKEN"),
             telegram_channel_id=os.getenv("REPORTS_CHANNEL_ID"),
             enable_reports=os.getenv("ENABLE_REPORTS", "false").lower() == "true",
-            report_interval_hours=int(os.getenv("REPORT_INTERVAL_HOURS", 3)),  # Отчеты каждые 3 часа
+            report_interval_hours=float(os.getenv("REPORT_INTERVAL_HOURS", "3.0")),  # Отчеты каждые N часов (поддержка дробных значений)
             timezone=os.getenv("REPORTS_TIMEZONE", "Europe/Moscow")
         )
 
         # Импорт targets и messages
         try:
-            from .targets import TARGETS, TEST_TARGETS
+            from .targets import TARGETS, TEST_TARGETS, ADS_TARGET, PRICE_TARGET, TEST_TARGETS_ADS
             from .messages import MESSAGES_B2B, MESSAGES_B2C
             from .messages_aaa import MESSAGESAAA
             from .messages_gus import MESSAGESGUS
+            from .messages_aaa_ads import MESSAGES_AAA_ADS
+            from .messages_gus_ads import MESSAGES_GUS_ADS
         except ImportError:
             # Fallback если файлы не найдены
             TARGETS = []
             TEST_TARGETS = []
+            ADS_TARGET = []
+            PRICE_TARGET = []
+            TEST_TARGETS_ADS = []
             MESSAGES_B2B = []
             MESSAGES_B2C = []
             MESSAGESAAA = []
             MESSAGESGUS = []
+            MESSAGES_AAA_ADS = []
+            MESSAGES_GUS_ADS = []
+
 
         self._config = AppConfig(
             telegram=telegram_config,
@@ -237,11 +254,16 @@ class ConfigManager:
             notifications=notifications_config,
             reports=reports_config,
             # targets=TARGETS,
+            targets_ads=ADS_TARGET,
+            targets_prices=PRICE_TARGET,
+            targets_ads_test=TEST_TARGETS_ADS,  # Тестовые чаты для рекламы
             targets=TEST_TARGETS,
             b2b_messages=MESSAGES_B2B,
             b2c_messages=MESSAGES_B2C,
             aaa_messages=MESSAGESAAA,
             gus_messages=MESSAGESGUS,
+            aaa_ads_messages=MESSAGES_AAA_ADS,
+            gus_ads_messages=MESSAGES_GUS_ADS,
         )
         
         return self._config

@@ -39,7 +39,7 @@ class TelegramReporter:
         self.channel_id = channel_id
         self.timezone = pytz.timezone(timezone)
         self.last_report_time: Optional[datetime] = None
-        self.report_interval_hours = 3  # Отчеты каждые 3 часа
+        self.report_interval_hours: float = 3.0  # Отчеты каждые N часов (поддержка дробных значений для тестирования)
         self.running = False
         self.task: Optional[asyncio.Task] = None
         self.logger = get_logger("telegram_reporter", config.logging)
@@ -58,6 +58,9 @@ class TelegramReporter:
             
             url = f"https://api.telegram.org/bot{self.bot_token}/sendMessage"
             
+            self.logger.debug(f"Отправка отчета в канал: {self.channel_id}")
+            self.logger.debug(f"Длина сообщения: {len(message)} символов")
+            
             data = {
                 "chat_id": self.channel_id,
                 "text": message,
@@ -68,15 +71,30 @@ class TelegramReporter:
             async with aiohttp.ClientSession() as session:
                 async with session.post(url, json=data) as response:
                     if response.status == 200:
-                        self.logger.info("Отчет успешно отправлен в Telegram")
+                        self.logger.info("✅ Отчет успешно отправлен в Telegram")
                         return True
                     else:
                         error_text = await response.text()
-                        self.logger.error(f"Ошибка отправки в Telegram: {response.status} - {error_text}")
+                        self.logger.error(f"❌ Ошибка отправки в Telegram:")
+                        self.logger.error(f"   Статус: {response.status}")
+                        self.logger.error(f"   Ответ: {error_text}")
+                        self.logger.error(f"   URL: {url}")
+                        self.logger.error(f"   Channel ID: {self.channel_id}")
+                        
+                        # Попробуем распарсить JSON ошибку
+                        try:
+                            import json
+                            error_json = json.loads(error_text)
+                            if 'description' in error_json:
+                                self.logger.error(f"   Описание ошибки: {error_json['description']}")
+                        except:
+                            pass
+                        
                         return False
                         
         except Exception as e:
-            self.logger.error(f"Ошибка отправки отчета в Telegram: {e}")
+            self.logger.error(f"❌ Исключение при отправке отчета в Telegram: {e}")
+            self.logger.exception("Полный traceback:")
             return False
     
     def _format_report_message(self, report_data: ReportData) -> str:
@@ -96,7 +114,15 @@ class TelegramReporter:
         
         # Время с последней активности
         if report_data.last_activity:
-            time_since_activity = (datetime.now(self.timezone) - report_data.last_activity).total_seconds()
+            # Убедимся, что оба объекта datetime имеют timezone
+            now_tz = datetime.now(self.timezone)
+            last_activity_tz = report_data.last_activity
+            
+            # Если last_activity без timezone, добавляем timezone
+            if last_activity_tz.tzinfo is None:
+                last_activity_tz = self.timezone.localize(last_activity_tz)
+            
+            time_since_activity = (now_tz - last_activity_tz).total_seconds()
             if time_since_activity < 3600:  # Менее часа
                 activity_text = f"{time_since_activity/60:.0f} мин назад"
             elif time_since_activity < 86400:  # Менее суток
@@ -207,10 +233,19 @@ class TelegramReporter:
             
             # Собираем данные
             report_data = self._collect_report_data(broadcasters)
+            
+            # Проверяем, есть ли данные для отправки (пропускаем пустые отчеты)
+            if report_data.total_sent == 0 and report_data.total_failed == 0:
+                self.logger.info("Пропуск отчета: нет данных для отправки (broadcaster'ы еще не начали работу)")
+                # НЕ устанавливаем last_report_time, чтобы отчет отправился позже, когда появятся данные
+                return False
+            
             self.last_report_data = report_data
             
             # Форматируем сообщение
             message = self._format_report_message(report_data)
+            
+            self.logger.info(f"Отправка отчета: {report_data.total_sent} отправлено, {report_data.total_failed} ошибок")
             
             # Отправляем
             success = await self._send_telegram_message(message)
@@ -218,7 +253,9 @@ class TelegramReporter:
             if success:
                 self.last_report_time = datetime.now(self.timezone)
                 self.reports_sent += 1
-                self.logger.info(f"Отчет #{self.reports_sent} отправлен успешно")
+                self.logger.info(f"✅ Отчет #{self.reports_sent} отправлен успешно в канал {self.channel_id}")
+            else:
+                self.logger.error(f"❌ Не удалось отправить отчет в канал {self.channel_id}")
             
             return success
             
@@ -236,28 +273,41 @@ class TelegramReporter:
     
     async def _report_loop(self):
         """Основной цикл отправки отчетов"""
-        self.logger.info(f"Запуск системы отчетов (интервал: {self.report_interval_hours} часов)")
+        self.logger.info(f"🚀 Запуск системы отчетов (интервал: {self.report_interval_hours} часов)")
+        self.logger.info(f"📊 Канал для отчетов: {self.channel_id}")
+        
+        # Вычисляем интервал проверки (минимум 5 минут, максимум 1 час)
+        check_interval = min(max(self.report_interval_hours * 3600 / 6, 300), 3600)  
+        self.logger.info(f"⏰ Проверка каждые {check_interval/60:.1f} минут")
         
         while self.running:
             try:
                 # Проверяем, нужно ли отправлять отчет
                 if self.should_send_report():
+                    self.logger.info("📈 Пора отправлять отчет...")
                     # Получаем актуальный список broadcaster'ов
                     broadcasters = self.get_broadcasters_func() if self.get_broadcasters_func else []
                     if broadcasters:
+                        self.logger.info(f"📡 Broadcaster'ов активно: {len([b for b in broadcasters if b._running])}/{len(broadcasters)}")
                         await self.send_report(broadcasters)
                     else:
-                        self.logger.warning("Нет broadcaster'ов для отчета")
+                        self.logger.warning("⚠️ Нет broadcaster'ов для отчета")
+                else:
+                    # Вычисляем время до следующего отчета
+                    if self.last_report_time:
+                        time_since_last = (datetime.now(self.timezone) - self.last_report_time).total_seconds()
+                        time_until_next = (self.report_interval_hours * 3600) - time_since_last
+                        self.logger.debug(f"⏳ До следующего отчета: {time_until_next/60:.1f} минут")
                 
-                # Ждем 1 час до следующей проверки
-                await asyncio.sleep(3600)
+                # Ждем до следующей проверки
+                await asyncio.sleep(check_interval)
                 
             except asyncio.CancelledError:
-                self.logger.info("Система отчетов остановлена")
+                self.logger.info("🛑 Система отчетов остановлена")
                 break
             except Exception as e:
-                self.logger.error(f"Ошибка в цикле отчетов: {e}")
-                await asyncio.sleep(3600)  # Ждем час при ошибке
+                self.logger.error(f"❌ Ошибка в цикле отчетов: {e}")
+                await asyncio.sleep(check_interval)
     
     async def start(self, get_broadcasters_func):
         """Запуск системы отчетов

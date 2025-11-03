@@ -387,3 +387,4 @@ MIN_INTERVAL_PER_CHAT=900
 **Применяется к:** SendMessageBot v2.0+
 
 
+
