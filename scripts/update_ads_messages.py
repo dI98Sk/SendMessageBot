@@ -50,7 +50,7 @@ async def update_ads_messages():
         if aaa_url:
             print(f"\n📥 Загрузка рекламных сообщений AAA...")
             try:
-                aaa_ads_messages = await fetcher.fetch_messages(aaa_url)
+                aaa_ads_messages = fetcher.fetch_messages(aaa_url)
                 print(f"✅ Загружено {len(aaa_ads_messages)} сообщений AAA ADS")
                 
                 # Сохранение в файл
@@ -80,7 +80,7 @@ async def update_ads_messages():
         if gus_url:
             print(f"\n📥 Загрузка рекламных сообщений GUS...")
             try:
-                gus_ads_messages = await fetcher.fetch_messages(gus_url)
+                gus_ads_messages = fetcher.fetch_messages(gus_url)
                 print(f"✅ Загружено {len(gus_ads_messages)} сообщений GUS ADS")
                 
                 # Сохранение в файл
