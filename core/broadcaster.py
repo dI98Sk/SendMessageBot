@@ -43,12 +43,16 @@ class DeferredMessage:
 class EnhancedBroadcaster:
     """Улучшенный класс для рассылки сообщений"""
     
-    def __init__(self, config: AppConfig, name: str, targets: List[int], messages: List[str], session_name: Optional[str] = None):
+    def __init__(self, config: AppConfig, name: str, targets: List[int], messages: List[str], 
+                 session_name: Optional[str] = None, cycle_delay: Optional[int] = None):
         self.config = config
         self.name = name
         self.targets = targets
         self.messages = messages
         self.session_name = session_name or config.telegram.session_name
+        
+        # Индивидуальная задержка между циклами (если не указана - берем из конфигурации)
+        self.cycle_delay = cycle_delay if cycle_delay is not None else config.broadcasting.cycle_delay
         
         # Статистика
         self.stats = MessageStats()
@@ -673,9 +677,9 @@ class EnhancedBroadcaster:
                     await self._send_messages_cycle()
                     
                     self.logger.info(
-                        f"Цикл завершён. Ждём {self.config.broadcasting.cycle_delay} секунд..."
+                        f"Цикл завершён. Ждём {self.cycle_delay} секунд ({self.cycle_delay/60:.0f} минут)..."
                     )
-                    await asyncio.sleep(self.config.broadcasting.cycle_delay)
+                    await asyncio.sleep(self.cycle_delay)
                     
                 except Exception as e:
                     self.logger.exception(f"Ошибка в цикле рассылки: {e}")

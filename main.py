@@ -43,6 +43,7 @@ class SendMessageBotApp:
         self.google_sheets_manager = None
         self.message_updater = None
         self.config_updater = None
+        self.auto_updater = None  # Автоматический обновлятель всех сообщений
 
         # Система отчетов
         self.telegram_reporter = None
@@ -72,7 +73,7 @@ class SendMessageBotApp:
             # Инициализация очередей
             await self._setup_queues()
 
-            # Инициализация Google Sheets
+            # Инициализация Google Sheets и автообновления
             await self._setup_google_sheets()
 
             # Инициализация системы отчетов
@@ -204,8 +205,10 @@ class SendMessageBotApp:
             self.logger.info(f"Создание broadcaster'ов... (текущее количество: {before_count})")
 
         # ========================================
-        # ПРАЙСЫ (targets_prices)
+        # ПРАЙСЫ (targets_prices) - цикл каждые 20 минут
         # ========================================
+        
+        PRICE_CYCLE_DELAY = 20 * 60  # 20 минут = 1200 секунд
         
         # AAA Прайсы - использует аккаунт acc1 (ID: ОПТОВЫЙ)
         aaa_broadcaster = EnhancedBroadcaster(
@@ -213,10 +216,11 @@ class SendMessageBotApp:
             name="AAA_PRICE_Broadcaster",
             targets=self.config.targets_prices,
             messages=self.config.aaa_messages,
-            session_name="sessions/acc1"  # Первый аккаунт для AAA
+            session_name="sessions/acc1_price",  # Уникальный файл сессии для прайсов
+            cycle_delay=PRICE_CYCLE_DELAY  # 20 минут между циклами
         )
         self.broadcasters.append(aaa_broadcaster)
-        print(f"✅ AAA PRICE Broadcaster создан (acc1): {len(self.config.targets_prices)} чатов, {len(self.config.aaa_messages)} сообщений")
+        print(f"✅ AAA PRICE Broadcaster создан (acc1): {len(self.config.targets_prices)} чатов, {len(self.config.aaa_messages)} сообщений, цикл: 20 мин")
 
         # GUS Прайсы - использует аккаунт acc2 (ID: РОЗНИЧНЫЙ)
         gus_broadcaster = EnhancedBroadcaster(
@@ -224,14 +228,17 @@ class SendMessageBotApp:
             name="GUS_PRICE_Broadcaster",
             targets=self.config.targets_prices,
             messages=self.config.gus_messages,
-            session_name="sessions/acc2"  # Второй аккаунт для GUS
+            session_name="sessions/acc2_price",  # Уникальный файл сессии для прайсов
+            cycle_delay=PRICE_CYCLE_DELAY  # 20 минут между циклами
         )
         self.broadcasters.append(gus_broadcaster)
-        print(f"✅ GUS PRICE Broadcaster создан (acc2): {len(self.config.targets_prices)} чатов, {len(self.config.gus_messages)} сообщений")
+        print(f"✅ GUS PRICE Broadcaster создан (acc2): {len(self.config.targets_prices)} чатов, {len(self.config.gus_messages)} сообщений, цикл: 20 мин")
         
         # ========================================
-        # РЕКЛАМА (targets_ads)
+        # РЕКЛАМА (targets_ads) - цикл каждый 1 час
         # ========================================
+        
+        ADS_CYCLE_DELAY = 60 * 60  # 1 час = 3600 секунд
         
         # AAA Реклама - использует аккаунт acc2 (Анна Макарова)
         aaa_ads_broadcaster = EnhancedBroadcaster(
@@ -239,10 +246,11 @@ class SendMessageBotApp:
             name="AAA_ADS_Broadcaster",
             targets=self.config.targets_ads,
             messages=self.config.aaa_ads_messages,
-            session_name="sessions/acc2"  # Анна Макарова для AAA рекламы
+            session_name="sessions/acc2_ads",  # Уникальный файл сессии для рекламы
+            cycle_delay=ADS_CYCLE_DELAY  # 1 час между циклами
         )
         self.broadcasters.append(aaa_ads_broadcaster)
-        print(f"✅ AAA ADS Broadcaster создан (acc2): {len(self.config.targets_ads)} чатов, {len(self.config.aaa_ads_messages)} сообщений")
+        print(f"✅ AAA ADS Broadcaster создан (acc2): {len(self.config.targets_ads)} чатов, {len(self.config.aaa_ads_messages)} сообщений, цикл: 1 час")
         
         # GUS Реклама - использует аккаунт acc1 (Яблочный Гусь Менеджер)
         gus_ads_broadcaster = EnhancedBroadcaster(
@@ -250,10 +258,11 @@ class SendMessageBotApp:
             name="GUS_ADS_Broadcaster",
             targets=self.config.targets_ads,
             messages=self.config.gus_ads_messages,
-            session_name="sessions/acc1"  # Яблочный Гусь для GUS рекламы
+            session_name="sessions/acc1_ads",  # Уникальный файл сессии для рекламы
+            cycle_delay=ADS_CYCLE_DELAY  # 1 час между циклами
         )
         self.broadcasters.append(gus_ads_broadcaster)
-        print(f"✅ GUS ADS Broadcaster создан (acc1): {len(self.config.targets_ads)} чатов, {len(self.config.gus_ads_messages)} сообщений")
+        print(f"✅ GUS ADS Broadcaster создан (acc1): {len(self.config.targets_ads)} чатов, {len(self.config.gus_ads_messages)} сообщений, цикл: 1 час")
         
         after_count = len(self.broadcasters)
         print(f"📊 Всего broadcaster'ов: {after_count}")
@@ -262,88 +271,67 @@ class SendMessageBotApp:
             self.logger.info(f"Всего broadcaster'ов после создания: {after_count}")
 
     async def _setup_google_sheets(self):
-        """Настройка Google Sheets интеграции"""
+        """Настройка Google Sheets интеграции и автообновления"""
         try:
-            # Инициализация Google Sheets менеджера
-            self.google_sheets_manager = GoogleSheetsManager(
-                credentials_file=self.config.google_sheets.credentials_file
+            from utils.auto_updater import AutoMessageUpdater
+            
+            # Инициализация автоматического обновлятеля
+            self.auto_updater = AutoMessageUpdater(
+                credentials_file=self.config.google_sheets.credentials_file,
+                config=self.config
             )
-
-            # Инициализация обновлятеля сообщений
-            self.config_updater = MessageConfigUpdater()
-
-            # Инициализация MessageUpdater
-            self.message_updater = MessageUpdater(self.google_sheets_manager)
-
-            # Добавляем callback для обновления конфигурации
-            self.message_updater.add_update_callback(self._on_messages_updated)
-
-            self.logger.info("Google Sheets интеграция настроена")
-
-            # Первоначальное обновление сообщений, если нужно
-            if (self.config.google_sheets.b2b_sheet_url or self.config.google_sheets.b2c_sheet_url):
-                try:
-                    self.logger.info("Попытка обновления сообщений из Google Sheets...")
-                    await self._initial_message_update()
-                except Exception as e:
-                    self.logger.warning(f"⚠️  Не удалось выполнить обновление Google Sheets: {e}")
-                    self.logger.info("ℹ️  Продолжаем работу с сообщениями из config/messages.py")
-                    self.logger.info("ℹ️  Вы можете исправить проблему с Google Sheets позже")
+            
+            # Устанавливаем callback для обработки обновлений
+            self.auto_updater.set_update_callback(self._on_auto_messages_updated)
+            
+            self.logger.info("✅ Автоматический обновлятель сообщений настроен")
 
         except Exception as e:
             self.logger.error(f"⚠️  Ошибка настройки Google Sheets: {e}")
-            self.logger.info("ℹ️  Продолжаем работу без интеграции Google Sheets")
+            self.logger.info("ℹ️  Продолжаем работу без автообновления")
 
-    async def _initial_message_update(self):
-        """Первоначальное обновление сообщений"""
+    async def _on_auto_messages_updated(self, results):
+        """Callback для автоматического обновления всех сообщений"""
         try:
-            self.logger.info("Выполняем первоначальное обновление сообщений...")
-
-            success = await self.message_updater.update_messages_from_sheets(
-                self.config.google_sheets.b2b_sheet_url,
-                self.config.google_sheets.b2c_sheet_url
-            )
-
-            if success:
-                self.logger.info("Первоначальное обновление сообщений завершено")
-                # Перезагружаем конфигурацию с новыми сообщениями
-                self.config = config_manager.load_config()
-                # Пересоздаем broadcaster'ы с новыми сообщениями
-                await self._recreate_broadcasters()
-            else:
-                self.logger.warning("Первоначальное обновление сообщений не удалось")
-
-        except Exception as e:
-            self.logger.error(f"Ошибка первоначального обновления: {e}")
-
-    async def _on_messages_updated(self, new_messages):
-        """Callback для обновления сообщений"""
-        try:
-            self.logger.info("Получены новые сообщения из Google Sheets")
-
-            # Обновляем файл конфигурации
-            self.config_updater.update_messages_file(
-                new_messages['b2b'],
-                new_messages['b2c']
-            )
-
-            # Перезагружаем модуль сообщений
-            self.config_updater.reload_messages_module()
-
+            self.logger.info("📊 Получены обновленные сообщения из Google Sheets")
+            
+            # Подсчитываем успешные обновления
+            success_types = [k for k, v in results.items() if v['success']]
+            
+            if not success_types:
+                self.logger.warning("⚠️ Ни один тип сообщений не был обновлен")
+                return
+            
+            # Формируем отчет об обновлении
+            update_info = []
+            for msg_type, result in results.items():
+                if result['success']:
+                    update_info.append(f"{msg_type}={result['count']}")
+            
+            self.logger.info(f"✅ Обновлено типов: {', '.join(update_info)}")
+            
             # Перезагружаем конфигурацию
             self.config = config_manager.load_config()
-
+            
             # Пересоздаем broadcaster'ы с новыми сообщениями
+            self.logger.info("🔄 Пересоздание broadcaster'ов с новыми сообщениями...")
             await self._recreate_broadcasters()
-
+            
             # Отправляем уведомление
             await notification_manager.send_info(
-                "Сообщения обновлены",
-                f"Получены новые сообщения: B2B={len(new_messages['b2b'])}, B2C={len(new_messages['b2c'])}"
+                "🔄 Сообщения автоматически обновлены",
+                f"Обновлено: {', '.join(update_info)}\n" +
+                f"Broadcaster'ы перезапущены с новыми сообщениями"
             )
+            
+            self.logger.info("✅ Автообновление завершено успешно")
 
         except Exception as e:
-            self.logger.error(f"Ошибка в callback обновления сообщений: {e}")
+            self.logger.error(f"❌ Ошибка в callback автообновления: {e}")
+            await notification_manager.send_error(
+                "Ошибка автообновления",
+                f"Не удалось применить обновленные сообщения: {e}"
+            )
 
     async def _recreate_broadcasters(self):
         """Пересоздание broadcaster'ов с новыми сообщениями"""
@@ -360,8 +348,22 @@ class SendMessageBotApp:
             self.broadcasters.clear()
             self.logger.info("Список broadcaster'ов очищен")
             
-            # Удаляем завершенные задачи из списка
-            self.tasks = [task for task in self.tasks if not task.done()]
+            # Удаляем завершенные задачи из списка (кроме задачи отчетов!)
+            # ⚠️ ВАЖНО: Сохраняем задачу telegram_reporter
+            reporter_task = None
+            if self.telegram_reporter and self.telegram_reporter.task:
+                reporter_task = self.telegram_reporter.task
+                self.logger.info("💾 Сохранена задача системы отчетов")
+            
+            # Фильтруем задачи
+            new_tasks = []
+            for task in self.tasks:
+                if not task.done():
+                    # Сохраняем задачу отчетов и системные задачи
+                    if task == reporter_task or 'health_check' in str(task) or 'metrics' in str(task):
+                        new_tasks.append(task)
+                        
+            self.tasks = new_tasks
             self.logger.info(f"Активных задач после очистки: {len(self.tasks)}")
 
             # Создаем новые broadcaster'ы
@@ -377,6 +379,12 @@ class SendMessageBotApp:
                     task = asyncio.create_task(broadcaster.start())
                     self.tasks.append(task)
                 self.logger.info("✅ Все broadcaster'ы запущены после пересоздания")
+                
+                # ✅ Проверяем что система отчетов все еще работает
+                if self.telegram_reporter and self.telegram_reporter.running:
+                    self.logger.info("✅ Система отчетов продолжает работать")
+                else:
+                    self.logger.warning("⚠️ Система отчетов не активна!")
 
         except Exception as e:
             self.logger.error(f"Ошибка пересоздания broadcaster'ов: {e}")
@@ -505,19 +513,17 @@ class SendMessageBotApp:
             stats_task = asyncio.create_task(self._stats_display_task())
             self.tasks.append(stats_task)
 
-
-            # Запуск задачи периодического обновления сообщений
-            if self.message_updater and (
-                    self.config.google_sheets.b2b_sheet_url or self.config.google_sheets.b2c_sheet_url):
-                update_task = asyncio.create_task(
-                    self.message_updater.start_periodic_updates(
-                        self.config.google_sheets.b2b_sheet_url,
-                        self.config.google_sheets.b2c_sheet_url,
-                        self.config.google_sheets.update_interval // 3600  # Конвертируем секунды в часы
-                    )
-                )
-                self.tasks.append(update_task)
-                print("📊 Автоматическое обновление сообщений из Google Sheets включено")
+            # ✅ Запуск автоматического обновления ВСЕХ сообщений (прайсы + реклама)
+            if self.auto_updater:
+                # Интервал обновления в часах из конфигурации
+                update_interval = self.config.google_sheets.update_interval / 3600.0  # секунды в часы
+                
+                await self.auto_updater.start(interval_hours=update_interval)
+                
+                self.logger.info(f"🔄 Автообновление сообщений запущено (интервал: {update_interval:.1f} часов)")
+                print(f"🔄 Автообновление сообщений включено (каждые {update_interval:.1f} часов)")
+                print("   • Прайсы AAA/GUS")
+                print("   • Реклама AAA/GUS")
 
             # Запуск системы отчетов
             if self.telegram_reporter:
@@ -554,6 +560,11 @@ class SendMessageBotApp:
         # Остановка broadcaster'ов
         for broadcaster in self.broadcasters:
             await broadcaster.stop()
+
+        # Остановка автообновления
+        if self.auto_updater:
+            await self.auto_updater.stop()
+            self.logger.info("Автообновление остановлено")
 
         # Остановка системы отчетов
         if self.telegram_reporter:
