@@ -264,3 +264,4 @@ python -m py_compile config/messages_gus_ads.py
 
 **Дата обновления: 2025-11-04**
 
+
