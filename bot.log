@@ -18103,3 +18103,5 @@ ConnectionError: Connection to Telegram failed 5 time(s)
 2025-11-06 00:23:25 [INFO] broadcaster.GUS_PRICE_TEST_Broadcaster: 📊 Статистика GUS_PRICE_TEST_Broadcaster: ✅ отправлено: 54, ❌ ошибок: 0, ⏳ FloodWait: 17, 📬 отложенных: 162
 2025-11-06 00:23:25 [INFO] broadcaster.GUS_PRICE_TEST_Broadcaster: 🎯 Адаптивная задержка: текущая=40.0с, базовая=40с, серия ошибок=0, серия успехов=4
 2025-11-06 00:23:25 [INFO] broadcaster.GUS_PRICE_TEST_Broadcaster: Цикл завершён. Ждём 1200 секунд (20 минут)...
+2025-11-06 01:36:48 [ERROR] update_ads: Ошибка обновления AAA ADS: object list can't be used in 'await' expression
+2025-11-06 01:36:51 [ERROR] update_ads: Ошибка обновления GUS ADS: object list can't be used in 'await' expression

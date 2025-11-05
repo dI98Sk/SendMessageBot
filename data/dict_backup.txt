@@ -1,0 +1,31 @@
+
+ГОРБУШКИНСКИЕ ЧАТЫ
+
+target1 = -1001459724536 #Name: Барахолка Apple, ID: -1001459724536, Username: Baraxolka_apple
+target2 = -1001465386299 #Name: Барахолка РФ, ID: -1001465386299, Username: baraxolka_rus
+target3 = -1002814695489 #Name: 📱 ГОРБУШКА | ГЛАВ. ЧАТ 📱, ID: -1002814695489, Username: gorbushka_digital
+target4 = -1001334460573 #Name: Митинский радиорынок, ID: -1001334460573, Username: mitino_ru
+target5 = -1001260508096 #Name: Электроника ТуТ👇👇👇, ID: -1001260508096, Username: electronic_tyt
+target6 = -1001260508096 #Name: Купи iPhone тут 👈👈👈, ID: -1001201314067, Username: IPhone_tyta
+target7 = -1001344677793 #Name: Горбушка Чат, ID: -1001344677793, Username: gorbushka_chat
+target8 = -1001205203973 # Name: Савеловский радиорынок, ID: -1001205203973, Username: savel_ru
+target9 = -1002217655560 #Name: ГОРБУШКА ЧАТ 💎📱, ID: -1002217655560, Username: gorbushka_g
+target10 = -1001673828053 #Name: Чат Apple, ID: -1001673828053, Username: applechatsale
+target11 = -1001264785143 #Name: Горбушка чат, ID: -1001264785143, Username: gorbushkin_ru
+target12 = -1002323347764 #Name: Re Store, ID: -1002323347764, Username: re_store_ru
+target13 = -1001055908983 #Name: Горбушка чат⚜️, ID: -1001055908983, Username: gorbushka_77
+target14 = -1001430610351 #Name: Чат телефонных мастерOFF, ID: -1001430610351, Username: telefon_mastera
+target15 = -1001247235081 #Name: Горбушка Чат 💬, ID: -1001247235081, Username: gorbyshkachat
+target16 = -1001426023232 #Name: Царицынский радиорынок, ID: -1001426023232, Username: Tk_Tsaritsyno
+target17 = -1001167575256 #Name: 🇷🇺 Барахолка России 🇷🇺, ID: -1001167575256, Username: Rus_baraxolka
+target18 = -1001202385106 #Name: 🇷🇺 Объявления Барахолка России 🇷🇺, ID: -1001202385106, Username: Rus_post
+target19 = -1001247724666 #Name: Купи Продай iPhone, ID: -1001247724666, Username: Prodai_iphone
+target20 = -1001419588487 #Name: 🇷🇺 Барахолка Apple 🇷🇺, ID: -1001419588487, Username: Rus_apple_rus
+target21 = -1001650533724 #Name: ☎️Мобильная Барахолка ☎️, ID: -1001650533724, Username: mobilkaa
+target22 = -1002424091888 #Name: Доска Обьявлений, ID: -1002424091888, Username: postanru
+target23 = -1001741002498 #Name: Рынок, ID: -1001741002498, Username: rin_ok
+
+
+
+
+

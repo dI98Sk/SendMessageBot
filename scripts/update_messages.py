@@ -42,31 +42,35 @@ def update_all_messages():
     print("🔄 ОБНОВЛЕНИЕ ВСЕХ СООБЩЕНИЙ ИЗ GOOGLE SHEETS")
     print("=" * 60)
     
-    # Конфигурация для обновления
+    # Конфигурация для обновления ВСЕХ типов сообщений
     updates = [
         {
-            "name": "B2B",
-            "sheet_url": os.getenv("BUY_SELL_PRICE_B2B_SHEET_URL"),
-            "config_file": "config/messages_b2b.py",
-            "messages_var": "MESSAGESB2B"
-        },
-        {
-            "name": "B2C", 
-            "sheet_url": os.getenv("BUY_SELL_PRICE_B2C_SHEET_URL"),
-            "config_file": "config/messages_b2c.py",
-            "messages_var": "MESSAGESB2C"
-        },
-        {
-            "name": "AAA",
+            "name": "AAA PRICE",
             "sheet_url": os.getenv("BUY_SELL_PRICE_AAA_SHEET_URL"),
             "config_file": "config/messages_aaa.py",
-            "messages_var": "MESSAGESAAA"
+            "messages_var": "MESSAGESAAA",
+            "description": "Прайсы AAA"
         },
         {
-            "name": "GUS",
+            "name": "GUS PRICE",
             "sheet_url": os.getenv("BUY_SELL_PRICE_GUS_SHEET_URL"),
             "config_file": "config/messages_gus.py",
-            "messages_var": "MESSAGESGUS"
+            "messages_var": "MESSAGESGUS",
+            "description": "Прайсы GUS"
+        },
+        {
+            "name": "AAA ADS",
+            "sheet_url": os.getenv("ADS_AAA_SHEET_URL"),
+            "config_file": "config/messages_aaa_ads.py",
+            "messages_var": "MESSAGES_AAA_ADS",
+            "description": "Реклама AAA"
+        },
+        {
+            "name": "GUS ADS",
+            "sheet_url": os.getenv("ADS_GUS_SHEET_URL"),
+            "config_file": "config/messages_gus_ads.py",
+            "messages_var": "MESSAGES_GUS_ADS",
+            "description": "Реклама GUS"
         }
     ]
     
@@ -120,14 +124,15 @@ def update_all_messages():
 
 def main():
     """Главная функция"""
-    print("🔄 ОБНОВЛЕНИЕ СООБЩЕНИЙ ИЗ GOOGLE SHEETS")
-    print("=" * 60)
-    print("Этот скрипт обновляет сообщения из всех настроенных таблиц:")
-    print("• B2B (оптовые сообщения)")
-    print("• B2C (розничные сообщения)")
-    print("• AAA (сообщения AAA Store)")
-    print("• GUS (сообщения Яблочный Гусь)")
-    print("=" * 60)
+    print("=" * 70)
+    print("🔄 ОБНОВЛЕНИЕ ВСЕХ СООБЩЕНИЙ ИЗ GOOGLE SHEETS")
+    print("=" * 70)
+    print("Этот скрипт обновляет ВСЕ типы сообщений:")
+    print("• AAA прайсы (из BUY_SELL_PRICE_AAA_SHEET_URL)")
+    print("• GUS прайсы (из BUY_SELL_PRICE_GUS_SHEET_URL)")
+    print("• AAA реклама (из ADS_AAA_SHEET_URL)")
+    print("• GUS реклама (из ADS_GUS_SHEET_URL)")
+    print("=" * 70)
     
     try:
         success = update_all_messages()
