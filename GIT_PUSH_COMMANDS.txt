@@ -1,0 +1,28 @@
+# Команды для push в GitHub
+
+## Коммит уже создан! ✅
+## Осталось только запушить
+
+# ВАРИАНТ 1: SSH (рекомендуется)
+git remote set-url origin git@github.com:dI98Sk/SendMessageBot.git
+git push origin master
+
+# ВАРИАНТ 2: HTTPS с credential helper
+git config --global credential.helper osxkeychain
+git push origin master
+
+# ВАРИАНТ 3: С токеном (замените YOUR_TOKEN на ваш токен)
+git push https://YOUR_TOKEN@github.com/dI98Sk/SendMessageBot.git master
+
+---
+
+После успешного push на сервере выполните:
+
+cd C:\Users\Administrator\PycharmProjects\SendMessageBot
+git pull origin master
+
+Затем:
+python main.py
+
+И всё заработает! 🚀
+
