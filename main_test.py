@@ -177,29 +177,29 @@ class SendMessageBotTestApp:
         
         print(f"\n📊 ПРАЙСЫ → TEST_TARGETS ({len(self.config.targets)} чатов)")
         
-        # AAA Прайсы - использует аккаунт acc1 (ID: ОПТОВЫЙ)
+        # AAA Прайсы - использует аккаунт acc2 (Анна Макарова - ОПТОВЫЙ)
         aaa_broadcaster = EnhancedBroadcaster(
             config=self.config,
             name="AAA_PRICE_TEST_Broadcaster",
             targets=self.config.targets,  # ⚠️ TEST_TARGETS вместо targets_prices
             messages=self.config.aaa_messages,
-            session_name="sessions/acc1_price",  # Уникальный файл сессии
+            session_name="sessions/acc2_price",  # Анна Макарова
             cycle_delay=PRICE_CYCLE_DELAY  # 20 минут между циклами
         )
         self.broadcasters.append(aaa_broadcaster)
-        print(f"✅ AAA PRICE TEST Broadcaster создан (acc1): {len(self.config.targets)} чатов, {len(self.config.aaa_messages)} сообщений, цикл: 20 мин")
+        print(f"✅ AAA PRICE TEST Broadcaster создан (acc2/Анна): {len(self.config.targets)} чатов, {len(self.config.aaa_messages)} сообщений, цикл: 20 мин")
 
-        # GUS Прайсы - использует аккаунт acc2 (ID: РОЗНИЧНЫЙ)
+        # GUS Прайсы - использует аккаунт acc1 (Яблочный Гусь - РОЗНИЧНЫЙ)
         gus_broadcaster = EnhancedBroadcaster(
             config=self.config,
             name="GUS_PRICE_TEST_Broadcaster",
             targets=self.config.targets,  # ⚠️ TEST_TARGETS вместо targets_prices
             messages=self.config.gus_messages,
-            session_name="sessions/acc2_price",  # Уникальный файл сессии
+            session_name="sessions/acc1_price",  # Яблочный Гусь
             cycle_delay=PRICE_CYCLE_DELAY  # 20 минут между циклами
         )
         self.broadcasters.append(gus_broadcaster)
-        print(f"✅ GUS PRICE TEST Broadcaster создан (acc2): {len(self.config.targets)} чатов, {len(self.config.gus_messages)} сообщений, цикл: 20 мин")
+        print(f"✅ GUS PRICE TEST Broadcaster создан (acc1/Яблочный Гусь): {len(self.config.targets)} чатов, {len(self.config.gus_messages)} сообщений, цикл: 20 мин")
         
         # ========================================
         # РЕКЛАМА → TEST_TARGETS_ADS (2 чата) - цикл каждый 1 час
@@ -209,29 +209,29 @@ class SendMessageBotTestApp:
         
         print(f"\n📢 РЕКЛАМА → TEST_TARGETS_ADS ({len(self.config.targets_ads_test)} чатов)")
         
-        # AAA Реклама - использует аккаунт acc2 (Анна Макарова)
+        # AAA Реклама - использует аккаунт acc2 (Анна Макарова - ОПТОВЫЙ)
         aaa_ads_broadcaster = EnhancedBroadcaster(
             config=self.config,
             name="AAA_ADS_TEST_Broadcaster",
             targets=self.config.targets_ads_test,  # ⚠️ TEST_TARGETS_ADS вместо targets_ads
             messages=self.config.aaa_ads_messages,
-            session_name="sessions/acc2_ads",  # Уникальный файл сессии
+            session_name="sessions/acc2_ads",  # Анна Макарова
             cycle_delay=ADS_CYCLE_DELAY  # 1 час между циклами
         )
         self.broadcasters.append(aaa_ads_broadcaster)
-        print(f"✅ AAA ADS TEST Broadcaster создан (acc2): {len(self.config.targets_ads_test)} чатов, {len(self.config.aaa_ads_messages)} сообщений, цикл: 1 час")
+        print(f"✅ AAA ADS TEST Broadcaster создан (acc2/Анна): {len(self.config.targets_ads_test)} чатов, {len(self.config.aaa_ads_messages)} сообщений, цикл: 1 час")
         
-        # GUS Реклама - использует аккаунт acc1 (Яблочный Гусь Менеджер)
+        # GUS Реклама - использует аккаунт acc1 (Яблочный Гусь - РОЗНИЧНЫЙ)
         gus_ads_broadcaster = EnhancedBroadcaster(
             config=self.config,
             name="GUS_ADS_TEST_Broadcaster",
             targets=self.config.targets_ads_test,  # ⚠️ TEST_TARGETS_ADS вместо targets_ads
             messages=self.config.gus_ads_messages,
-            session_name="sessions/acc1_ads",  # Уникальный файл сессии
+            session_name="sessions/acc1_ads",  # Яблочный Гусь
             cycle_delay=ADS_CYCLE_DELAY  # 1 час между циклами
         )
         self.broadcasters.append(gus_ads_broadcaster)
-        print(f"✅ GUS ADS TEST Broadcaster создан (acc1): {len(self.config.targets_ads_test)} чатов, {len(self.config.gus_ads_messages)} сообщений, цикл: 1 час")
+        print(f"✅ GUS ADS TEST Broadcaster создан (acc1/Яблочный Гусь): {len(self.config.targets_ads_test)} чатов, {len(self.config.gus_ads_messages)} сообщений, цикл: 1 час")
         
         after_count = len(self.broadcasters)
         print(f"\n📊 Всего ТЕСТОВЫХ broadcaster'ов: {after_count}")

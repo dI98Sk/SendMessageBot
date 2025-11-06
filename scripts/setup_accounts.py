@@ -26,13 +26,15 @@ def create_session_copies(base_session: str, account_name: str):
     
     # Определяем какие копии нужны (acc1 или acc2)
     if "acc1" in base_session:
+        # acc1 = Яблочный Гусь → GUS бренд
         copies = [
-            ("sessions/acc1_price", "AAA_PRICE_Broadcaster"),
+            ("sessions/acc1_price", "GUS_PRICE_Broadcaster"),
             ("sessions/acc1_ads", "GUS_ADS_Broadcaster")
         ]
     else:
+        # acc2 = Анна Макарова → AAA бренд
         copies = [
-            ("sessions/acc2_price", "GUS_PRICE_Broadcaster"),
+            ("sessions/acc2_price", "AAA_PRICE_Broadcaster"),
             ("sessions/acc2_ads", "AAA_ADS_Broadcaster")
         ]
     
@@ -139,12 +141,12 @@ async def main():
     
     print("\n📊 СТРУКТУРА BROADCASTER'ОВ:")
     print("-" * 70)
-    print("acc1 (Яблочный Гусь Менеджер):")
-    print("  • AAA_PRICE_Broadcaster → sessions/acc1_price.session")
+    print("acc1 (Яблочный Гусь Менеджер) - РОЗНИЧНЫЙ:")
+    print("  • GUS_PRICE_Broadcaster → sessions/acc1_price.session")
     print("  • GUS_ADS_Broadcaster   → sessions/acc1_ads.session")
     print()
-    print("acc2 (Анна Макарова):")
-    print("  • GUS_PRICE_Broadcaster → sessions/acc2_price.session")
+    print("acc2 (Анна Макарова) - ОПТОВЫЙ:")
+    print("  • AAA_PRICE_Broadcaster → sessions/acc2_price.session")
     print("  • AAA_ADS_Broadcaster   → sessions/acc2_ads.session")
     print("-" * 70)
     
