@@ -210,29 +210,31 @@ class SendMessageBotApp:
         
         PRICE_CYCLE_DELAY = 20 * 60  # 20 минут = 1200 секунд
         
-        # AAA Прайсы - использует аккаунт acc1 (ID: ОПТОВЫЙ)
+        # AAA Прайсы - использует аккаунт acc1 (Яблочный Гусь)
+        # УНИКАЛЬНЫЙ файл сессии чтобы избежать database locked!
         aaa_broadcaster = EnhancedBroadcaster(
             config=self.config,
             name="AAA_PRICE_Broadcaster",
             targets=self.config.targets_prices,
             messages=self.config.aaa_messages,
-            session_name="sessions/acc1_price",  # Уникальный файл сессии для прайсов
+            session_name="sessions/acc1_price",  # Уникальный файл (копия acc1)
             cycle_delay=PRICE_CYCLE_DELAY  # 20 минут между циклами
         )
         self.broadcasters.append(aaa_broadcaster)
-        print(f"✅ AAA PRICE Broadcaster создан (acc1): {len(self.config.targets_prices)} чатов, {len(self.config.aaa_messages)} сообщений, цикл: 20 мин")
+        print(f"✅ AAA PRICE Broadcaster создан (acc1_price): {len(self.config.targets_prices)} чатов, {len(self.config.aaa_messages)} сообщений, цикл: 20 мин")
 
-        # GUS Прайсы - использует аккаунт acc2 (ID: РОЗНИЧНЫЙ)
+        # GUS Прайсы - использует аккаунт acc2 (Анна Макарова)
+        # УНИКАЛЬНЫЙ файл сессии чтобы избежать database locked!
         gus_broadcaster = EnhancedBroadcaster(
             config=self.config,
             name="GUS_PRICE_Broadcaster",
             targets=self.config.targets_prices,
             messages=self.config.gus_messages,
-            session_name="sessions/acc2_price",  # Уникальный файл сессии для прайсов
+            session_name="sessions/acc2_price",  # Уникальный файл (копия acc2)
             cycle_delay=PRICE_CYCLE_DELAY  # 20 минут между циклами
         )
         self.broadcasters.append(gus_broadcaster)
-        print(f"✅ GUS PRICE Broadcaster создан (acc2): {len(self.config.targets_prices)} чатов, {len(self.config.gus_messages)} сообщений, цикл: 20 мин")
+        print(f"✅ GUS PRICE Broadcaster создан (acc2_price): {len(self.config.targets_prices)} чатов, {len(self.config.gus_messages)} сообщений, цикл: 20 мин")
         
         # ========================================
         # РЕКЛАМА (targets_ads) - цикл каждый 1 час
@@ -241,28 +243,30 @@ class SendMessageBotApp:
         ADS_CYCLE_DELAY = 60 * 60  # 1 час = 3600 секунд
         
         # AAA Реклама - использует аккаунт acc2 (Анна Макарова)
+        # УНИКАЛЬНЫЙ файл сессии чтобы избежать database locked!
         aaa_ads_broadcaster = EnhancedBroadcaster(
             config=self.config,
             name="AAA_ADS_Broadcaster",
             targets=self.config.targets_ads,
             messages=self.config.aaa_ads_messages,
-            session_name="sessions/acc2_ads",  # Уникальный файл сессии для рекламы
+            session_name="sessions/acc2_ads",  # Уникальный файл (копия acc2)
             cycle_delay=ADS_CYCLE_DELAY  # 1 час между циклами
         )
         self.broadcasters.append(aaa_ads_broadcaster)
-        print(f"✅ AAA ADS Broadcaster создан (acc2): {len(self.config.targets_ads)} чатов, {len(self.config.aaa_ads_messages)} сообщений, цикл: 1 час")
+        print(f"✅ AAA ADS Broadcaster создан (acc2_ads): {len(self.config.targets_ads)} чатов, {len(self.config.aaa_ads_messages)} сообщений, цикл: 1 час")
         
-        # GUS Реклама - использует аккаунт acc1 (Яблочный Гусь Менеджер)
+        # GUS Реклама - использует аккаунт acc1 (Яблочный Гусь)
+        # УНИКАЛЬНЫЙ файл сессии чтобы избежать database locked!
         gus_ads_broadcaster = EnhancedBroadcaster(
             config=self.config,
             name="GUS_ADS_Broadcaster",
             targets=self.config.targets_ads,
             messages=self.config.gus_ads_messages,
-            session_name="sessions/acc1_ads",  # Уникальный файл сессии для рекламы
+            session_name="sessions/acc1_ads",  # Уникальный файл (копия acc1)
             cycle_delay=ADS_CYCLE_DELAY  # 1 час между циклами
         )
         self.broadcasters.append(gus_ads_broadcaster)
-        print(f"✅ GUS ADS Broadcaster создан (acc1): {len(self.config.targets_ads)} чатов, {len(self.config.gus_ads_messages)} сообщений, цикл: 1 час")
+        print(f"✅ GUS ADS Broadcaster создан (acc1_ads): {len(self.config.targets_ads)} чатов, {len(self.config.gus_ads_messages)} сообщений, цикл: 1 час")
         
         after_count = len(self.broadcasters)
         print(f"📊 Всего broadcaster'ов: {after_count}")
