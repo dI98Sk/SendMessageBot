@@ -45,19 +45,19 @@ class TelegramConfig:
 @dataclass
 class BroadcastingConfig:
     """Конфигурация рассылки"""
-    delay_between_chats: int = 40  # Увеличено с 15 до 40 секунд для снижения нагрузки на API
+    delay_between_chats: int = 90  # Увеличено до 90 секунд (1.5 мин) для 4 параллельных broadcaster'ов
     cycle_delay: int = 3600  # Увеличено с 20 минут до 1 часа между циклами
     max_retries: int = 5  # Увеличено с 3 до 5 попыток
-    retry_delay: int = 60
+    retry_delay: int = 120  # Увеличено до 2 минут между повторами
     start_time_hour: int = 6
     enable_scheduling: bool = True
     quiet_hour_start: int = 0  # Начало тихого часа (00:00)
     quiet_hour_end: int = 7    # Конец тихого часа (07:00)
     enable_quiet_hours: bool = True  # Включить тихий час
-    min_interval_per_chat: int = 600  # Увеличено с 2 до 10 минут между отправками в один чат
+    min_interval_per_chat: int = 900  # Увеличено до 15 минут между отправками в один чат (для 4 broadcaster'ов)
     adaptive_delay_enabled: bool = True  # Адаптивная задержка при ошибках
-    adaptive_delay_multiplier: float = 1.5  # Множитель увеличения задержки при ошибках
-    max_delay_between_chats: int = 120  # Максимальная задержка между чатами (2 минуты)
+    adaptive_delay_multiplier: float = 2.0  # Увеличено до 2.0 для более агрессивного замедления при ошибках
+    max_delay_between_chats: int = 180  # Увеличено до 3 минут максимальная задержка
 
 @dataclass
 class GoogleSheetsConfig:
