@@ -188,6 +188,28 @@ class EnhancedBroadcaster:
             self.logger.error(f"❌ Невалидный chat_id: {chat_id} (не является числом)")
             return False
         
+        # Проверка формата Telegram chat_id
+        # Для групп/каналов chat_id должен быть отрицательным
+        # Обычно начинается с -100 для супергрупп/каналов
+        if chat_id > 0:
+            self.logger.error(
+                f"❌ Невалидный chat_id: {chat_id} | "
+                f"Группы/каналы должны иметь отрицательный ID (начинаться с -100) | "
+                f"Положительные ID используются только для пользователей"
+            )
+            return False
+        
+        # Проверка что это не слишком короткий ID (минимальная длина для групп)
+        # Telegram группы обычно имеют ID длиннее 10 цифр
+        if abs(chat_id) < 1000000000:
+            # Это может быть старая группа, но проверим
+            if abs(chat_id) < 1000000:
+                self.logger.warning(
+                    f"⚠️ Подозрительный chat_id: {chat_id} | "
+                    f"ID слишком короткий, возможно это не группа/канал"
+                )
+                # Не блокируем, но предупреждаем
+        
         # Проверка что чат не в списке заблокированных
         if chat_id in self._blocked_chats:
             reason = self._blocked_chats[chat_id]
@@ -276,14 +298,30 @@ class EnhancedBroadcaster:
         if not self._is_valid_chat_id(target):
             self.stats.total_failed += 1
             error_type = "InvalidChatId"
-            error_details = f"Чат {target} невалиден или заблокирован"
+            
+            # Детальная диагностика
+            if target > 0:
+                error_details = f"Положительный ID {target} - это ID пользователя, а не группы/канала. Группы должны иметь отрицательный ID (начинаться с -100)"
+            elif abs(target) < 1000000:
+                error_details = f"ID {target} слишком короткий - возможно это не группа/канал или старая группа"
+            elif target in self._blocked_chats:
+                error_details = f"Чат {target} заблокирован: {self._blocked_chats[target]}"
+            else:
+                error_details = f"Чат {target} невалиден по неизвестной причине"
+            
             self.stats.errors[error_type] = self.stats.errors.get(error_type, 0) + 1
             
             self.logger.error(
-                f"❌ [{self.name}] Невалидный chat_id: {target} | "
+                f"❌ [{self.name}] InvalidChatId: {target} | "
                 f"Сообщение №{message_idx} | "
-                f"Причина: {error_details}"
+                f"Причина: {error_details} | "
+                f"Всего InvalidChatId: {self.stats.errors.get(error_type, 0)}"
             )
+            
+            # Блокируем чат, чтобы не пытаться отправлять снова
+            if target not in self._blocked_chats:
+                self._block_chat(target, error_details)
+            
             return False
 
         try:

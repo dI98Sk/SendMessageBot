@@ -232,6 +232,18 @@ class ConfigManager:
             from .messages_gus import MESSAGESGUS
             from .messages_aaa_ads import MESSAGES_AAA_ADS
             from .messages_gus_ads import MESSAGES_GUS_ADS
+            from utils.chat_validator import validate_targets_list
+            
+            # Валидация и фильтрация списков целей
+            TARGETS, _ = validate_targets_list(TARGETS, "TARGETS", verbose=False)
+            TEST_TARGETS, _ = validate_targets_list(TEST_TARGETS, "TEST_TARGETS", verbose=False)
+            ADS_TARGET, _ = validate_targets_list(ADS_TARGET, "ADS_TARGET", verbose=False)
+            PRICE_TARGET, _ = validate_targets_list(PRICE_TARGET, "PRICE_TARGET", verbose=False)
+            TEST_TARGETS_ADS, _ = validate_targets_list(TEST_TARGETS_ADS, "TEST_TARGETS_ADS", verbose=False)
+            B2C_TARGET, invalid_b2c = validate_targets_list(B2C_TARGET, "B2C_TARGET", verbose=True)
+            
+            if invalid_b2c:
+                print(f"⚠️  Из B2C_TARGET удалено {len(invalid_b2c)} невалидных chat_id")
         except ImportError:
             # Fallback если файлы не найдены
             TARGETS = []
