@@ -279,18 +279,27 @@ class SendMessageBotApp:
         # GUS B2C - использует аккаунт acc1 (Яблочный Гусь) - РОЗНИЧНЫЙ
         # УНИКАЛЬНЫЙ файл сессии чтобы избежать database locked!
         # УВЕЛИЧЕННЫЕ задержки для избежания конфликтов с другими broadcaster'ами
+        # Использует сообщения из ДВУХ таблиц: прайсы GUS + реклама GUS
+        gus_b2c_messages = self.config.gus_messages + self.config.gus_ads_messages
+        
         gus_b2c_broadcaster = EnhancedBroadcaster(
             config=self.config,
             name="GUS_B2C_Broadcaster",
             targets=self.config.targets_b2c,
-            messages=self.config.b2c_messages,
+            messages=gus_b2c_messages,  # Объединенные сообщения из прайсов и рекламы
             session_name="sessions/acc1_b2c",  # Яблочный Гусь
             cycle_delay=B2C_CYCLE_DELAY,  # 2 часа между циклами
             delay_between_chats=B2C_DELAY_BETWEEN_CHATS,  # 2 минуты между чатами
             start_offset_seconds=B2C_START_OFFSET  # 5 минут смещение старта
         )
         self.broadcasters.append(gus_b2c_broadcaster)
-        print(f"✅ GUS B2C Broadcaster создан (acc1_b2c/Яблочный Гусь): {len(self.config.targets_b2c)} чатов, {len(self.config.b2c_messages)} сообщений, цикл: 2 часа, задержка: {B2C_DELAY_BETWEEN_CHATS}с")
+        print(
+            f"✅ GUS B2C Broadcaster создан (acc1_b2c/Яблочный Гусь): "
+            f"{len(self.config.targets_b2c)} чатов, "
+            f"{len(gus_b2c_messages)} сообщений "
+            f"(прайсы: {len(self.config.gus_messages)}, реклама: {len(self.config.gus_ads_messages)}), "
+            f"цикл: 2 часа, задержка: {B2C_DELAY_BETWEEN_CHATS}с"
+        )
         
         after_count = len(self.broadcasters)
         print(f"📊 Всего broadcaster'ов: {after_count}")
