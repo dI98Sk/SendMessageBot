@@ -63,6 +63,9 @@ class EnhancedBroadcaster:
         # Смещение времени старта (для распределения нагрузки между broadcaster'ами)
         self._start_offset_seconds = start_offset_seconds
         
+        # Для B2C: отправляем одно случайное сообщение в каждый чат за цикл
+        self._use_single_random_message = "B2C" in name
+        
         # Статистика
         self.stats = MessageStats()
         self.metrics = MetricsCollector()
@@ -618,31 +621,97 @@ class EnhancedBroadcaster:
             if deferred_to_retry:
                 self.logger.info(f"📬 В очереди осталось {len(deferred_to_retry)} отложенных сообщений")
 
-        total_messages = len(self.messages) * len(self.targets)
-        successful_messages = 0
-        failed_messages = 0
-        flood_waits_count = 0
-        
-        for idx, message in enumerate(self.messages, start=1):
-            # Проверяем, не наступил ли тихий час во время рассылки
-            if self._is_quiet_hour():
-                self.logger.info(
-                    f"🌙 [{self.name}] Наступил тихий час во время рассылки. "
-                    f"Прерываем текущий цикл."
-                )
-                break
+        # Для B2C: отправляем одно случайное сообщение в каждый чат
+        if self._use_single_random_message:
+            import random
+            selected_message = random.choice(self.messages)
+            total_messages = len(self.targets)  # Одно сообщение на чат
+            successful_messages = 0
+            failed_messages = 0
+            flood_waits_count = 0
             
             self.logger.info(
-                f"📨 [{self.name}] Отправляем сообщение №{idx} из {len(self.messages)} | "
-                f"Длина сообщения: {len(message)} символов"
+                f"📨 [{self.name}] Отправляем одно случайное сообщение (из {len(self.messages)}) "
+                f"в каждый из {len(self.targets)} чатов"
             )
             
-            # Отправляем во все целевые чаты
+            # Отправляем одно сообщение во все чаты
             for target in self.targets:
                 # Проверяем тихий час перед каждым сообщением
                 if self._is_quiet_hour():
                     self.logger.info(f"🌙 Наступил тихий час. Останавливаем рассылку.")
                     break
+                
+                # 🕐 Проверка rate limiting
+                min_interval = self.config.broadcasting.min_interval_per_chat
+                
+                # Сначала проверяем глобальный координатор (если доступен)
+                global_can_send = True
+                if self._coordinator:
+                    try:
+                        global_can_send, global_wait_time = await self._coordinator.can_send_to_chat(
+                            self.name, target, min_interval_seconds=min_interval
+                        )
+                        if not global_can_send:
+                            self.logger.debug(
+                                f"⏳ [{self.name}] Глобальная блокировка для чата {target} | "
+                                f"Нужно подождать: {global_wait_time:.1f}с (координатор)"
+                            )
+                            self._defer_message(target, selected_message, 0)
+                            continue
+                    except Exception as e:
+                        self.logger.debug(f"Ошибка проверки координатора: {e}")
+                
+                # Затем проверяем локальный rate limiting
+                can_send, wait_time = self._can_send_to_chat(target, min_interval_seconds=min_interval)
+                if not can_send:
+                    self.logger.debug(
+                        f"⏳ [{self.name}] Пропускаем чат {target} | "
+                        f"Нужно подождать: {wait_time:.1f}с | "
+                        f"Интервал: {min_interval}с"
+                    )
+                    self._defer_message(target, selected_message, 0)
+                    continue
+                
+                success = await self._send_single_message(target, selected_message, 0)
+                
+                # Обновляем время последней отправки и статистику только при успехе
+                if success:
+                    self._update_chat_send_time(target)
+                    successful_messages += 1
+                else:
+                    failed_messages += 1
+                
+                # 🕐 АДАПТИВНАЯ ЗАДЕРЖКА МЕЖДУ ЧАТАМИ
+                if self._current_delay_between_chats > 0:
+                    await asyncio.sleep(self._current_delay_between_chats)
+        else:
+            # Стандартная логика: все сообщения во все чаты
+            total_messages = len(self.messages) * len(self.targets)
+            successful_messages = 0
+            failed_messages = 0
+            flood_waits_count = 0
+            
+            for idx, message in enumerate(self.messages, start=1):
+                # Проверяем, не наступил ли тихий час во время рассылки
+                if self._is_quiet_hour():
+                    self.logger.info(
+                        f"🌙 [{self.name}] Наступил тихий час во время рассылки. "
+                        f"Прерываем текущий цикл."
+                    )
+                    break
+                
+                self.logger.info(
+                    f"📨 [{self.name}] Отправляем сообщение №{idx} из {len(self.messages)} | "
+                    f"Длина сообщения: {len(message)} символов"
+                )
+                
+                # Отправляем во все целевые чаты
+                for target in self.targets:
+                    # Проверяем тихий час перед каждым сообщением
+                    if self._is_quiet_hour():
+                        self.logger.info(f"🌙 Наступил тихий час. Останавливаем рассылку.")
+                        break
                 
                 # 🕐 Проверка rate limiting: не отправляем в один чат чаще чем установленный интервал
                 min_interval = self.config.broadcasting.min_interval_per_chat
