@@ -29,7 +29,8 @@ def create_session_copies(base_session: str, account_name: str):
         # acc1 = Яблочный Гусь → GUS бренд
         copies = [
             ("sessions/acc1_price", "GUS_PRICE_Broadcaster"),
-            ("sessions/acc1_ads", "GUS_ADS_Broadcaster")
+            ("sessions/acc1_ads", "GUS_ADS_Broadcaster"),
+            ("sessions/acc1_b2c", "GUS_B2C_Broadcaster")
         ]
     else:
         # acc2 = Анна Макарова → AAA бренд
@@ -144,6 +145,7 @@ async def main():
     print("acc1 (Яблочный Гусь Менеджер) - РОЗНИЧНЫЙ:")
     print("  • GUS_PRICE_Broadcaster → sessions/acc1_price.session")
     print("  • GUS_ADS_Broadcaster   → sessions/acc1_ads.session")
+    print("  • GUS_B2C_Broadcaster   → sessions/acc1_b2c.session")
     print()
     print("acc2 (Анна Макарова) - ОПТОВЫЙ:")
     print("  • AAA_PRICE_Broadcaster → sessions/acc2_price.session")
@@ -188,10 +190,11 @@ async def main():
     print("\n📁 Проверка созданных файлов:")
     required_files = [
         ("sessions/acc1.session", "База для Яблочный Гусь"),
-        ("sessions/acc1_price.session", "AAA_PRICE_Broadcaster"),
+        ("sessions/acc1_price.session", "GUS_PRICE_Broadcaster"),
         ("sessions/acc1_ads.session", "GUS_ADS_Broadcaster"),
+        ("sessions/acc1_b2c.session", "GUS_B2C_Broadcaster"),
         ("sessions/acc2.session", "База для Анна Макарова"),
-        ("sessions/acc2_price.session", "GUS_PRICE_Broadcaster"),
+        ("sessions/acc2_price.session", "AAA_PRICE_Broadcaster"),
         ("sessions/acc2_ads.session", "AAA_ADS_Broadcaster"),
     ]
     
