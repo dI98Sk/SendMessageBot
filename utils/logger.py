@@ -3,9 +3,81 @@
 """
 import logging
 import logging.handlers
+import os
+import sys
 from pathlib import Path
 from typing import Optional
 from config.settings import LoggingConfig
+
+class WindowsSafeRotatingFileHandler(logging.handlers.RotatingFileHandler):
+    """
+    RotatingFileHandler с обработкой ошибок на Windows
+    Обрабатывает PermissionError при ротации файла, если файл заблокирован другим процессом
+    """
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._rotation_failed = False  # Флаг для отслеживания неудачных попыток ротации
+    
+    def emit(self, record):
+        """
+        Переопределяем emit для обработки ошибок при записи
+        """
+        try:
+            super().emit(record)
+        except (PermissionError, OSError) as e:
+            # На Windows файл может быть заблокирован
+            if sys.platform == 'win32':
+                # Пытаемся записать предупреждение в stderr
+                try:
+                    if not self._rotation_failed:
+                        print(
+                            f"⚠️  Ошибка записи в лог-файл {self.baseFilename}: {e}",
+                            file=sys.stderr
+                        )
+                        print(
+                            "   Файл может быть заблокирован другим процессом.",
+                            file=sys.stderr
+                        )
+                        self._rotation_failed = True
+                except:
+                    pass
+            else:
+                # На других ОС пробрасываем ошибку дальше
+                raise
+    
+    def doRollover(self):
+        """
+        Переопределяем doRollover для безопасной обработки ошибок на Windows
+        """
+        try:
+            super().doRollover()
+            self._rotation_failed = False  # Сбрасываем флаг при успешной ротации
+        except (PermissionError, OSError) as e:
+            # На Windows файл может быть заблокирован другим процессом
+            # В этом случае просто пропускаем ротацию и продолжаем писать в текущий файл
+            if sys.platform == 'win32':
+                # Пытаемся записать предупреждение в stderr, так как файл может быть заблокирован
+                try:
+                    if not self._rotation_failed:
+                        print(
+                            f"⚠️  Не удалось выполнить ротацию лог-файла {self.baseFilename}: {e}",
+                            file=sys.stderr
+                        )
+                        print(
+                            "   Файл заблокирован другим процессом. Продолжаем писать в текущий файл.",
+                            file=sys.stderr
+                        )
+                        print(
+                            "   Рекомендация: закройте другие процессы, использующие этот файл, или перезапустите бота.",
+                            file=sys.stderr
+                        )
+                        self._rotation_failed = True
+                except:
+                    pass  # Если даже stderr недоступен, просто игнорируем
+            else:
+                # На других ОС пробрасываем ошибку дальше
+                raise
 
 class ColoredFormatter(logging.Formatter):
     """Цветной форматтер для консольного вывода"""
@@ -47,7 +119,8 @@ class LoggerManager:
         log_path = Path(config.file_path)
         log_path.parent.mkdir(parents=True, exist_ok=True)
         
-        file_handler = logging.handlers.RotatingFileHandler(
+        # Используем кастомный хэндлер для Windows, который обрабатывает ошибки ротации
+        file_handler = WindowsSafeRotatingFileHandler(
             log_path,
             maxBytes=config.max_file_size,
             backupCount=config.backup_count,
