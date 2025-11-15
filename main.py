@@ -205,74 +205,87 @@ class SendMessageBotApp:
             self.logger.info(f"Создание broadcaster'ов... (текущее количество: {before_count})")
 
         # ========================================
-        # ПРАЙСЫ (targets_prices) - цикл каждые 20 минут
+        # ПРАЙСЫ (targets_prices) - цикл каждые 30 минут (оптимизировано)
+        # Цель: ~48 циклов в сутки на broadcaster (всего ~96 циклов для 2 PRICE)
         # ========================================
         
-        PRICE_CYCLE_DELAY = 20 * 60  # 20 минут = 1200 секунд
+        PRICE_CYCLE_DELAY = 30 * 60  # 30 минут = 1800 секунд (увеличено с 20 мин)
+        PRICE_DELAY_BETWEEN_CHATS = 60.0  # 1 минута между чатами (оптимизировано)
         
         # AAA Прайсы - использует аккаунт acc2 (Анна Макарова) - ОПТОВЫЙ
         # УНИКАЛЬНЫЙ файл сессии чтобы избежать database locked!
+        # ОПТИМИЗИРОВАНО: одно случайное сообщение на чат, цикл 30 минут
         aaa_broadcaster = EnhancedBroadcaster(
             config=self.config,
             name="AAA_PRICE_Broadcaster",
             targets=self.config.targets_prices,
             messages=self.config.aaa_messages,
             session_name="sessions/acc2_price",  # Анна Макарова
-            cycle_delay=PRICE_CYCLE_DELAY  # 20 минут между циклами
+            cycle_delay=PRICE_CYCLE_DELAY,  # 30 минут между циклами
+            delay_between_chats=PRICE_DELAY_BETWEEN_CHATS  # 1 минута между чатами
         )
         self.broadcasters.append(aaa_broadcaster)
-        print(f"✅ AAA PRICE Broadcaster создан (acc2_price/Анна): {len(self.config.targets_prices)} чатов, {len(self.config.aaa_messages)} сообщений, цикл: 20 мин")
+        print(f"✅ AAA PRICE Broadcaster создан (acc2_price/Анна): {len(self.config.targets_prices)} чатов, {len(self.config.aaa_messages)} сообщений (случайное на чат), цикл: 30 мин, задержка: {PRICE_DELAY_BETWEEN_CHATS}с")
 
         # GUS Прайсы - использует аккаунт acc1 (Яблочный Гусь) - РОЗНИЧНЫЙ
         # УНИКАЛЬНЫЙ файл сессии чтобы избежать database locked!
+        # ОПТИМИЗИРОВАНО: одно случайное сообщение на чат, цикл 30 минут
         gus_broadcaster = EnhancedBroadcaster(
             config=self.config,
             name="GUS_PRICE_Broadcaster",
             targets=self.config.targets_prices,
             messages=self.config.gus_messages,
             session_name="sessions/acc1_price",  # Яблочный Гусь
-            cycle_delay=PRICE_CYCLE_DELAY  # 20 минут между циклами
+            cycle_delay=PRICE_CYCLE_DELAY,  # 30 минут между циклами
+            delay_between_chats=PRICE_DELAY_BETWEEN_CHATS  # 1 минута между чатами
         )
         self.broadcasters.append(gus_broadcaster)
-        print(f"✅ GUS PRICE Broadcaster создан (acc1_price/Яблочный Гусь): {len(self.config.targets_prices)} чатов, {len(self.config.gus_messages)} сообщений, цикл: 20 мин")
+        print(f"✅ GUS PRICE Broadcaster создан (acc1_price/Яблочный Гусь): {len(self.config.targets_prices)} чатов, {len(self.config.gus_messages)} сообщений (случайное на чат), цикл: 30 мин, задержка: {PRICE_DELAY_BETWEEN_CHATS}с")
         
         # ========================================
-        # РЕКЛАМА (targets_ads) - цикл каждый 1 час
+        # РЕКЛАМА (targets_ads) - цикл каждые 50 минут (оптимизировано)
+        # Цель: ~29 циклов в сутки на broadcaster (всего ~58 циклов для 2 ADS)
         # ========================================
         
-        ADS_CYCLE_DELAY = 60 * 60  # 1 час = 3600 секунд
+        ADS_CYCLE_DELAY = 50 * 60  # 50 минут = 3000 секунд (уменьшено с 1 часа)
+        ADS_DELAY_BETWEEN_CHATS = 60.0  # 1 минута между чатами (оптимизировано)
         
         # AAA Реклама - использует аккаунт acc2 (Анна Макарова) - ОПТОВЫЙ
         # УНИКАЛЬНЫЙ файл сессии чтобы избежать database locked!
+        # ОПТИМИЗИРОВАНО: одно случайное сообщение на чат, цикл 50 минут
         aaa_ads_broadcaster = EnhancedBroadcaster(
             config=self.config,
             name="AAA_ADS_Broadcaster",
             targets=self.config.targets_ads,
             messages=self.config.aaa_ads_messages,
             session_name="sessions/acc2_ads",  # Анна Макарова
-            cycle_delay=ADS_CYCLE_DELAY  # 1 час между циклами
+            cycle_delay=ADS_CYCLE_DELAY,  # 50 минут между циклами
+            delay_between_chats=ADS_DELAY_BETWEEN_CHATS  # 1 минута между чатами
         )
         self.broadcasters.append(aaa_ads_broadcaster)
-        print(f"✅ AAA ADS Broadcaster создан (acc2_ads/Анна): {len(self.config.targets_ads)} чатов, {len(self.config.aaa_ads_messages)} сообщений, цикл: 1 час")
+        print(f"✅ AAA ADS Broadcaster создан (acc2_ads/Анна): {len(self.config.targets_ads)} чатов, {len(self.config.aaa_ads_messages)} сообщений (случайное на чат), цикл: 50 мин, задержка: {ADS_DELAY_BETWEEN_CHATS}с")
         
         # GUS Реклама - использует аккаунт acc1 (Яблочный Гусь) - РОЗНИЧНЫЙ
         # УНИКАЛЬНЫЙ файл сессии чтобы избежать database locked!
+        # ОПТИМИЗИРОВАНО: одно случайное сообщение на чат, цикл 50 минут
         gus_ads_broadcaster = EnhancedBroadcaster(
             config=self.config,
             name="GUS_ADS_Broadcaster",
             targets=self.config.targets_ads,
             messages=self.config.gus_ads_messages,
             session_name="sessions/acc1_ads",  # Яблочный Гусь
-            cycle_delay=ADS_CYCLE_DELAY  # 1 час между циклами
+            cycle_delay=ADS_CYCLE_DELAY,  # 50 минут между циклами
+            delay_between_chats=ADS_DELAY_BETWEEN_CHATS  # 1 минута между чатами
         )
         self.broadcasters.append(gus_ads_broadcaster)
-        print(f"✅ GUS ADS Broadcaster создан (acc1_ads/Яблочный Гусь): {len(self.config.targets_ads)} чатов, {len(self.config.gus_ads_messages)} сообщений, цикл: 1 час")
+        print(f"✅ GUS ADS Broadcaster создан (acc1_ads/Яблочный Гусь): {len(self.config.targets_ads)} чатов, {len(self.config.gus_ads_messages)} сообщений (случайное на чат), цикл: 50 мин, задержка: {ADS_DELAY_BETWEEN_CHATS}с")
         
         # ========================================
-        # B2C РОЗНИЧНЫЙ (targets_b2c) - цикл каждые 2 часа
+        # B2C РОЗНИЧНЫЙ (targets_b2c) - цикл каждые 1.5 часа (оптимизировано)
+        # Цель: ~16 циклов в сутки (всего ~16 циклов для B2C)
         # ========================================
         
-        B2C_CYCLE_DELAY = 2 * 60 * 60  # 2 часа = 7200 секунд
+        B2C_CYCLE_DELAY = int(1.5 * 60 * 60)  # 1.5 часа = 5400 секунд (уменьшено с 2 часов)
         B2C_DELAY_BETWEEN_CHATS = 60.0  # 1 минута между чатами (оптимизировано)
         B2C_START_OFFSET = 300  # 5 минут смещение старта (чтобы не конфликтовать с другими)
         
@@ -296,9 +309,9 @@ class SendMessageBotApp:
         print(
             f"✅ GUS B2C Broadcaster создан (acc1_b2c/Яблочный Гусь): "
             f"{len(self.config.targets_b2c)} чатов, "
-            f"{len(gus_b2c_messages)} сообщений "
+            f"{len(gus_b2c_messages)} сообщений (случайное на чат) "
             f"(прайсы: {len(self.config.gus_messages)}, реклама: {len(self.config.gus_ads_messages)}), "
-            f"цикл: 2 часа, задержка: {B2C_DELAY_BETWEEN_CHATS}с"
+            f"цикл: 1.5 часа, задержка: {B2C_DELAY_BETWEEN_CHATS}с"
         )
         
         after_count = len(self.broadcasters)

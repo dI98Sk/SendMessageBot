@@ -63,8 +63,9 @@ class EnhancedBroadcaster:
         # Смещение времени старта (для распределения нагрузки между broadcaster'ами)
         self._start_offset_seconds = start_offset_seconds
         
-        # Для B2C: отправляем одно случайное сообщение в каждый чат за цикл
-        self._use_single_random_message = "B2C" in name
+        # Для всех broadcaster'ов: отправляем одно случайное сообщение в каждый чат за цикл
+        # Это оптимизирует время цикла и обеспечивает разнообразие сообщений
+        self._use_single_random_message = True
         
         # Статистика
         self.stats = MessageStats()
