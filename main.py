@@ -268,6 +268,30 @@ class SendMessageBotApp:
         self.broadcasters.append(gus_ads_broadcaster)
         print(f"✅ GUS ADS Broadcaster создан (acc1_ads/Яблочный Гусь): {len(self.config.targets_ads)} чатов, {len(self.config.gus_ads_messages)} сообщений, цикл: 1 час")
         
+        # ========================================
+        # B2C РОЗНИЧНЫЙ (targets_b2c) - цикл каждые 2 часа
+        # ========================================
+        
+        B2C_CYCLE_DELAY = 2 * 60 * 60  # 2 часа = 7200 секунд
+        B2C_DELAY_BETWEEN_CHATS = 120.0  # 2 минуты между чатами (больше, так как работает реже)
+        B2C_START_OFFSET = 300  # 5 минут смещение старта (чтобы не конфликтовать с другими)
+        
+        # GUS B2C - использует аккаунт acc1 (Яблочный Гусь) - РОЗНИЧНЫЙ
+        # УНИКАЛЬНЫЙ файл сессии чтобы избежать database locked!
+        # УВЕЛИЧЕННЫЕ задержки для избежания конфликтов с другими broadcaster'ами
+        gus_b2c_broadcaster = EnhancedBroadcaster(
+            config=self.config,
+            name="GUS_B2C_Broadcaster",
+            targets=self.config.targets_b2c,
+            messages=self.config.b2c_messages,
+            session_name="sessions/acc1_b2c",  # Яблочный Гусь
+            cycle_delay=B2C_CYCLE_DELAY,  # 2 часа между циклами
+            delay_between_chats=B2C_DELAY_BETWEEN_CHATS,  # 2 минуты между чатами
+            start_offset_seconds=B2C_START_OFFSET  # 5 минут смещение старта
+        )
+        self.broadcasters.append(gus_b2c_broadcaster)
+        print(f"✅ GUS B2C Broadcaster создан (acc1_b2c/Яблочный Гусь): {len(self.config.targets_b2c)} чатов, {len(self.config.b2c_messages)} сообщений, цикл: 2 часа, задержка: {B2C_DELAY_BETWEEN_CHATS}с")
+        
         after_count = len(self.broadcasters)
         print(f"📊 Всего broadcaster'ов: {after_count}")
         

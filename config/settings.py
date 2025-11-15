@@ -124,6 +124,7 @@ class AppConfig:
     targets_ads: List[int] = field(default_factory=list)
     targets_prices: List[int] = field(default_factory=list)
     targets_ads_test: List[int] = field(default_factory=list)  # Тестовые чаты для рекламы
+    targets_b2c: List[int] = field(default_factory=list)  # Розничные цели (B2C)
     b2b_messages: List[str] = field(default_factory=list)
     b2c_messages: List[str] = field(default_factory=list)
     aaa_messages: List[str] = field(default_factory=list)  # Прайсы AAA
@@ -225,7 +226,7 @@ class ConfigManager:
 
         # Импорт targets и messages
         try:
-            from .targets import TARGETS, TEST_TARGETS, ADS_TARGET, PRICE_TARGET, TEST_TARGETS_ADS
+            from .targets import TARGETS, TEST_TARGETS, ADS_TARGET, PRICE_TARGET, TEST_TARGETS_ADS, B2C_TARGET
             from .messages import MESSAGES_B2B, MESSAGES_B2C
             from .messages_aaa import MESSAGESAAA
             from .messages_gus import MESSAGESGUS
@@ -238,6 +239,7 @@ class ConfigManager:
             ADS_TARGET = []
             PRICE_TARGET = []
             TEST_TARGETS_ADS = []
+            B2C_TARGET = []
             MESSAGES_B2B = []
             MESSAGES_B2C = []
             MESSAGESAAA = []
@@ -258,6 +260,7 @@ class ConfigManager:
             targets_prices=PRICE_TARGET,
             targets_ads_test=TEST_TARGETS_ADS,  # Тестовые чаты для рекламы
             targets=TEST_TARGETS,
+            targets_b2c=B2C_TARGET,  # Розничные цели (B2C)
             b2b_messages=MESSAGES_B2B,
             b2c_messages=MESSAGES_B2C,
             aaa_messages=MESSAGESAAA,

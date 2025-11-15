@@ -10,12 +10,14 @@ import pytz
 from telethon import TelegramClient
 from telethon.errors import FloodWaitError, RPCError, ChatWriteForbiddenError
 from telethon.network.connection.tcpmtproxy import ConnectionTcpMTProxyIntermediate
+import traceback
 
 from config.settings import TelegramConfig, BroadcastingConfig, AppConfig
 from utils.logger import get_logger
 from core.exceptions import BroadcastingError, ConfigurationError
 from core.retry import retry_with_backoff
 from monitoring.metrics import MetricsCollector, MessageMetric, BroadcastCycleMetric
+from core.coordinator import get_coordinator
 
 @dataclass
 class MessageStats:
@@ -44,7 +46,8 @@ class EnhancedBroadcaster:
     """Улучшенный класс для рассылки сообщений"""
     
     def __init__(self, config: AppConfig, name: str, targets: List[int], messages: List[str], 
-                 session_name: Optional[str] = None, cycle_delay: Optional[int] = None):
+                 session_name: Optional[str] = None, cycle_delay: Optional[int] = None,
+                 delay_between_chats: Optional[float] = None, start_offset_seconds: int = 0):
         self.config = config
         self.name = name
         self.targets = targets
@@ -53,6 +56,12 @@ class EnhancedBroadcaster:
         
         # Индивидуальная задержка между циклами (если не указана - берем из конфигурации)
         self.cycle_delay = cycle_delay if cycle_delay is not None else config.broadcasting.cycle_delay
+        
+        # Индивидуальная задержка между чатами (если не указана - берем из конфигурации)
+        self._custom_delay_between_chats = delay_between_chats
+        
+        # Смещение времени старта (для распределения нагрузки между broadcaster'ами)
+        self._start_offset_seconds = start_offset_seconds
         
         # Статистика
         self.stats = MessageStats()
@@ -72,7 +81,13 @@ class EnhancedBroadcaster:
         self._deferred_messages: List[DeferredMessage] = []
         
         # 🎯 Адаптивная задержка: динамическое изменение задержек на основе ошибок
-        self._current_delay_between_chats: float = float(config.broadcasting.delay_between_chats)
+        # Используем индивидуальную задержку, если указана, иначе из конфигурации
+        base_delay = self._custom_delay_between_chats if self._custom_delay_between_chats is not None else float(config.broadcasting.delay_between_chats)
+        self._current_delay_between_chats: float = base_delay
+        
+        # Координатор для синхронизации с другими broadcaster'ами
+        self._coordinator = None
+        self._account_id = None  # Будет установлен при подключении
         self._error_streak: int = 0  # Количество последовательных ошибок
         self._success_streak: int = 0  # Количество последовательных успешных отправок
         self._last_flood_wait_time: Optional[datetime] = None
@@ -254,28 +269,70 @@ class EnhancedBroadcaster:
         response_time = 0.0
         flood_wait_duration = 0
         error_type = None
+        error_details = None
         success = False
 
         # 🔍 Валидация chat_id перед отправкой
         if not self._is_valid_chat_id(target):
             self.stats.total_failed += 1
             error_type = "InvalidChatId"
+            error_details = f"Чат {target} невалиден или заблокирован"
             self.stats.errors[error_type] = self.stats.errors.get(error_type, 0) + 1
+            
+            self.logger.error(
+                f"❌ [{self.name}] Невалидный chat_id: {target} | "
+                f"Сообщение №{message_idx} | "
+                f"Причина: {error_details}"
+            )
             return False
 
         try:
-            await self._client.send_message(target, message)
-            self.stats.total_sent += 1
-            self.stats.last_sent_time = datetime.now()
-            success = True
-            response_time = (datetime.now() - start_time).total_seconds()
+            # Проверяем подключение перед отправкой
+            if not self._client or not self._client.is_connected():
+                self.logger.warning(
+                    f"⚠️ [{self.name}] Клиент не подключен для чата {target}, "
+                    f"пытаемся переподключиться..."
+                )
+                await self._ensure_connection()
+            
+            # Получаем блокировку чата через координатор (если доступен)
+            chat_lock_acquired = False
+            if self._coordinator:
+                try:
+                    await self._coordinator.acquire_chat_lock(target)
+                    chat_lock_acquired = True
+                except Exception as e:
+                    self.logger.debug(f"Не удалось получить блокировку чата {target}: {e}")
+            
+            try:
+                await self._client.send_message(target, message)
+                self.stats.total_sent += 1
+                self.stats.last_sent_time = datetime.now()
+                success = True
+                response_time = (datetime.now() - start_time).total_seconds()
+                
+                # Записываем отправку в координатор
+                if self._coordinator:
+                    try:
+                        self._coordinator.record_send(self.name, target)
+                    except Exception as e:
+                        self.logger.debug(f"Не удалось записать отправку в координатор: {e}")
+            finally:
+                # Освобождаем блокировку
+                if chat_lock_acquired and self._coordinator:
+                    try:
+                        self._coordinator.release_chat_lock(target)
+                    except Exception as e:
+                        self.logger.debug(f"Не удалось освободить блокировку чата {target}: {e}")
             
             # ✅ Адаптивная задержка при успехе
             self._adjust_delay_on_success()
             
             self.logger.info(
-                f"✅ Отправлено сообщение №{message_idx} в {target} "
-                f"(всего отправлено: {self.stats.total_sent}, задержка: {self._current_delay_between_chats:.1f}с)"
+                f"✅ [{self.name}] Отправлено сообщение №{message_idx} в {target} | "
+                f"Время ответа: {response_time:.2f}с | "
+                f"Всего отправлено: {self.stats.total_sent} | "
+                f"Задержка: {self._current_delay_between_chats:.1f}с"
             )
 
             
@@ -284,11 +341,15 @@ class EnhancedBroadcaster:
             wait_time = e.seconds
             flood_wait_duration = wait_time
             error_type = "FloodWaitError"
+            error_details = f"Требуется ожидание {wait_time} секунд"
             self._last_flood_wait_time = datetime.now()
             
             self.logger.warning(
-                f"⏳ FloodWait: ждём {wait_time} секунд для {target}. "
-                f"Всего FloodWait: {self.stats.flood_waits}"
+                f"⏳ [{self.name}] FloodWait для чата {target} | "
+                f"Сообщение №{message_idx} | "
+                f"Ожидание: {wait_time} сек | "
+                f"Всего FloodWait: {self.stats.flood_waits} | "
+                f"Текущая задержка: {self._current_delay_between_chats:.1f}с"
             )
             
             # 🎯 Увеличиваем задержку после FloodWait
@@ -302,47 +363,144 @@ class EnhancedBroadcaster:
             self.stats.total_failed += 1
             self.stats.errors["ChatWriteForbidden"] = self.stats.errors.get("ChatWriteForbidden", 0) + 1
             error_type = "ChatWriteForbiddenError"
+            error_details = "Нет прав на отправку сообщений в этот чат"
             
             # 🚫 Блокируем чат - нет смысла пытаться снова
-            self._block_chat(target, "Нет прав на отправку сообщений")
+            self._block_chat(target, error_details)
             self._adjust_delay_on_error()
             
-            self.logger.error(f"❌ Нет прав на отправку в чат {target}. Чат заблокирован.")
+            self.logger.error(
+                f"❌ [{self.name}] ChatWriteForbidden для чата {target} | "
+                f"Сообщение №{message_idx} | "
+                f"Причина: {error_details} | "
+                f"Чат заблокирован | "
+                f"Всего ошибок: {self.stats.total_failed} | "
+                f"Ошибок этого типа: {self.stats.errors.get('ChatWriteForbidden', 0)}"
+            )
 
             
         except RPCError as e:
             self.stats.total_failed += 1
             error_type = f"RPCError_{e.code}"
+            error_details = f"Код: {e.code}, Сообщение: {str(e)}"
             self.stats.errors[error_type] = self.stats.errors.get(error_type, 0) + 1
+            
+            # Детальная информация об ошибке
+            error_info = {
+                'code': e.code,
+                'message': str(e),
+                'type': type(e).__name__
+            }
             
             # 🚫 Блокируем чат при определенных ошибках
             if e.code == 400:
                 # Ошибка 400 часто означает невалидный чат или пользователь заблокировал бота
-                self._block_chat(target, f"RPC Error 400: {str(e)}")
-                self.logger.error(f"❌ RPC 400 ошибка для {target}: {e}. Чат заблокирован.")
+                block_reason = f"RPC Error 400: {str(e)}"
+                self._block_chat(target, block_reason)
+                
+                self.logger.error(
+                    f"❌ [{self.name}] RPC 400 ошибка для чата {target} | "
+                    f"Сообщение №{message_idx} | "
+                    f"Детали: {error_details} | "
+                    f"Чат заблокирован | "
+                    f"Всего RPCError_400: {self.stats.errors.get('RPCError_400', 0)} | "
+                    f"Всего ошибок: {self.stats.total_failed}"
+                )
+            elif e.code == 403:
+                # Ошибка 403 - запрещено
+                self.logger.error(
+                    f"❌ [{self.name}] RPC 403 (Forbidden) для чата {target} | "
+                    f"Сообщение №{message_idx} | "
+                    f"Детали: {error_details} | "
+                    f"Всего RPCError_403: {self.stats.errors.get('RPCError_403', 0)}"
+                )
+            elif e.code == 500:
+                # Ошибка 500 - внутренняя ошибка сервера Telegram
+                self.logger.error(
+                    f"❌ [{self.name}] RPC 500 (Server Error) для чата {target} | "
+                    f"Сообщение №{message_idx} | "
+                    f"Детали: {error_details} | "
+                    f"Всего RPCError_500: {self.stats.errors.get('RPCError_500', 0)}"
+                )
             else:
-                self.logger.error(f"❌ RPC ошибка при отправке в {target}: {e}")
+                self.logger.error(
+                    f"❌ [{self.name}] RPC ошибка для чата {target} | "
+                    f"Сообщение №{message_idx} | "
+                    f"Код: {e.code} | "
+                    f"Детали: {error_details} | "
+                    f"Всего {error_type}: {self.stats.errors.get(error_type, 0)}"
+                )
             
             self._adjust_delay_on_error()
+            
+        except (ConnectionError, OSError, TimeoutError) as e:
+            # Обработка ошибок подключения
+            self.stats.total_failed += 1
+            error_type = type(e).__name__
+            error_details = f"Ошибка подключения: {str(e)}"
+            self.stats.errors[error_type] = self.stats.errors.get(error_type, 0) + 1
+            self._adjust_delay_on_error()
+            
+            # Пытаемся переподключиться
+            try:
+                self.logger.warning(
+                    f"⚠️ [{self.name}] Ошибка подключения для чата {target} | "
+                    f"Сообщение №{message_idx} | "
+                    f"Тип: {error_type} | "
+                    f"Детали: {error_details} | "
+                    f"Попытка переподключения..."
+                )
+                await self._ensure_connection()
+            except Exception as reconnect_error:
+                self.logger.error(
+                    f"❌ [{self.name}] Не удалось переподключиться после {error_type} | "
+                    f"Ошибка переподключения: {reconnect_error}"
+                )
+            
+            self.logger.error(
+                f"❌ [{self.name}] {error_type} для чата {target} | "
+                f"Сообщение №{message_idx} | "
+                f"Детали: {error_details} | "
+                f"Всего {error_type}: {self.stats.errors.get(error_type, 0)} | "
+                f"Всего ошибок: {self.stats.total_failed}"
+            )
             
         except ValueError as e:
             self.stats.total_failed += 1
             error_type = "ValueError"
+            error_details = f"Невалидные данные: {str(e)}"
             self.stats.errors[error_type] = self.stats.errors.get(error_type, 0) + 1
             
             # ValueError часто означает невалидные данные
-            self._block_chat(target, f"ValueError: {str(e)}")
+            self._block_chat(target, error_details)
             self._adjust_delay_on_error()
             
-            self.logger.error(f"❌ ValueError при отправке в {target}: {e}. Чат заблокирован.")
+            self.logger.error(
+                f"❌ [{self.name}] ValueError для чата {target} | "
+                f"Сообщение №{message_idx} | "
+                f"Детали: {error_details} | "
+                f"Чат заблокирован | "
+                f"Всего ValueError: {self.stats.errors.get('ValueError', 0)}"
+            )
             
         except Exception as e:
             self.stats.total_failed += 1
             error_type = type(e).__name__
+            error_details = f"Неожиданная ошибка: {str(e)}"
             self.stats.errors[error_type] = self.stats.errors.get(error_type, 0) + 1
             self._adjust_delay_on_error()
             
-            self.logger.error(f"❌ Неожиданная ошибка при отправке в {target}: {e}")
+            # Логируем полный traceback для неожиданных ошибок
+            self.logger.error(
+                f"❌ [{self.name}] Неожиданная ошибка для чата {target} | "
+                f"Сообщение №{message_idx} | "
+                f"Тип: {error_type} | "
+                f"Детали: {error_details} | "
+                f"Всего {error_type}: {self.stats.errors.get(error_type, 0)}"
+            )
+            self.logger.debug(
+                f"Traceback для чата {target}:\n{traceback.format_exc()}"
+            )
 
         finally:
             # Записываем метрику
@@ -364,7 +522,14 @@ class EnhancedBroadcaster:
         cycle_start = datetime.now()
         self._cycle_start_time = cycle_start
 
-        self.logger.info(f"Начинаем цикл рассылки для {self.name}")
+        self.logger.info(
+            f"🔄 [{self.name}] Начинаем цикл рассылки | "
+            f"Целевых чатов: {len(self.targets)} | "
+            f"Сообщений: {len(self.messages)} | "
+            f"Заблокированных: {len(self._blocked_chats)} | "
+            f"Отложенных: {len(self._deferred_messages)} | "
+            f"Текущая задержка: {self._current_delay_between_chats:.1f}с"
+        )
 
         # 📬 Обработка отложенных сообщений из предыдущего цикла
         if self._deferred_messages:
@@ -423,10 +588,16 @@ class EnhancedBroadcaster:
         for idx, message in enumerate(self.messages, start=1):
             # Проверяем, не наступил ли тихий час во время рассылки
             if self._is_quiet_hour():
-                self.logger.info(f"🌙 Наступил тихий час во время рассылки. Прерываем текущий цикл.")
+                self.logger.info(
+                    f"🌙 [{self.name}] Наступил тихий час во время рассылки. "
+                    f"Прерываем текущий цикл."
+                )
                 break
             
-            self.logger.info(f"Отправляем сообщение №{idx} из {len(self.messages)}")
+            self.logger.info(
+                f"📨 [{self.name}] Отправляем сообщение №{idx} из {len(self.messages)} | "
+                f"Длина сообщения: {len(message)} символов"
+            )
             
             # Отправляем во все целевые чаты
             for target in self.targets:
@@ -437,11 +608,33 @@ class EnhancedBroadcaster:
                 
                 # 🕐 Проверка rate limiting: не отправляем в один чат чаще чем установленный интервал
                 min_interval = self.config.broadcasting.min_interval_per_chat
+                
+                # Сначала проверяем глобальный координатор (если доступен)
+                global_can_send = True
+                if self._coordinator:
+                    try:
+                        global_can_send, global_wait_time = await self._coordinator.can_send_to_chat(
+                            self.name, target, min_interval_seconds=min_interval
+                        )
+                        if not global_can_send:
+                            self.logger.debug(
+                                f"⏳ [{self.name}] Глобальная блокировка для чата {target} | "
+                                f"Нужно подождать: {global_wait_time:.1f}с (координатор)"
+                            )
+                            self._defer_message(target, message, idx)
+                            continue
+                    except Exception as e:
+                        self.logger.debug(f"Ошибка проверки координатора: {e}")
+                
+                # Затем проверяем локальный rate limiting
                 can_send, wait_time = self._can_send_to_chat(target, min_interval_seconds=min_interval)
                 if not can_send:
-                    self.logger.info(
-                        f"⏳ Пропускаем чат {target}: прошло только {min_interval - wait_time:.1f} сек с последней отправки. "
-                        f"Нужно подождать ещё {wait_time:.1f} сек. (Интервал: {min_interval} сек)"
+                    self.logger.debug(
+                        f"⏳ [{self.name}] Пропускаем чат {target} | "
+                        f"Сообщение №{idx} | "
+                        f"Прошло: {min_interval - wait_time:.1f}с | "
+                        f"Нужно подождать: {wait_time:.1f}с | "
+                        f"Интервал: {min_interval}с"
                     )
                     # 📬 Откладываем сообщение для отправки в следующем цикле
                     self._defer_message(target, message, idx)
@@ -483,33 +676,100 @@ class EnhancedBroadcaster:
     
     def _log_stats(self):
         """Логирование статистики"""
+        total_attempts = self.stats.total_sent + self.stats.total_failed
+        success_rate = (self.stats.total_sent / total_attempts * 100) if total_attempts > 0 else 0
+        
         self.logger.info(
-            f"📊 Статистика {self.name}: "
-            f"✅ отправлено: {self.stats.total_sent}, "
-            f"❌ ошибок: {self.stats.total_failed}, "
-            f"⏳ FloodWait: {self.stats.flood_waits}, "
-            f"📬 отложенных: {len(self._deferred_messages)}"
+            f"📊 [{self.name}] Статистика цикла: "
+            f"✅ отправлено: {self.stats.total_sent} | "
+            f"❌ ошибок: {self.stats.total_failed} | "
+            f"⏳ FloodWait: {self.stats.flood_waits} | "
+            f"📬 отложенных: {len(self._deferred_messages)} | "
+            f"📈 Успешность: {success_rate:.1f}%"
         )
         
         # Адаптивная задержка
         if self.config.broadcasting.adaptive_delay_enabled:
             base_delay = self.config.broadcasting.delay_between_chats
             self.logger.info(
-                f"🎯 Адаптивная задержка: текущая={self._current_delay_between_chats:.1f}с, "
-                f"базовая={base_delay}с, "
-                f"серия ошибок={self._error_streak}, "
+                f"🎯 [{self.name}] Адаптивная задержка: "
+                f"текущая={self._current_delay_between_chats:.1f}с | "
+                f"базовая={base_delay}с | "
+                f"серия ошибок={self._error_streak} | "
                 f"серия успехов={self._success_streak}"
             )
         
         # Заблокированные чаты
         if self._blocked_chats:
+            blocked_count = len(self._blocked_chats)
+            blocked_percent = (blocked_count / len(self.targets) * 100) if self.targets else 0
             self.logger.warning(
-                f"🚫 Заблокировано чатов: {len(self._blocked_chats)} "
-                f"(из {len(self.targets)} целевых)"
+                f"🚫 [{self.name}] Заблокировано чатов: {blocked_count} из {len(self.targets)} "
+                f"({blocked_percent:.1f}%)"
             )
+            
+            # Показываем топ-5 причин блокировки
+            if blocked_count <= 5:
+                for chat_id, reason in list(self._blocked_chats.items())[:5]:
+                    self.logger.warning(f"   • Чат {chat_id}: {reason}")
+            else:
+                # Группируем по причинам
+                reasons_count = {}
+                for reason in self._blocked_chats.values():
+                    # Берем первые 50 символов причины
+                    short_reason = reason[:50] + "..." if len(reason) > 50 else reason
+                    reasons_count[short_reason] = reasons_count.get(short_reason, 0) + 1
+                
+                top_reasons = sorted(reasons_count.items(), key=lambda x: x[1], reverse=True)[:5]
+                self.logger.warning(f"   Топ причин блокировки:")
+                for reason, count in top_reasons:
+                    self.logger.warning(f"   • {reason}: {count} чатов")
         
+        # Детальная статистика по ошибкам
         if self.stats.errors:
-            self.logger.info(f"🚨 Типы ошибок: {dict(self.stats.errors)}")
+            total_errors = sum(self.stats.errors.values())
+            self.logger.warning(
+                f"🚨 [{self.name}] Детальная статистика ошибок (всего: {total_errors}):"
+            )
+            
+            # Сортируем ошибки по количеству
+            sorted_errors = sorted(self.stats.errors.items(), key=lambda x: x[1], reverse=True)
+            for error_type, count in sorted_errors[:10]:  # Топ-10 ошибок
+                error_percent = (count / total_errors * 100) if total_errors > 0 else 0
+                self.logger.warning(
+                    f"   • {error_type}: {count} ({error_percent:.1f}% от всех ошибок)"
+                )
+        
+        # Статистика по проблемным чатам (из метрик)
+        if hasattr(self, 'metrics') and self.metrics.chat_stats:
+            problem_chats = []
+            for chat_id, stats in self.metrics.chat_stats.items():
+                total_chat_attempts = stats['messages_sent'] + stats['messages_failed']
+                if total_chat_attempts > 0:
+                    chat_success_rate = (stats['messages_sent'] / total_chat_attempts * 100)
+                    if chat_success_rate < 50 or stats['messages_failed'] > 5:
+                        problem_chats.append({
+                            'chat_id': chat_id,
+                            'success_rate': chat_success_rate,
+                            'failed': stats['messages_failed'],
+                            'sent': stats['messages_sent'],
+                            'errors': dict(stats['error_types'])
+                        })
+            
+            if problem_chats:
+                # Сортируем по проценту ошибок
+                problem_chats.sort(key=lambda x: x['success_rate'])
+                self.logger.warning(
+                    f"⚠️ [{self.name}] Проблемные чаты (успешность < 50% или > 5 ошибок):"
+                )
+                for chat in problem_chats[:10]:  # Топ-10 проблемных чатов
+                    self.logger.warning(
+                        f"   • Чат {chat['chat_id']}: "
+                        f"успешность {chat['success_rate']:.1f}% | "
+                        f"✅ {chat['sent']} | "
+                        f"❌ {chat['failed']} | "
+                        f"Ошибки: {chat['errors']}"
+                    )
     
     def _wait_until_start_time(self) -> float:
         """Ожидание времени начала рассылки"""
@@ -632,11 +892,24 @@ class EnhancedBroadcaster:
             # Получаем информацию о текущем пользователе
             me = await self._client.get_me()
             account_id = me.id
+            self._account_id = str(account_id)  # Сохраняем для координатора
             account_name = f"{me.first_name or ''} {me.last_name or ''}".strip()
             username = me.username or "без username"
             
             # Определяем тип аккаунта по имени broadcaster'а
             account_type = "ОПТОВЫЙ" if "B2B" in self.name or "AAA" in self.name else "РОЗНИЧНЫЙ"
+            
+            # Регистрация в координаторе
+            try:
+                self._coordinator = await get_coordinator()
+                self._coordinator.register_broadcaster(
+                    broadcaster_name=self.name,
+                    account_id=self._account_id,
+                    chat_ids=self.targets
+                )
+                self.logger.info(f"✅ Broadcaster '{self.name}' зарегистрирован в координаторе")
+            except Exception as e:
+                self.logger.warning(f"⚠️ Не удалось зарегистрироваться в координаторе: {e}")
             
             self.logger.info(f"✅ Подключено как {account_name} (@{username})")
             self.logger.info(f"📱 ID аккаунта: {account_id}")
@@ -663,6 +936,13 @@ class EnhancedBroadcaster:
             wait_time = self._wait_until_start_time()
             if wait_time > 0:
                 await asyncio.sleep(wait_time)
+            
+            # Добавляем смещение времени старта (для распределения нагрузки)
+            if self._start_offset_seconds > 0:
+                self.logger.info(
+                    f"⏰ [{self.name}] Применяется смещение времени старта: {self._start_offset_seconds}с"
+                )
+                await asyncio.sleep(self._start_offset_seconds)
             
             # Основной цикл
             while self._running:
