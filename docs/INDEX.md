@@ -1,7 +1,7 @@
 # 📚 Документация SendMessageBot
 
-**Версия:** 1.0  
-**Дата:** 2025-11-04
+**Версия:** 2.0  
+**Последнее обновление:** 2025-11-16
 
 ---
 
@@ -9,70 +9,206 @@
 
 1. **[setup/START_HERE.md](setup/START_HERE.md)** ⭐ - начните отсюда
 2. **[setup/QUICK_START.md](setup/QUICK_START.md)** - быстрый старт в 3 команды
-3. **[PRODUCTION_CHECKLIST.md](PRODUCTION_CHECKLIST.md)** - чек-лист перед запуском
+3. **[DEPLOYMENT_INSTRUCTIONS.md](DEPLOYMENT_INSTRUCTIONS.md)** - инструкции по деплою
+4. **[PRODUCTION_CHECKLIST.md](PRODUCTION_CHECKLIST.md)** - чек-лист перед запуском
 
 ---
 
-## 📖 Категории документации
+## 📖 Структура документации
 
-### 🛠️ Настройка и установка ([setup/](setup/))
-- **[START_HERE.md](setup/START_HERE.md)** - с чего начать
-- **[QUICK_START.md](setup/QUICK_START.md)** - быстрая настройка
-- **[INDEX.md](setup/INDEX.md)** - полный индекс
+### 🛠️ Настройка и установка
 
-### 📘 Руководства ([guides/](guides/))
-- **[BROADCASTERS_SETUP.md](guides/BROADCASTERS_SETUP.md)** - настройка broadcaster'ов
-- **[AUTO_UPDATE_GUIDE.md](guides/AUTO_UPDATE_GUIDE.md)** - автообновление сообщений
-- **[HOW_TO_USE_REPORTS.md](guides/HOW_TO_USE_REPORTS.md)** - система отчетов
-- **[CYCLE_DELAYS_GUIDE.md](guides/CYCLE_DELAYS_GUIDE.md)** - задержки между циклами
+#### Начало работы
+- **[setup/START_HERE.md](setup/START_HERE.md)** ⭐ - с чего начать (обязательно к прочтению)
+- **[setup/QUICK_START.md](setup/QUICK_START.md)** - быстрая настройка за 3 шага
+- **[setup/INDEX.md](setup/INDEX.md)** - полный индекс настройки
 
-### 🔧 Решение проблем ([troubleshooting/](troubleshooting/))
-- **[SERVER_DIAGNOSTIC.md](troubleshooting/SERVER_DIAGNOSTIC.md)** - диагностика проблем
-- **[SESSION_FILES_FIX.md](troubleshooting/SESSION_FILES_FIX.md)** - проблемы с сессиями
-- **[SYNC_TO_SERVER.md](troubleshooting/SYNC_TO_SERVER.md)** - синхронизация с сервером
-- **[SERVER_UPDATE_INSTRUCTIONS.md](troubleshooting/SERVER_UPDATE_INSTRUCTIONS.md)** - обновление на сервере
+#### Установка
+- **[SETUP_GUIDE.md](SETUP_GUIDE.md)** - подробное руководство по установке
+- **[ACCOUNT_SETUP_GUIDE.md](ACCOUNT_SETUP_GUIDE.md)** - настройка Telegram аккаунтов
+- **[WINDOWS_SETUP.md](WINDOWS_SETUP.md)** - установка на Windows
+- **[ENV_VARIABLES.md](ENV_VARIABLES.md)** - описание переменных окружения
+- **[ENV_TEMPLATE.md](ENV_TEMPLATE.md)** - шаблон .env файла
 
-### 📊 Итоговые документы
+---
+
+### 📘 Руководства по использованию
+
+#### Broadcaster'ы
+- **[guides/BROADCASTERS_SETUP.md](guides/BROADCASTERS_SETUP.md)** - настройка broadcaster'ов
+- **[BROADCASTER_COORDINATION.md](BROADCASTER_COORDINATION.md)** - система координации broadcaster'ов
+- **[ADD_NEW_BROADCASTER.md](ADD_NEW_BROADCASTER.md)** - как добавить новый broadcaster
+- **[guides/CYCLE_DELAYS_GUIDE.md](guides/CYCLE_DELAYS_GUIDE.md)** - настройка задержек между циклами
+
+#### Автоматизация
+- **[guides/AUTO_UPDATE_GUIDE.md](guides/AUTO_UPDATE_GUIDE.md)** - автообновление сообщений из Google Sheets
+- **[guides/HOW_TO_USE_REPORTS.md](guides/HOW_TO_USE_REPORTS.md)** - система отчетов в Telegram
+
+#### Тестирование
+- **[NIGHT_TESTING_GUIDE.md](NIGHT_TESTING_GUIDE.md)** - ночное тестирование
+- **[README_TESTING.md](README_TESTING.md)** - общее руководство по тестированию
+
+---
+
+### 🔧 Решение проблем
+
+#### Диагностика и исправление
+- **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** - общее руководство по решению проблем
+- **[ERROR_ANALYSIS.md](ERROR_ANALYSIS.md)** - анализ ошибок и рекомендации
+- **[INVALID_CHAT_ID_FIX.md](INVALID_CHAT_ID_FIX.md)** - решение проблемы InvalidChatId
+- **[WINDOWS_LOG_ROTATION_FIX.md](WINDOWS_LOG_ROTATION_FIX.md)** - решение проблемы ротации логов на Windows
+
+#### Серверные проблемы
+- **[troubleshooting/SERVER_DIAGNOSTIC.md](troubleshooting/SERVER_DIAGNOSTIC.md)** - диагностика проблем на сервере
+- **[troubleshooting/SESSION_FILES_FIX.md](troubleshooting/SESSION_FILES_FIX.md)** - проблемы с файлами сессий
+- **[troubleshooting/SYNC_TO_SERVER.md](troubleshooting/SYNC_TO_SERVER.md)** - синхронизация с сервером
+- **[troubleshooting/SERVER_UPDATE_INSTRUCTIONS.md](troubleshooting/SERVER_UPDATE_INSTRUCTIONS.md)** - обновление на сервере
+- **[troubleshooting/WINDOWS_SERVER_SETUP.ps1](troubleshooting/WINDOWS_SERVER_SETUP.ps1)** - скрипт настройки Windows сервера
+
+---
+
+### 🚀 Деплой и продакшен
+
+- **[DEPLOYMENT_INSTRUCTIONS.md](DEPLOYMENT_INSTRUCTIONS.md)** - инструкции по деплою в продакшен
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - общее руководство по деплою
+- **[PRODUCTION_CHECKLIST.md](PRODUCTION_CHECKLIST.md)** - чек-лист перед продакшеном
+- **[FINAL_CHECKLIST.md](FINAL_CHECKLIST.md)** - финальный чек-лист
+
+---
+
+### 📊 Архитектура и API
+
+- **[ARCHITECTURE_FLOW.md](ARCHITECTURE_FLOW.md)** - как работает архитектура
+- **[API_REFERENCE.md](API_REFERENCE.md)** - справочник API
+- **[NEW_BROADCASTERS_README.md](NEW_BROADCASTERS_README.md)** - описание новых broadcaster'ов
+
+---
+
+### 📈 Оптимизация и улучшения
+
+- **[OPTIMIZATION_GUIDE.md](OPTIMIZATION_GUIDE.md)** - руководство по оптимизации
+- **[IMPROVEMENT_ROADMAP.md](IMPROVEMENT_ROADMAP.md)** - план улучшений
+- **[PROJECT_REORGANIZATION_PLAN.md](PROJECT_REORGANIZATION_PLAN.md)** - план реорганизации проекта
+
+---
+
+### 📝 Отчеты и мониторинг
+
+- **[REPORTS_SETUP.md](REPORTS_SETUP.md)** - настройка системы отчетов
+- **[REPORTS_FIX.md](REPORTS_FIX.md)** - исправление проблем с отчетами
+- **[REPORTS_FIX_SUMMARY.md](REPORTS_FIX_SUMMARY.md)** - сводка исправлений отчетов
+
+---
+
+### 📚 Исторические документы
+
+- **[CHANGELOG.md](CHANGELOG.md)** - история изменений
+- **[MIGRATION_REPORT.md](MIGRATION_REPORT.md)** - отчет о миграции
 - **[COMPLETE_SUMMARY.md](COMPLETE_SUMMARY.md)** - полная сводка работы
 - **[FINAL_STATUS.md](FINAL_STATUS.md)** - финальный статус проекта
 - **[FINAL_SETUP.md](FINAL_SETUP.md)** - финальная настройка
-- **[ARCHITECTURE_FLOW.md](ARCHITECTURE_FLOW.md)** - как работает архитектура
-- **[REPORTS_FIX_SUMMARY.md](REPORTS_FIX_SUMMARY.md)** - история исправлений
 
 ---
 
-## 🎯 По задачам
+## 🎯 Навигация по задачам
 
-### Настроить broadcaster'ы
-→ [guides/BROADCASTERS_SETUP.md](guides/BROADCASTERS_SETUP.md)
+### Я хочу...
 
-### Настроить автообновление
-→ [guides/AUTO_UPDATE_GUIDE.md](guides/AUTO_UPDATE_GUIDE.md)
+#### Настроить систему с нуля
+1. [setup/START_HERE.md](setup/START_HERE.md)
+2. [SETUP_GUIDE.md](SETUP_GUIDE.md)
+3. [ACCOUNT_SETUP_GUIDE.md](ACCOUNT_SETUP_GUIDE.md)
 
-### Настроить отчеты
-→ [guides/HOW_TO_USE_REPORTS.md](guides/HOW_TO_USE_REPORTS.md)
+#### Добавить новый broadcaster
+1. [ADD_NEW_BROADCASTER.md](ADD_NEW_BROADCASTER.md)
+2. [BROADCASTER_COORDINATION.md](BROADCASTER_COORDINATION.md)
 
-### Решить проблему на сервере
-→ [troubleshooting/SERVER_DIAGNOSTIC.md](troubleshooting/SERVER_DIAGNOSTIC.md)
+#### Разобраться с ошибками
+1. [ERROR_ANALYSIS.md](ERROR_ANALYSIS.md)
+2. [INVALID_CHAT_ID_FIX.md](INVALID_CHAT_ID_FIX.md)
+3. [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
 
-### Понять архитектуру
-→ [ARCHITECTURE_FLOW.md](ARCHITECTURE_FLOW.md)
+#### Задеплоить в продакшен
+1. [DEPLOYMENT_INSTRUCTIONS.md](DEPLOYMENT_INSTRUCTIONS.md)
+2. [PRODUCTION_CHECKLIST.md](PRODUCTION_CHECKLIST.md)
+3. [troubleshooting/SERVER_UPDATE_INSTRUCTIONS.md](troubleshooting/SERVER_UPDATE_INSTRUCTIONS.md)
+
+#### Настроить автообновление
+1. [guides/AUTO_UPDATE_GUIDE.md](guides/AUTO_UPDATE_GUIDE.md)
+
+#### Настроить отчеты
+1. [REPORTS_SETUP.md](REPORTS_SETUP.md)
+2. [guides/HOW_TO_USE_REPORTS.md](guides/HOW_TO_USE_REPORTS.md)
+
+#### Понять архитектуру
+1. [ARCHITECTURE_FLOW.md](ARCHITECTURE_FLOW.md)
+2. [BROADCASTER_COORDINATION.md](BROADCASTER_COORDINATION.md)
 
 ---
 
 ## 📊 Текущая конфигурация
 
-### Broadcaster'ы:
-- AAA_PRICE (acc1) → 22 чата, цикл 20 мин, 13 сообщений
-- GUS_PRICE (acc2) → 22 чата, цикл 20 мин, 13 сообщений
-- AAA_ADS (acc2) → 11 чатов, цикл 1 час, 21 сообщение
-- GUS_ADS (acc1) → 11 чатов, цикл 1 час, 16 сообщений
+### Broadcaster'ы (5 шт.)
 
-### Автоматизация:
-- Автообновление: каждый час
-- Отчеты: каждые 3 часа
+| Broadcaster | Аккаунт | Тип | Цикл | Задержка | Чатов | Сообщений |
+|------------|---------|-----|------|----------|-------|-----------|
+| **AAA_PRICE** | acc2 | ОПТОВЫЙ | 20 мин | 90с | 27 | ~30 |
+| **GUS_PRICE** | acc1 | РОЗНИЧНЫЙ | 20 мин | 90с | 27 | ~30 |
+| **AAA_ADS** | acc2 | ОПТОВЫЙ | 1 час | 90с | 16 | ~20 |
+| **GUS_ADS** | acc1 | РОЗНИЧНЫЙ | 1 час | 90с | 16 | ~20 |
+| **GUS_B2C** | acc1 | РОЗНИЧНЫЙ | 2 часа | 120с | 66 | ~65 |
+
+### Автоматизация
+- 🔄 **Автообновление сообщений** из Google Sheets (настраиваемый интервал)
+- 📊 **Отчеты в Telegram** каждые 3 часа
+- 🛡️ **Система координации** - предотвращение конфликтов между broadcaster'ами
+- ⏰ **Расписание работы** - настраиваемое время запуска и тихий час
+
+### Безопасность
+- ✅ Уникальные файлы сессий для каждого broadcaster'а
+- ✅ Адаптивные задержки при ошибках
+- ✅ Очередь отложенных сообщений (до 5 попыток)
+- ✅ Защита от FloodWait
+- ✅ Валидация chat_id при загрузке
+- ✅ Глобальная координация отправок
+
+---
+
+## 🔍 Быстрый поиск
+
+### По проблемам
+- **InvalidChatId ошибки** → [INVALID_CHAT_ID_FIX.md](INVALID_CHAT_ID_FIX.md)
+- **Ошибка ротации логов на Windows** → [WINDOWS_LOG_ROTATION_FIX.md](WINDOWS_LOG_ROTATION_FIX.md)
+- **Много ошибок в отчетах** → [ERROR_ANALYSIS.md](ERROR_ANALYSIS.md)
+- **Проблемы с сессиями** → [troubleshooting/SESSION_FILES_FIX.md](troubleshooting/SESSION_FILES_FIX.md)
+- **Проблемы на сервере** → [troubleshooting/SERVER_DIAGNOSTIC.md](troubleshooting/SERVER_DIAGNOSTIC.md)
+
+### По функциям
+- **Добавить broadcaster** → [ADD_NEW_BROADCASTER.md](ADD_NEW_BROADCASTER.md)
+- **Настроить координацию** → [BROADCASTER_COORDINATION.md](BROADCASTER_COORDINATION.md)
+- **Настроить автообновление** → [guides/AUTO_UPDATE_GUIDE.md](guides/AUTO_UPDATE_GUIDE.md)
+- **Настроить отчеты** → [REPORTS_SETUP.md](REPORTS_SETUP.md)
+
+---
+
+## 📝 Последние обновления
+
+### Версия 2.0 (2025-11-16)
+- ✅ Добавлен GUS_B2C_Broadcaster
+- ✅ Создана система координации broadcaster'ов
+- ✅ Улучшено логирование ошибок
+- ✅ Исправлена валидация chat_id
+- ✅ Исправлена ротация логов на Windows
+- ✅ Добавлена документация по всем новым функциям
+
+### Новые документы
+- [BROADCASTER_COORDINATION.md](BROADCASTER_COORDINATION.md) - система координации
+- [ERROR_ANALYSIS.md](ERROR_ANALYSIS.md) - анализ ошибок
+- [INVALID_CHAT_ID_FIX.md](INVALID_CHAT_ID_FIX.md) - решение InvalidChatId
+- [WINDOWS_LOG_ROTATION_FIX.md](WINDOWS_LOG_ROTATION_FIX.md) - решение ротации логов
+- [DEPLOYMENT_INSTRUCTIONS.md](DEPLOYMENT_INSTRUCTIONS.md) - инструкции по деплою
+- [ADD_NEW_BROADCASTER.md](ADD_NEW_BROADCASTER.md) - добавление нового broadcaster'а
 
 ---
 
 **Вернуться к:** [Главному README](../README.md)
-
