@@ -27,6 +27,7 @@
 - **[SETUP_GUIDE.md](SETUP_GUIDE.md)** - подробное руководство по установке
 - **[ACCOUNT_SETUP_GUIDE.md](ACCOUNT_SETUP_GUIDE.md)** - настройка Telegram аккаунтов
 - **[WINDOWS_SETUP.md](WINDOWS_SETUP.md)** - установка на Windows
+- **[scripts/README_START_WINDOWS.md](../scripts/README_START_WINDOWS.md)** ⭐ - скрипты первоначального запуска на Windows
 - **[ENV_VARIABLES.md](ENV_VARIABLES.md)** - описание переменных окружения
 - **[ENV_TEMPLATE.md](ENV_TEMPLATE.md)** - шаблон .env файла
 
