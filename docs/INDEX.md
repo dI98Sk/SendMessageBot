@@ -41,6 +41,7 @@
 - **[ADD_NEW_BROADCASTER.md](ADD_NEW_BROADCASTER.md)** - как добавить новый broadcaster
 - **[ALL_BROADCASTERS_ANALYSIS.md](ALL_BROADCASTERS_ANALYSIS.md)** ⭐ - полный анализ всех broadcaster'ов и рекомендации
 - **[OPTIMIZED_CYCLES_CONFIG.md](OPTIMIZED_CYCLES_CONFIG.md)** ⭐ - оптимизированная конфигурация циклов (130-150 циклов/сутки)
+- **[B2C_MIDSLOW_BROADCASTER.md](B2C_MIDSLOW_BROADCASTER.md)** - документация GUS_B2C_MIDSLOW_Broadcaster
 - **[GUS_B2C_CYCLE_ANALYSIS.md](GUS_B2C_CYCLE_ANALYSIS.md)** - детальный анализ цикла GUS_B2C
 - **[guides/CYCLE_DELAYS_GUIDE.md](guides/CYCLE_DELAYS_GUIDE.md)** - настройка задержек между циклами
 
