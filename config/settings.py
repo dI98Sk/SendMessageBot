@@ -125,6 +125,7 @@ class AppConfig:
     targets_prices: List[int] = field(default_factory=list)
     targets_ads_test: List[int] = field(default_factory=list)  # Тестовые чаты для рекламы
     targets_b2c: List[int] = field(default_factory=list)  # Розничные цели (B2C)
+    targets_b2c_midslow: List[int] = field(default_factory=list)  # Розничные цели B2C MIDSLOW
     b2b_messages: List[str] = field(default_factory=list)
     b2c_messages: List[str] = field(default_factory=list)
     aaa_messages: List[str] = field(default_factory=list)  # Прайсы AAA
@@ -226,7 +227,7 @@ class ConfigManager:
 
         # Импорт targets и messages
         try:
-            from .targets import TARGETS, TEST_TARGETS, ADS_TARGET, PRICE_TARGET, TEST_TARGETS_ADS, B2C_TARGET
+            from .targets import TARGETS, TEST_TARGETS, ADS_TARGET, PRICE_TARGET, TEST_TARGETS_ADS, B2C_TARGET, B2C_TARGET_MIDSLOW
             from .messages import MESSAGES_B2B, MESSAGES_B2C
             from .messages_aaa import MESSAGESAAA
             from .messages_gus import MESSAGESGUS
@@ -241,9 +242,12 @@ class ConfigManager:
             PRICE_TARGET, _ = validate_targets_list(PRICE_TARGET, "PRICE_TARGET", verbose=False)
             TEST_TARGETS_ADS, _ = validate_targets_list(TEST_TARGETS_ADS, "TEST_TARGETS_ADS", verbose=False)
             B2C_TARGET, invalid_b2c = validate_targets_list(B2C_TARGET, "B2C_TARGET", verbose=True)
+            B2C_TARGET_MIDSLOW, invalid_b2c_midslow = validate_targets_list(B2C_TARGET_MIDSLOW, "B2C_TARGET_MIDSLOW", verbose=True)
             
             if invalid_b2c:
                 print(f"⚠️  Из B2C_TARGET удалено {len(invalid_b2c)} невалидных chat_id")
+            if invalid_b2c_midslow:
+                print(f"⚠️  Из B2C_TARGET_MIDSLOW удалено {len(invalid_b2c_midslow)} невалидных chat_id")
         except ImportError:
             # Fallback если файлы не найдены
             TARGETS = []
@@ -252,6 +256,7 @@ class ConfigManager:
             PRICE_TARGET = []
             TEST_TARGETS_ADS = []
             B2C_TARGET = []
+            B2C_TARGET_MIDSLOW = []
             MESSAGES_B2B = []
             MESSAGES_B2C = []
             MESSAGESAAA = []
@@ -273,6 +278,7 @@ class ConfigManager:
             targets_ads_test=TEST_TARGETS_ADS,  # Тестовые чаты для рекламы
             targets=TEST_TARGETS,
             targets_b2c=B2C_TARGET,  # Розничные цели (B2C)
+            targets_b2c_midslow=B2C_TARGET_MIDSLOW,  # Розничные цели B2C MIDSLOW
             b2b_messages=MESSAGES_B2B,
             b2c_messages=MESSAGES_B2C,
             aaa_messages=MESSAGESAAA,

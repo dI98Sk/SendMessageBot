@@ -314,6 +314,42 @@ class SendMessageBotApp:
             f"цикл: 1.5 часа, задержка: {B2C_DELAY_BETWEEN_CHATS}с"
         )
         
+        # ========================================
+        # B2C MIDSLOW РОЗНИЧНЫЙ (targets_b2c_midslow) - цикл каждые 2.67 часа
+        # Цель: ~9 циклов в сутки
+        # ========================================
+        
+        # Расчет: 24 часа / 9 циклов = 2.67 часа = 160 минут
+        B2C_MIDSLOW_CYCLE_DELAY = int(2.67 * 60 * 60)  # 2.67 часа = 9612 секунд (≈160 минут)
+        B2C_MIDSLOW_DELAY_BETWEEN_CHATS = 60.0  # 1 минута между чатами
+        B2C_MIDSLOW_START_OFFSET = 600  # 10 минут смещение старта (чтобы не конфликтовать с другими)
+        
+        # Проверяем, есть ли чаты для MIDSLOW
+        if self.config.targets_b2c_midslow:
+            # GUS B2C MIDSLOW - использует аккаунт acc1 (Яблочный Гусь) - РОЗНИЧНЫЙ
+            # УНИКАЛЬНЫЙ файл сессии чтобы избежать database locked!
+            # Использует сообщения из ДВУХ таблиц: прайсы GUS + реклама GUS
+            gus_b2c_midslow_messages = self.config.gus_messages + self.config.gus_ads_messages
+            
+            gus_b2c_midslow_broadcaster = EnhancedBroadcaster(
+                config=self.config,
+                name="GUS_B2C_MIDSLOW_Broadcaster",
+                targets=self.config.targets_b2c_midslow,
+                messages=gus_b2c_midslow_messages,  # Объединенные сообщения из прайсов и рекламы
+                session_name="sessions/acc1_b2c_midslow",  # Яблочный Гусь
+                cycle_delay=B2C_MIDSLOW_CYCLE_DELAY,  # 2.67 часа между циклами
+                delay_between_chats=B2C_MIDSLOW_DELAY_BETWEEN_CHATS,  # 1 минута между чатами
+                start_offset_seconds=B2C_MIDSLOW_START_OFFSET  # 10 минут смещение старта
+            )
+            self.broadcasters.append(gus_b2c_midslow_broadcaster)
+            print(
+                f"✅ GUS B2C MIDSLOW Broadcaster создан (acc1_b2c_midslow/Яблочный Гусь): "
+                f"{len(self.config.targets_b2c_midslow)} чатов, "
+                f"{len(gus_b2c_midslow_messages)} сообщений (случайное на чат) "
+                f"(прайсы: {len(self.config.gus_messages)}, реклама: {len(self.config.gus_ads_messages)}), "
+                f"цикл: 2.67 часа (~9 циклов/день), задержка: {B2C_MIDSLOW_DELAY_BETWEEN_CHATS}с"
+            )
+        
         after_count = len(self.broadcasters)
         print(f"📊 Всего broadcaster'ов: {after_count}")
         
