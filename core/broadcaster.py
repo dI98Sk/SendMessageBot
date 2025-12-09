@@ -1077,6 +1077,14 @@ class EnhancedBroadcaster:
             print(f"✅ {self.name} подключен: {account_name} (@{username})")
             print(f"📱 ID: {account_id} | Тип: {account_type}")
             print(f"🎯 Чатов: {len(self.targets)} | 💬 Сообщений: {len(self.messages)}")
+            
+        except Exception as e:
+            self.logger.error(f"❌ [{self.name}] Ошибка подключения: {e}")
+            if retry_count < max_retries:
+                # Рекурсивный retry
+                return await self._ensure_connection(retry_count + 1, max_retries)
+            else:
+                raise
     
     async def start(self):
         """Запуск broadcaster"""
