@@ -50,7 +50,8 @@ class AutoMessageUpdater:
         if self.config.google_sheets.aaa_sheet_url:
             try:
                 self.logger.info("📥 Загрузка прайсов AAA...")
-                aaa_messages = await self.fetcher.fetch_messages(
+                # fetch_messages не async, убираем await
+                aaa_messages = self.fetcher.fetch_messages(
                     self.config.google_sheets.aaa_sheet_url
                 )
                 
@@ -72,7 +73,8 @@ class AutoMessageUpdater:
         if self.config.google_sheets.gus_sheet_url:
             try:
                 self.logger.info("📥 Загрузка прайсов GUS...")
-                gus_messages = await self.fetcher.fetch_messages(
+                # fetch_messages не async, убираем await
+                gus_messages = self.fetcher.fetch_messages(
                     self.config.google_sheets.gus_sheet_url
                 )
                 
@@ -94,7 +96,8 @@ class AutoMessageUpdater:
         if self.config.google_sheets.aaa_ads_sheet_url:
             try:
                 self.logger.info("📥 Загрузка рекламы AAA...")
-                aaa_ads_messages = await self.fetcher.fetch_messages(
+                # fetch_messages не async, убираем await
+                aaa_ads_messages = self.fetcher.fetch_messages(
                     self.config.google_sheets.aaa_ads_sheet_url
                 )
                 
@@ -116,7 +119,8 @@ class AutoMessageUpdater:
         if self.config.google_sheets.gus_ads_sheet_url:
             try:
                 self.logger.info("📥 Загрузка рекламы GUS...")
-                gus_ads_messages = await self.fetcher.fetch_messages(
+                # fetch_messages не async, убираем await
+                gus_ads_messages = self.fetcher.fetch_messages(
                     self.config.google_sheets.gus_ads_sheet_url
                 )
                 

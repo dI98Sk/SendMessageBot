@@ -510,24 +510,77 @@ class SendMessageBotApp:
         signal.signal(signal.SIGTERM, signal_handler)
 
     async def _health_check_task(self):
-        """Задача проверки здоровья системы"""
+        """Задача проверки здоровья системы с мониторингом broadcaster'ов"""
+        from datetime import datetime, timedelta
+        
         while self.running:
             try:
+                # Проверка "мертвых" broadcaster'ов
+                dead_broadcasters = []
+                for broadcaster in self.broadcasters:
+                    # Проверяем, что broadcaster запущен
+                    if not broadcaster._running:
+                        dead_broadcasters.append(broadcaster)
+                        continue
+                    
+                    # Проверяем последнюю активность (если есть)
+                    if hasattr(broadcaster, '_cycle_start_time') and broadcaster._cycle_start_time:
+                        time_since_cycle = datetime.now() - broadcaster._cycle_start_time
+                        # Если прошло больше 2 циклов без активности - подозрительно
+                        max_cycle_time = broadcaster.cycle_delay * 2.5
+                        if time_since_cycle.total_seconds() > max_cycle_time:
+                            self.logger.warning(
+                                f"⚠️ [{broadcaster.name}] Нет активности {time_since_cycle.total_seconds()/60:.1f} минут "
+                                f"(максимум: {max_cycle_time/60:.1f} минут)"
+                            )
+                    
+                    # Проверяем соединение
+                    if broadcaster._client:
+                        try:
+                            if not broadcaster._client.is_connected():
+                                self.logger.warning(f"⚠️ [{broadcaster.name}] Клиент не подключен, пытаемся переподключить...")
+                                await broadcaster._ensure_connection()
+                        except Exception as e:
+                            self.logger.error(f"❌ [{broadcaster.name}] Ошибка проверки соединения: {e}")
+                            dead_broadcasters.append(broadcaster)
+                
+                # Перезапуск "мертвых" broadcaster'ов
+                for broadcaster in dead_broadcasters:
+                    self.logger.warning(f"🔄 [{broadcaster.name}] Обнаружен остановленный broadcaster, перезапускаем...")
+                    try:
+                        # Останавливаем старый
+                        await broadcaster.stop()
+                        # Небольшая пауза
+                        await asyncio.sleep(5)
+                        # Запускаем заново
+                        task = asyncio.create_task(broadcaster.start())
+                        # Обновляем задачу в списке
+                        for i, t in enumerate(self.tasks):
+                            if hasattr(t, '_broadcaster') and t._broadcaster == broadcaster:
+                                self.tasks[i] = task
+                                break
+                        else:
+                            self.tasks.append(task)
+                        self.logger.info(f"✅ [{broadcaster.name}] Broadcaster перезапущен")
+                    except Exception as e:
+                        self.logger.error(f"❌ [{broadcaster.name}] Не удалось перезапустить: {e}")
+                
                 # Сбор метрик
-                health_status = self.health_checker.check_health()
-
-                # Проверка алертов
-                stats = self.metrics_collector.get_summary_stats()
-                await alert_manager.check_alerts(stats['general'])
-
-                # Отправка уведомления о статусе
-                if health_status['status'] != 'healthy':
-                    await notification_manager.send_warning(
-                        "Проблемы с системой",
-                        f"Статус: {health_status['status']}",
-                        rate_limit_key="health_check",
-                        rate_limit_seconds=1800  # 30 минут
-                    )
+                try:
+                    health_status = self.health_checker.check_health()
+                    stats = self.metrics_collector.get_summary_stats()
+                    await alert_manager.check_alerts(stats['general'])
+                    
+                    # Отправка уведомления о статусе
+                    if health_status['status'] != 'healthy':
+                        await notification_manager.send_warning(
+                            "Проблемы с системой",
+                            f"Статус: {health_status['status']}",
+                            rate_limit_key="health_check",
+                            rate_limit_seconds=1800  # 30 минут
+                        )
+                except Exception as e:
+                    self.logger.debug(f"Ошибка сбора метрик в health check: {e}")
 
                 await asyncio.sleep(300)  # Проверка каждые 5 минут
 

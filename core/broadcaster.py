@@ -476,33 +476,61 @@ class EnhancedBroadcaster:
             self._adjust_delay_on_error()
             
         except (ConnectionError, OSError, TimeoutError) as e:
-            # Обработка ошибок подключения
+            # Обработка ошибок подключения с улучшенным retry
             self.stats.total_failed += 1
             error_type = type(e).__name__
             error_details = f"Ошибка подключения: {str(e)}"
             self.stats.errors[error_type] = self.stats.errors.get(error_type, 0) + 1
             self._adjust_delay_on_error()
             
-            # Пытаемся переподключиться
-            try:
-                self.logger.warning(
-                    f"⚠️ [{self.name}] Ошибка подключения для чата {target} | "
-                    f"Сообщение №{message_idx} | "
-                    f"Тип: {error_type} | "
-                    f"Детали: {error_details} | "
-                    f"Попытка переподключения..."
-                )
-                await self._ensure_connection()
-            except Exception as reconnect_error:
+            # Пытаемся переподключиться с несколькими попытками
+            reconnected = False
+            max_reconnect_attempts = 3
+            for reconnect_attempt in range(1, max_reconnect_attempts + 1):
+                try:
+                    self.logger.warning(
+                        f"⚠️ [{self.name}] Ошибка подключения для чата {target} | "
+                        f"Сообщение №{message_idx} | "
+                        f"Тип: {error_type} | "
+                        f"Детали: {error_details} | "
+                        f"Попытка переподключения {reconnect_attempt}/{max_reconnect_attempts}..."
+                    )
+                    
+                    # Отключаемся перед переподключением
+                    if self._client and self._client.is_connected():
+                        try:
+                            await self._client.disconnect()
+                        except:
+                            pass
+                    
+                    # Ждем перед переподключением
+                    await asyncio.sleep(reconnect_attempt * 2)
+                    
+                    # Переподключаемся
+                    await self._ensure_connection()
+                    reconnected = True
+                    self.logger.info(f"✅ [{self.name}] Успешно переподключился после {error_type}")
+                    break
+                    
+                except Exception as reconnect_error:
+                    self.logger.warning(
+                        f"⚠️ [{self.name}] Попытка переподключения {reconnect_attempt}/{max_reconnect_attempts} "
+                        f"не удалась: {reconnect_error}"
+                    )
+                    if reconnect_attempt < max_reconnect_attempts:
+                        await asyncio.sleep(reconnect_attempt * 2)
+            
+            if not reconnected:
                 self.logger.error(
-                    f"❌ [{self.name}] Не удалось переподключиться после {error_type} | "
-                    f"Ошибка переподключения: {reconnect_error}"
+                    f"❌ [{self.name}] Не удалось переподключиться после {max_reconnect_attempts} попыток | "
+                    f"Последняя ошибка: {reconnect_error if 'reconnect_error' in locals() else 'неизвестна'}"
                 )
             
             self.logger.error(
                 f"❌ [{self.name}] {error_type} для чата {target} | "
                 f"Сообщение №{message_idx} | "
                 f"Детали: {error_details} | "
+                f"Переподключение: {'✅' if reconnected else '❌'} | "
                 f"Всего {error_type}: {self.stats.errors.get(error_type, 0)} | "
                 f"Всего ошибок: {self.stats.total_failed}"
             )
@@ -990,11 +1018,31 @@ class EnhancedBroadcaster:
         
         return seconds_to_wait
     
-    @retry_with_backoff(max_retries=3, base_delay=5)
-    async def _ensure_connection(self):
-        """Обеспечение подключения к Telegram"""
-        if not self._client or not self._client.is_connected():
-            self.logger.info(f"Подключаемся к Telegram для {self.name}...")
+    async def _ensure_connection(self, retry_count: int = 0, max_retries: int = 3):
+        """Обеспечение подключения к Telegram с улучшенной обработкой ошибок"""
+        try:
+            # Проверяем подключение
+            if self._client and self._client.is_connected():
+                # Проверяем, что соединение действительно работает
+                try:
+                    await self._client.get_me()
+                    return  # Соединение работает
+                except Exception as e:
+                    self.logger.warning(f"⚠️ [{self.name}] Соединение не работает, переподключаемся: {e}")
+                    try:
+                        await self._client.disconnect()
+                    except:
+                        pass
+            
+            if retry_count >= max_retries:
+                raise Exception(f"Не удалось подключиться после {max_retries} попыток")
+            
+            if retry_count > 0:
+                wait_time = min(2 ** retry_count, 30)  # Экспоненциальная задержка до 30 секунд
+                self.logger.info(f"⏳ [{self.name}] Ожидание {wait_time}с перед переподключением (попытка {retry_count + 1}/{max_retries})...")
+                await asyncio.sleep(wait_time)
+            
+            self.logger.info(f"🔌 [{self.name}] Подключаемся к Telegram... (попытка {retry_count + 1}/{max_retries})")
             await self._client.start()
             
             # Получаем информацию о текущем пользователе
