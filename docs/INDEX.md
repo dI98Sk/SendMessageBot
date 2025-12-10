@@ -28,6 +28,7 @@
 - **[ACCOUNT_SETUP_GUIDE.md](ACCOUNT_SETUP_GUIDE.md)** - настройка Telegram аккаунтов
 - **[WINDOWS_SETUP.md](WINDOWS_SETUP.md)** - установка на Windows
 - **[scripts/README_START_WINDOWS.md](../scripts/README_START_WINDOWS.md)** ⭐ - скрипты первоначального запуска на Windows
+- **[ANACONDA_UPDATE_AND_RUN.md](ANACONDA_UPDATE_AND_RUN.md)** ⭐ - обновление и запуск в Anaconda Prompt
 - **[ENV_VARIABLES.md](ENV_VARIABLES.md)** - описание переменных окружения
 - **[ENV_TEMPLATE.md](ENV_TEMPLATE.md)** - шаблон .env файла
 
@@ -62,6 +63,7 @@
 - **[ERROR_ANALYSIS.md](ERROR_ANALYSIS.md)** - анализ ошибок и рекомендации
 - **[INVALID_CHAT_ID_FIX.md](INVALID_CHAT_ID_FIX.md)** - решение проблемы InvalidChatId
 - **[WINDOWS_LOG_ROTATION_FIX.md](WINDOWS_LOG_ROTATION_FIX.md)** - решение проблемы ротации логов на Windows
+- **[LOG_ANALYSIS_STARTUP_ISSUES.md](LOG_ANALYSIS_STARTUP_ISSUES.md)** ⭐ - анализ проблем при запуске (database is locked, phone attribute)
 
 #### Серверные проблемы
 - **[troubleshooting/SERVER_DIAGNOSTIC.md](troubleshooting/SERVER_DIAGNOSTIC.md)** - диагностика проблем на сервере
@@ -78,6 +80,7 @@
 - **[DEPLOYMENT.md](DEPLOYMENT.md)** - общее руководство по деплою
 - **[PRODUCTION_CHECKLIST.md](PRODUCTION_CHECKLIST.md)** - чек-лист перед продакшеном
 - **[FINAL_CHECKLIST.md](FINAL_CHECKLIST.md)** - финальный чек-лист
+- **[ANACONDA_UPDATE_AND_RUN.md](ANACONDA_UPDATE_AND_RUN.md)** ⭐ - обновление и запуск в Anaconda Prompt
 
 ---
 
@@ -137,6 +140,10 @@
 1. [DEPLOYMENT_INSTRUCTIONS.md](DEPLOYMENT_INSTRUCTIONS.md)
 2. [PRODUCTION_CHECKLIST.md](PRODUCTION_CHECKLIST.md)
 3. [troubleshooting/SERVER_UPDATE_INSTRUCTIONS.md](troubleshooting/SERVER_UPDATE_INSTRUCTIONS.md)
+
+#### Обновить существующий проект
+1. [ANACONDA_UPDATE_AND_RUN.md](ANACONDA_UPDATE_AND_RUN.md) ⭐ - обновление через git и запуск
+2. [troubleshooting/SERVER_UPDATE_INSTRUCTIONS.md](troubleshooting/SERVER_UPDATE_INSTRUCTIONS.md) - обновление на сервере
 
 #### Настроить автообновление
 1. [guides/AUTO_UPDATE_GUIDE.md](guides/AUTO_UPDATE_GUIDE.md)

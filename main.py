@@ -135,8 +135,9 @@ class SendMessageBotApp:
                         self.config.telegram.api_hash
                     )
                     
-                    # Запускаем клиент
-                    await notification_client.start(phone=self.config.telegram.phone)
+                    # Запускаем клиент (без phone - используем существующую сессию)
+                    # Если сессия не существует, Telethon запросит авторизацию автоматически
+                    await notification_client.start()
                     
                     # Создаем канал уведомлений
                     telegram_channel = TelegramNotificationChannel(
@@ -457,11 +458,16 @@ class SendMessageBotApp:
 
             self.logger.info(f"Broadcaster'ы пересозданы: теперь {len(self.broadcasters)} шт.")
 
-            # ВАЖНО: Запускаем новые broadcaster'ы
+            # ВАЖНО: Запускаем новые broadcaster'ы с задержкой между подключениями
             if self.running:
                 self.logger.info("Запуск пересозданных broadcaster'ов...")
                 for idx, broadcaster in enumerate(self.broadcasters, 1):
                     self.logger.info(f"Запуск broadcaster {idx}/{len(self.broadcasters)}: {broadcaster.name}")
+                    
+                    # Добавляем задержку между запусками (кроме первого)
+                    if idx > 1:
+                        await asyncio.sleep(2)  # 2 секунды между подключениями
+                    
                     task = asyncio.create_task(broadcaster.start())
                     self.tasks.append(task)
                 self.logger.info("✅ Все broadcaster'ы запущены после пересоздания")
@@ -614,10 +620,17 @@ class SendMessageBotApp:
         self.logger.info(f"Количество broadcaster'ов для запуска: {len(self.broadcasters)}")
 
         try:
-            # Запуск broadcaster'ов
+            # Запуск broadcaster'ов с задержкой между подключениями
+            # Это предотвращает ошибки "database is locked" при одновременном подключении
             broadcaster_tasks = []
             for idx, broadcaster in enumerate(self.broadcasters, 1):
                 self.logger.info(f"Запуск broadcaster {idx}/{len(self.broadcasters)}: {broadcaster.name}")
+                
+                # Добавляем задержку между запусками (кроме первого)
+                # Это позволяет избежать конфликтов при подключении к базам данных сессий
+                if idx > 1:
+                    await asyncio.sleep(2)  # 2 секунды между подключениями
+                
                 task = asyncio.create_task(broadcaster.start())
                 broadcaster_tasks.append(task)
                 self.tasks.append(task)
