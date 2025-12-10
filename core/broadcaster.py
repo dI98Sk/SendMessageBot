@@ -449,13 +449,30 @@ class EnhancedBroadcaster:
                     f"Всего ошибок: {self.stats.total_failed}"
                 )
             elif e.code == 403:
-                # Ошибка 403 - запрещено
-                self.logger.error(
-                    f"❌ [{self.name}] RPC 403 (Forbidden) для чата {target} | "
-                    f"Сообщение №{message_idx} | "
-                    f"Детали: {error_details} | "
-                    f"Всего RPCError_403: {self.stats.errors.get('RPCError_403', 0)}"
-                )
+                # Ошибка 403 - запрещено (часто означает требование оплаты или нет доступа)
+                # Блокируем чат, особенно если это ALLOW_PAYMENT_REQUIRED_1
+                error_str = str(e).lower()
+                if "payment" in error_str or "allow_payment" in error_str:
+                    block_reason = f"RPC Error 403: Требуется оплата - {str(e)}"
+                    self._block_chat(target, block_reason)
+                    self.logger.error(
+                        f"❌ [{self.name}] RPC 403 (Forbidden) для чата {target} | "
+                        f"Сообщение №{message_idx} | "
+                        f"Детали: {error_details} | "
+                        f"Чат заблокирован (требуется оплата) | "
+                        f"Всего RPCError_403: {self.stats.errors.get('RPCError_403', 0)}"
+                    )
+                else:
+                    # Другие 403 ошибки - тоже блокируем, так как доступ запрещен
+                    block_reason = f"RPC Error 403: Доступ запрещен - {str(e)}"
+                    self._block_chat(target, block_reason)
+                    self.logger.error(
+                        f"❌ [{self.name}] RPC 403 (Forbidden) для чата {target} | "
+                        f"Сообщение №{message_idx} | "
+                        f"Детали: {error_details} | "
+                        f"Чат заблокирован | "
+                        f"Всего RPCError_403: {self.stats.errors.get('RPCError_403', 0)}"
+                    )
             elif e.code == 500:
                 # Ошибка 500 - внутренняя ошибка сервера Telegram
                 self.logger.error(
@@ -557,8 +574,23 @@ class EnhancedBroadcaster:
             self.stats.total_failed += 1
             error_type = type(e).__name__
             error_details = f"Неожиданная ошибка: {str(e)}"
+            error_msg = str(e).lower()
             self.stats.errors[error_type] = self.stats.errors.get(error_type, 0) + 1
-            self._adjust_delay_on_error()
+            
+            # Специальная обработка для OperationalError "database is locked"
+            if "operationalerror" in error_type.lower() or "database is locked" in error_msg:
+                # Это временная ошибка, не блокируем чат, но логируем
+                self.logger.warning(
+                    f"⚠️ [{self.name}] OperationalError (database is locked) для чата {target} | "
+                    f"Сообщение №{message_idx} | "
+                    f"Детали: {error_details} | "
+                    f"Сообщение будет отложено | "
+                    f"Всего OperationalError: {self.stats.errors.get('OperationalError', 0)}"
+                )
+                # Не блокируем чат, так как это временная ошибка
+                # Сообщение будет отложено и отправлено позже
+            else:
+                self._adjust_delay_on_error()
             
             # Логируем полный traceback для неожиданных ошибок
             self.logger.error(
@@ -1044,7 +1076,17 @@ class EnhancedBroadcaster:
             
             self.logger.info(f"🔌 [{self.name}] Подключаемся к Telegram... (попытка {retry_count + 1}/{max_retries})")
             
+            # Используем глобальную блокировку подключений для предотвращения "database is locked"
+            connection_lock_acquired = False
             try:
+                # Получаем координатор, если еще не получен
+                if not self._coordinator:
+                    self._coordinator = await get_coordinator()
+                
+                if self._coordinator:
+                    await self._coordinator.acquire_connection_lock()
+                    connection_lock_acquired = True
+                
                 await self._client.start()
             except Exception as start_error:
                 error_msg = str(start_error).lower()
@@ -1062,6 +1104,10 @@ class EnhancedBroadcaster:
                         raise Exception(f"Не удалось запустить клиент из-за блокировки базы данных после {max_retries + 2} попыток")
                 else:
                     raise  # Пробрасываем другие ошибки
+            finally:
+                # Освобождаем блокировку подключения в любом случае
+                if connection_lock_acquired and self._coordinator:
+                    self._coordinator.release_connection_lock()
             
             # Получаем информацию о текущем пользователе
             me = await self._client.get_me()

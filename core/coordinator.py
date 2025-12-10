@@ -34,6 +34,9 @@ class BroadcasterCoordinator:
         # Блокировки для каждого чата (предотвращение одновременной отправки)
         self._chat_locks: Dict[int, asyncio.Lock] = defaultdict(asyncio.Lock)
         
+        # Глобальная блокировка для подключений (предотвращение "database is locked")
+        self._connection_lock = asyncio.Lock()
+        
         # Минимальный интервал между отправками в один чат (глобально)
         self._min_interval_seconds: int = 300  # 5 минут по умолчанию
         
@@ -110,6 +113,19 @@ class BroadcasterCoordinator:
                     self._chat_locks[chat_id].release()
             except Exception:
                 pass  # Игнорируем ошибки при освобождении
+    
+    async def acquire_connection_lock(self):
+        """Получение блокировки для подключения (предотвращение "database is locked")"""
+        await self._connection_lock.acquire()
+        return True
+    
+    def release_connection_lock(self):
+        """Освобождение блокировки для подключения"""
+        try:
+            if self._connection_lock.locked():
+                self._connection_lock.release()
+        except Exception:
+            pass  # Игнорируем ошибки при освобождении
     
     def record_send(self, broadcaster_name: str, chat_id: int):
         """Запись факта отправки сообщения"""
