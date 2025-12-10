@@ -30,8 +30,8 @@ class ScheduledUpdater:
         self.running = False
         self._task: Optional[asyncio.Task] = None
         
-        # Время обновления: 11:00 по МСК
-        self.update_time = time(11, 0)
+        # Время обновления: 11:05 по МСК
+        self.update_time = time(11, 5)
         self.timezone = pytz.timezone('Europe/Moscow')  # МСК
     
     async def start(self):

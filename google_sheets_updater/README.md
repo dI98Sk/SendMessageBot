@@ -49,7 +49,7 @@ TELEGRAM_SOURCE_CHANNEL_ID=-1001234567890
 # Интервал обновления (секунды)
 UPDATER_UPDATE_INTERVAL=3600
 
-# Включить обновление из Telegram (каждый день в 11:00 МСК)
+# Включить обновление из Telegram (каждый день в 11:05 МСК)
 UPDATER_ENABLE_TELEGRAM_UPDATE=true
 
 # Логирование
