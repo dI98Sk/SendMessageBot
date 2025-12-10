@@ -38,13 +38,24 @@ class DataSourceConfig:
 
 
 @dataclass
+class TelegramConfig:
+    """Конфигурация Telegram для получения сообщений"""
+    api_id: Optional[str] = None
+    api_hash: Optional[str] = None
+    session_name: str = "sessions/updater_session"
+    source_channel_id: Optional[str] = None  # ID канала для получения сообщений
+
+
+@dataclass
 class UpdaterConfig:
     """Основная конфигурация сервиса"""
     google_sheets: GoogleSheetsConfig = field(default_factory=GoogleSheetsConfig)
     logging: LoggingConfig = field(default_factory=LoggingConfig)
+    telegram: TelegramConfig = field(default_factory=TelegramConfig)
     update_interval_seconds: int = 3600  # 1 час по умолчанию
     data_sources: List[DataSourceConfig] = field(default_factory=list)
     enable_auto_update: bool = True
+    enable_telegram_scheduled_update: bool = True  # Включить обновление из Telegram по расписанию
 
 
 def load_config() -> UpdaterConfig:
@@ -78,12 +89,22 @@ def load_config() -> UpdaterConfig:
         enable_console=os.getenv("UPDATER_LOG_CONSOLE", "true").lower() == "true"
     )
     
+    # Telegram конфигурация
+    telegram_config = TelegramConfig(
+        api_id=os.getenv("TELEGRAM_API_ID"),
+        api_hash=os.getenv("TELEGRAM_API_HASH"),
+        session_name=os.getenv("TELEGRAM_SESSION_NAME", "sessions/updater_session"),
+        source_channel_id=os.getenv("TELEGRAM_SOURCE_CHANNEL_ID")
+    )
+    
     # Основная конфигурация
     config = UpdaterConfig(
         google_sheets=google_sheets_config,
         logging=logging_config,
+        telegram=telegram_config,
         update_interval_seconds=int(os.getenv("UPDATER_UPDATE_INTERVAL", "3600")),
-        enable_auto_update=os.getenv("UPDATER_ENABLE_AUTO_UPDATE", "true").lower() == "true"
+        enable_auto_update=os.getenv("UPDATER_ENABLE_AUTO_UPDATE", "true").lower() == "true",
+        enable_telegram_scheduled_update=os.getenv("UPDATER_ENABLE_TELEGRAM_UPDATE", "true").lower() == "true"
     )
     
     return config

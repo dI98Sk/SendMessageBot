@@ -35,18 +35,29 @@ pip install -r requirements-updater.txt
 GOOGLE_CREDENTIALS_FILE=credentials.json
 
 # Таблицы для обновления
-SHEET_URL_PRICE_AAA=https://docs.google.com/spreadsheets/d/...
-SHEET_URL_PRICE_GUS=https://docs.google.com/spreadsheets/d/...
-SHEET_URL_ADS_AAA=https://docs.google.com/spreadsheets/d/...
-SHEET_URL_ADS_GUS=https://docs.google.com/spreadsheets/d/...
+BUY_SELL_PRICE_AAA_SHEET_URL=https://docs.google.com/spreadsheets/d/...
+BUY_SELL_PRICE_GUS_SHEET_URL=https://docs.google.com/spreadsheets/d/...
+ADS_AAA_SHEET_URL=https://docs.google.com/spreadsheets/d/...
+ADS_GUS_SHEET_URL=https://docs.google.com/spreadsheets/d/...
+
+# Telegram (для получения сообщений из канала)
+TELEGRAM_API_ID=your_api_id
+TELEGRAM_API_HASH=your_api_hash
+TELEGRAM_SESSION_NAME=sessions/updater_session
+TELEGRAM_SOURCE_CHANNEL_ID=-1001234567890
 
 # Интервал обновления (секунды)
-UPDATE_INTERVAL=3600
+UPDATER_UPDATE_INTERVAL=3600
+
+# Включить обновление из Telegram (каждый день в 11:05)
+UPDATER_ENABLE_TELEGRAM_UPDATE=true
 
 # Логирование
-LOG_LEVEL=INFO
-LOG_FILE=logs/updater.log
+UPDATER_LOG_LEVEL=INFO
+UPDATER_LOG_FILE=logs/updater.log
 ```
+
+**Подробнее:** [docs/TELEGRAM_TO_SHEETS_UPDATE.md](../docs/TELEGRAM_TO_SHEETS_UPDATE.md)
 
 ### 3. Запуск
 
