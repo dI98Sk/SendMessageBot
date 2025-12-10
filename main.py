@@ -571,20 +571,64 @@ class SendMessageBotApp:
                     except Exception as e:
                         self.logger.error(f"❌ [{broadcaster.name}] Не удалось перезапустить: {e}")
                 
+                # Проверка здоровья системы отчетов
+                if self.telegram_reporter:
+                    try:
+                        # Проверяем, что задача отчетов работает
+                        if self.telegram_reporter.task and self.telegram_reporter.task.done():
+                            self.logger.error("❌ [TelegramReporter] Задача отчетов завершена неожиданно!")
+                            # Перезапускаем систему отчетов
+                            try:
+                                await self.telegram_reporter.stop()
+                                await asyncio.sleep(2)
+                                self.telegram_reporter.start(lambda: self.broadcasters)
+                                self.logger.info("✅ [TelegramReporter] Система отчетов перезапущена")
+                            except Exception as e:
+                                self.logger.error(f"❌ [TelegramReporter] Не удалось перезапустить: {e}")
+                        
+                        # Проверяем, что система отчетов запущена
+                        elif not self.telegram_reporter.running:
+                            self.logger.warning("⚠️ [TelegramReporter] Система отчетов не запущена")
+                            try:
+                                self.telegram_reporter.start(lambda: self.broadcasters)
+                                self.logger.info("✅ [TelegramReporter] Система отчетов запущена")
+                            except Exception as e:
+                                self.logger.error(f"❌ [TelegramReporter] Не удалось запустить: {e}")
+                        
+                        # Проверяем, отправлялись ли отчеты в последнее время
+                        elif self.telegram_reporter.last_report_time:
+                            time_since_last = datetime.now() - self.telegram_reporter.last_report_time
+                            # Если прошло больше чем интервал + 50% запаса - подозрительно
+                            max_time = timedelta(hours=self.telegram_reporter.report_interval_hours * 1.5)
+                            if time_since_last > max_time:
+                                self.logger.warning(
+                                    f"⚠️ [TelegramReporter] Последний отчет был {time_since_last.total_seconds()/3600:.1f} часов назад "
+                                    f"(максимум: {max_time.total_seconds()/3600:.1f} часов)"
+                                )
+                        # Если отчетов еще не было, но система работает - это нормально
+                        elif self.telegram_reporter.running:
+                            # Проверяем, что система работает достаточно долго для первого отчета
+                            # Если система работает больше интервала, но отчетов нет - проблема
+                            # Но это сложно проверить без времени запуска, пропускаем
+                            pass
+                            
+                    except Exception as e:
+                        self.logger.error(f"❌ Ошибка проверки здоровья системы отчетов: {e}")
+                
                 # Сбор метрик
                 try:
-                    health_status = self.health_checker.check_health()
-                    stats = self.metrics_collector.get_summary_stats()
-                    await alert_manager.check_alerts(stats['general'])
-                    
-                    # Отправка уведомления о статусе
-                    if health_status['status'] != 'healthy':
-                        await notification_manager.send_warning(
-                            "Проблемы с системой",
-                            f"Статус: {health_status['status']}",
-                            rate_limit_key="health_check",
-                            rate_limit_seconds=1800  # 30 минут
-                        )
+                health_status = self.health_checker.check_health()
+                stats = self.metrics_collector.get_summary_stats()
+                await alert_manager.check_alerts(stats['general'])
+
+                # Отправка уведомления о статусе
+                if health_status['status'] != 'healthy':
+                    await notification_manager.send_warning(
+                        "Проблемы с системой",
+                        f"Статус: {health_status['status']}",
+                        rate_limit_key="health_check",
+                        rate_limit_seconds=1800  # 30 минут
+                    )
                 except Exception as e:
                     self.logger.debug(f"Ошибка сбора метрик в health check: {e}")
 
