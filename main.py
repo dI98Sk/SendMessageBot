@@ -617,18 +617,18 @@ class SendMessageBotApp:
                 
                 # Сбор метрик
                 try:
-                health_status = self.health_checker.check_health()
-                stats = self.metrics_collector.get_summary_stats()
-                await alert_manager.check_alerts(stats['general'])
+                    health_status = self.health_checker.check_health()
+                    stats = self.metrics_collector.get_summary_stats()
+                    await alert_manager.check_alerts(stats['general'])
 
-                # Отправка уведомления о статусе
-                if health_status['status'] != 'healthy':
-                    await notification_manager.send_warning(
-                        "Проблемы с системой",
-                        f"Статус: {health_status['status']}",
-                        rate_limit_key="health_check",
-                        rate_limit_seconds=1800  # 30 минут
-                    )
+                    # Отправка уведомления о статусе
+                    if health_status['status'] != 'healthy':
+                        await notification_manager.send_warning(
+                            "Проблемы с системой",
+                            f"Статус: {health_status['status']}",
+                            rate_limit_key="health_check",
+                            rate_limit_seconds=1800  # 30 минут
+                        )
                 except Exception as e:
                     self.logger.debug(f"Ошибка сбора метрик в health check: {e}")
 
