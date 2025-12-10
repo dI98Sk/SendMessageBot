@@ -1,16 +1,30 @@
 # 🤖 SendMessageBot
 
-Автоматизированная система рассылки сообщений в Telegram с поддержкой множественных broadcaster'ов, автообновлением из Google Sheets и отчетами.
+Проект состоит из двух независимых микросервисов:
 
-**Версия:** 2.0 Production Ready  
+1. **Broadcaster Service** - автоматизированная система рассылки сообщений в Telegram
+2. **Google Sheets Updater Service** - автоматическое обновление Google таблиц
+
+**Версия:** 2.1 Microservices Architecture  
 **Статус:** ✅ Готово к использованию  
-**Дата:** 2025-11-16
+**Дата:** 2025-12-10
 
 ---
 
 ## 🚀 Быстрый старт
 
-### Windows (автоматический)
+### Архитектура микросервисов
+
+Проект состоит из двух независимых сервисов:
+
+- **Broadcaster Service** (`main.py`) - рассылка сообщений в Telegram
+- **Google Sheets Updater Service** (`google_sheets_updater/main.py`) - обновление таблиц
+
+**Подробнее:** [docs/MICROSERVICES_ARCHITECTURE.md](docs/MICROSERVICES_ARCHITECTURE.md)
+
+### Запуск Broadcaster Service
+
+#### Windows (автоматический)
 
 ```cmd
 # Запустите скрипт для первоначальной настройки
@@ -22,11 +36,11 @@ scripts\start_windows.bat
 2. ✅ Активацию venv
 3. ✅ Установку зависимостей
 4. ✅ Настройку Telegram аккаунтов
-5. ✅ Запуск бота
+5. ✅ Запуск broadcaster service
 
 **Подробнее:** [scripts/README_START_WINDOWS.md](scripts/README_START_WINDOWS.md)
 
-### Linux/Mac (ручной)
+#### Linux/Mac (ручной)
 
 ```bash
 # 1. Создать виртуальное окружение
@@ -41,9 +55,24 @@ pip install -r requirements.txt
 # 4. Настроить аккаунты
 python scripts/setup_accounts.py
 
-# 5. Запустить бот
+# 5. Запустить broadcaster service
 python main.py
 ```
+
+### Запуск Google Sheets Updater Service
+
+```bash
+# Windows
+scripts\start_updater.bat
+
+# Linux/Mac
+scripts/start_updater.sh
+
+# Или напрямую
+python google_sheets_updater/main.py
+```
+
+**Подробнее:** [google_sheets_updater/README.md](google_sheets_updater/README.md)
 
 ---
 
