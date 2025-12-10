@@ -64,6 +64,7 @@
 - **[INVALID_CHAT_ID_FIX.md](INVALID_CHAT_ID_FIX.md)** - решение проблемы InvalidChatId
 - **[WINDOWS_LOG_ROTATION_FIX.md](WINDOWS_LOG_ROTATION_FIX.md)** - решение проблемы ротации логов на Windows
 - **[LOG_ANALYSIS_STARTUP_ISSUES.md](LOG_ANALYSIS_STARTUP_ISSUES.md)** ⭐ - анализ проблем при запуске (database is locked, phone attribute)
+- **[STARTUP_FIXES_SUMMARY.md](STARTUP_FIXES_SUMMARY.md)** - сводка всех исправлений при запуске
 
 #### Серверные проблемы
 - **[troubleshooting/SERVER_DIAGNOSTIC.md](troubleshooting/SERVER_DIAGNOSTIC.md)** - диагностика проблем на сервере
