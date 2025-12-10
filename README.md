@@ -56,8 +56,12 @@ pip install -r requirements.txt
 python scripts/setup_accounts.py
 
 # 5. Запустить broadcaster service
-python main.py
+python broadcaster/main.py
+# или
+scripts/start_broadcaster.sh
 ```
+
+**Подробнее:** [broadcaster/README.md](broadcaster/README.md)
 
 ### Запуск Google Sheets Updater Service
 
@@ -124,25 +128,32 @@ scripts/stop_all.sh     # Linux/Mac
 
 ```
 SendMessageBot/
-├── main.py                 # Production версия (PRICE_TARGET, ADS_TARGET)
-├── main_test.py           # Тестовая версия (TEST чаты)
+├── broadcaster/            # Broadcaster Service (микросервис)
+│   ├── main.py            # Точка входа
+│   ├── core/              # Ядро broadcaster'ов
+│   ├── config/            # Конфигурация
+│   ├── monitoring/       # Мониторинг и отчеты
+│   └── utils/             # Утилиты
 │
-├── config/                 # Конфигурация
-│   ├── settings.py        # Основные настройки
-│   ├── targets.py         # Целевые чаты
-│   ├── messages_aaa.py    # Прайсы AAA (автообновляется)
-│   ├── messages_gus.py    # Прайсы GUS (автообновляется)
-│   ├── messages_aaa_ads.py # Реклама AAA (автообновляется)
-│   └── messages_gus_ads.py # Реклама GUS (автообновляется)
+├── google_sheets_updater/  # Google Sheets Updater Service (микросервис)
+│   ├── main.py            # Точка входа
+│   ├── updater/           # Логика обновления
+│   ├── config/            # Конфигурация
+│   └── utils/             # Утилиты
 │
-├── core/                   # Ядро приложения
-│   ├── broadcaster.py     # Broadcaster с индивидуальными задержками
-│   ├── coordinator.py     # Система координации broadcaster'ов
-│   ├── queue.py          # Система очередей
-│   └── ...
+├── shared/                 # Общие компоненты
+│   └── google_sheets/     # Google Sheets клиент
+│       ├── client.py     # Базовый клиент (для записи)
+│       └── fetcher.py    # Для чтения (broadcaster)
 │
-├── utils/                  # Утилиты
-│   ├── auto_updater.py   # Автообновление сообщений
+├── scripts/                # Скрипты запуска
+│   ├── start_broadcaster.sh/bat
+│   ├── start_updater.sh/bat
+│   └── start_all.sh/bat
+│
+├── docs/                   # Документация
+└── requirements.txt       # Общие зависимости
+```
 │   ├── google_sheets.py  # Работа с Google Sheets
 │   ├── chat_validator.py # Валидация chat_id
 │   └── ...

@@ -28,7 +28,7 @@ trap cleanup SIGINT SIGTERM
 
 # Запуск Broadcaster Service в фоне
 echo "📡 Запуск Broadcaster Service..."
-python main.py > logs/broadcaster.log 2>&1 &
+python broadcaster/main.py > logs/broadcaster.log 2>&1 &
 BROADCASTER_PID=$!
 echo "   PID: $BROADCASTER_PID"
 echo "   Логи: logs/broadcaster.log"

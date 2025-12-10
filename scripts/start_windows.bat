@@ -128,7 +128,7 @@ echo.
 echo ========================================
 echo.
 
-python main.py
+python broadcaster/main.py
 
 REM Если бот завершился с ошибкой
 if errorlevel 1 (

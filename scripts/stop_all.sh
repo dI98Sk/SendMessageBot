@@ -4,7 +4,7 @@
 echo "🛑 Остановка всех микросервисов..."
 
 # Поиск процессов
-BROADCASTER_PIDS=$(ps aux | grep "[p]ython.*main.py" | awk '{print $2}')
+BROADCASTER_PIDS=$(ps aux | grep "[p]ython.*broadcaster/main.py" | awk '{print $2}')
 UPDATER_PIDS=$(ps aux | grep "[p]ython.*google_sheets_updater/main.py" | awk '{print $2}')
 
 if [ -z "$BROADCASTER_PIDS" ] && [ -z "$UPDATER_PIDS" ]; then
@@ -28,7 +28,7 @@ fi
 sleep 2
 
 # Принудительная остановка, если процессы еще работают
-BROADCASTER_PIDS=$(ps aux | grep "[p]ython.*main.py" | awk '{print $2}')
+BROADCASTER_PIDS=$(ps aux | grep "[p]ython.*broadcaster/main.py" | awk '{print $2}')
 UPDATER_PIDS=$(ps aux | grep "[p]ython.*google_sheets_updater/main.py" | awk '{print $2}')
 
 if [ ! -z "$BROADCASTER_PIDS" ]; then

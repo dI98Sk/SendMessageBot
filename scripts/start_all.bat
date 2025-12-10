@@ -14,7 +14,7 @@ REM Создание директории для логов, если не су�
 if not exist logs mkdir logs
 
 echo 📡 Запуск Broadcaster Service...
-start "Broadcaster Service" /MIN python main.py
+start "Broadcaster Service" /MIN python broadcaster\main.py
 echo    Логи: logs\broadcaster.log
 
 timeout /t 2 /nobreak >nul
