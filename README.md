@@ -74,6 +74,22 @@ python google_sheets_updater/main.py
 
 **Подробнее:** [google_sheets_updater/README.md](google_sheets_updater/README.md)
 
+### Запуск обоих сервисов одновременно
+
+```bash
+# Windows
+scripts\start_all.bat
+
+# Linux/Mac
+scripts/start_all.sh
+
+# Остановка всех сервисов
+scripts\stop_all.bat    # Windows
+scripts/stop_all.sh     # Linux/Mac
+```
+
+**Подробнее:** [docs/RUNNING_MICROSERVICES.md](docs/RUNNING_MICROSERVICES.md)
+
 ---
 
 ## 📊 Возможности
