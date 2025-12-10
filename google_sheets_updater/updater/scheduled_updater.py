@@ -4,6 +4,7 @@
 import asyncio
 from datetime import datetime, time
 from typing import Optional
+import pytz
 
 from google_sheets_updater.config.settings import UpdaterConfig
 from google_sheets_updater.updater.telegram_fetcher import TelegramFetcher
@@ -29,8 +30,9 @@ class ScheduledUpdater:
         self.running = False
         self._task: Optional[asyncio.Task] = None
         
-        # Время обновления: 11:05
-        self.update_time = time(11, 5)
+        # Время обновления: 11:00 по МСК
+        self.update_time = time(11, 0)
+        self.timezone = pytz.timezone('Europe/Moscow')  # МСК
     
     async def start(self):
         """Запуск планировщика"""
@@ -42,7 +44,7 @@ class ScheduledUpdater:
         await self.telegram_fetcher.initialize()
         
         self.logger.info("🚀 Запуск планировщика обновления из Telegram")
-        self.logger.info(f"⏰ Время обновления: {self.update_time.strftime('%H:%M')}")
+        self.logger.info(f"⏰ Время обновления: {self.update_time.strftime('%H:%M')} МСК")
         
         self._task = asyncio.create_task(self._scheduler_loop())
         await self._task
@@ -84,21 +86,29 @@ class ScheduledUpdater:
     
     def _get_seconds_until_update(self) -> float:
         """
-        Вычисление секунд до времени обновления
+        Вычисление секунд до времени обновления (по МСК)
         
         Returns:
             float: Количество секунд до обновления
         """
-        now = datetime.now()
-        update_datetime = datetime.combine(now.date(), self.update_time)
+        # Получаем текущее время в МСК
+        now_moscow = datetime.now(self.timezone)
+        
+        # Создаем datetime для обновления сегодня в МСК
+        update_datetime = self.timezone.localize(
+            datetime.combine(now_moscow.date(), self.update_time)
+        )
         
         # Если время уже прошло сегодня, планируем на завтра
-        if update_datetime <= now:
+        if update_datetime <= now_moscow:
             from datetime import timedelta
-            update_datetime += timedelta(days=1)
+            tomorrow = now_moscow.date() + timedelta(days=1)
+            update_datetime = self.timezone.localize(
+                datetime.combine(tomorrow, self.update_time)
+            )
         
-        delta = update_datetime - now
-        return delta.total_seconds()
+        delta = (update_datetime - now_moscow).total_seconds()
+        return delta
     
     async def _perform_update(self):
         """Выполнение обновления таблиц из Telegram канала"""
