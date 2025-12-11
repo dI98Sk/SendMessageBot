@@ -84,6 +84,7 @@
 - **[ANACONDA_UPDATE_AND_RUN.md](ANACONDA_UPDATE_AND_RUN.md)** ⭐ - обновление и запуск в Anaconda Prompt
 - **[RUNNING_MICROSERVICES.md](RUNNING_MICROSERVICES.md)** ⭐ - запуск обоих микросервисов
 - **[MICROSERVICES_ARCHITECTURE.md](MICROSERVICES_ARCHITECTURE.md)** ⭐ - архитектура микросервисов
+- **[MICROSERVICES_MIGRATION.md](MICROSERVICES_MIGRATION.md)** ⭐ - миграция на микросервисную архитектуру
 - **[TELEGRAM_TO_SHEETS_UPDATE.md](TELEGRAM_TO_SHEETS_UPDATE.md)** ⭐ - обновление таблиц из Telegram канала
 
 ---
