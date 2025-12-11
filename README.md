@@ -124,7 +124,36 @@ scripts/stop_all.sh     # Linux/Mac
 
 ---
 
-## 📁 Структура проекта
+## 📁 Структура проекта (Микросервисная архитектура)
+
+```
+SendMessageBot/
+├── broadcaster/                    # Broadcaster Service
+│   ├── main.py                    # Точка входа
+│   ├── core/                      # Ядро broadcaster'ов
+│   ├── config/                    # Конфигурация
+│   ├── monitoring/                # Мониторинг и отчеты
+│   └── utils/                     # Утилиты
+│
+├── google_sheets_updater/          # Google Sheets Updater Service
+│   ├── main.py                    # Точка входа
+│   ├── updater/                   # Логика обновления
+│   ├── config/                    # Конфигурация
+│   └── utils/                     # Утилиты
+│
+├── shared/                         # Общие компоненты
+│   └── google_sheets/              # Google Sheets клиент
+│
+├── scripts/                        # Скрипты запуска
+├── sessions/                       # Файлы сессий Telegram
+├── logs/                           # Логи
+├── main.py                         # Обертка для обратной совместимости
+└── requirements.txt                # Зависимости
+```
+
+**Подробнее:** [docs/MICROSERVICES_ARCHITECTURE.md](docs/MICROSERVICES_ARCHITECTURE.md)
+
+## 📁 Старая структура проекта (для справки)
 
 ```
 SendMessageBot/

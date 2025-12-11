@@ -1,1 +1,1 @@
-"""Конфигурация Broadcaster Service"""
+# Configuration package

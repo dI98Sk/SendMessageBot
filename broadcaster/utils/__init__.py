@@ -1,2 +1,1 @@
-"""Утилиты Broadcaster Service"""
-
+# Utilities package

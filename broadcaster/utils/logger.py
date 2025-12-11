@@ -7,7 +7,7 @@ import os
 import sys
 from pathlib import Path
 from typing import Optional
-from config.settings import LoggingConfig
+from broadcaster.config.settings import LoggingConfig
 
 class WindowsSafeRotatingFileHandler(logging.handlers.RotatingFileHandler):
     """

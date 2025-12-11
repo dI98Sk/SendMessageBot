@@ -58,7 +58,7 @@ class AutoMessageUpdater:
                 if aaa_messages:
                     await self._save_messages_to_file(
                         aaa_messages, 
-                        'broadcaster/config/messages_aaa.py',
+                        'config/messages_aaa.py',
                         'MESSAGESAAA',
                         'Прайсы AAA'
                     )
@@ -81,7 +81,7 @@ class AutoMessageUpdater:
                 if gus_messages:
                     await self._save_messages_to_file(
                         gus_messages,
-                        'broadcaster/config/messages_gus.py',
+                        'config/messages_gus.py',
                         'MESSAGESGUS',
                         'Прайсы GUS'
                     )
@@ -104,7 +104,7 @@ class AutoMessageUpdater:
                 if aaa_ads_messages:
                     await self._save_messages_to_file(
                         aaa_ads_messages,
-                        'broadcaster/config/messages_aaa_ads.py',
+                        'config/messages_aaa_ads.py',
                         'MESSAGES_AAA_ADS',
                         'Реклама AAA'
                     )
@@ -127,7 +127,7 @@ class AutoMessageUpdater:
                 if gus_ads_messages:
                     await self._save_messages_to_file(
                         gus_ads_messages,
-                        'broadcaster/config/messages_gus_ads.py',
+                        'config/messages_gus_ads.py',
                         'MESSAGES_GUS_ADS',
                         'Реклама GUS'
                     )
@@ -157,9 +157,7 @@ class AutoMessageUpdater:
     async def _save_messages_to_file(self, messages: list, file_path: str, 
                                      var_name: str, description: str):
         """Сохранить сообщения в Python файл"""
-        # Путь относительно корня проекта
-        project_root = Path(__file__).parent.parent.parent
-        full_path = project_root / file_path
+        full_path = Path(__file__).parent.parent / file_path
         
         # Создаем содержимое файла
         content = f'"""\n{description}\n'

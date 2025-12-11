@@ -1,1 +1,1 @@
-"""Ядро Broadcaster Service"""
+# Core package

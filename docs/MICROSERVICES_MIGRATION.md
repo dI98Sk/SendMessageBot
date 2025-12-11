@@ -5,67 +5,105 @@
 
 ---
 
-## ✅ Выполненные изменения
+## ✅ Выполненная реорганизация
 
-### 1. Реорганизация структуры проекта
+Проект реорганизован в микросервисную архитектуру:
 
-**Было:**
+### Новая структура:
+
 ```
 SendMessageBot/
-├── main.py
-├── core/
-├── config/
-├── monitoring/
-├── utils/
-└── google_sheets_updater/
+├── broadcaster/                    # Broadcaster Service
+│   ├── main.py                    # Точка входа
+│   ├── core/                      # Ядро broadcaster'ов
+│   │   ├── broadcaster.py
+│   │   ├── coordinator.py
+│   │   ├── exceptions.py
+│   │   ├── queue.py
+│   │   └── retry.py
+│   ├── config/                     # Конфигурация
+│   │   ├── settings.py
+│   │   ├── targets.py
+│   │   ├── message_updater.py
+│   │   └── messages_*.py
+│   ├── monitoring/                 # Мониторинг и отчеты
+│   │   ├── metrics.py
+│   │   ├── notifications.py
+│   │   └── reports.py
+│   └── utils/                      # Утилиты
+│       ├── auto_updater.py
+│       ├── chat_validator.py
+│       ├── logger.py
+│       └── security.py
+│
+├── google_sheets_updater/          # Google Sheets Updater Service
+│   ├── main.py                     # Точка входа
+│   ├── updater/                    # Логика обновления
+│   │   ├── sheet_updater.py
+│   │   ├── scheduled_updater.py
+│   │   └── telegram_fetcher.py
+│   ├── config/                     # Конфигурация
+│   │   └── settings.py
+│   └── utils/                      # Утилиты
+│       └── logger.py
+│
+├── shared/                         # Общие компоненты
+│   └── google_sheets/              # Google Sheets клиент
+│       ├── __init__.py
+│       ├── client.py               # Базовый клиент (для updater)
+│       └── fetcher.py               # Fetcher (для broadcaster)
+│
+├── main.py                         # Обертка для обратной совместимости
+├── scripts/                        # Скрипты запуска
+│   ├── start_broadcaster.sh
+│   ├── start_broadcaster.bat
+│   ├── start_updater.sh
+│   ├── start_updater.bat
+│   ├── start_all.sh
+│   ├── start_all.bat
+│   ├── stop_all.sh
+│   └── stop_all.bat
+│
+├── requirements.txt                # Общие зависимости
+├── README.md
+└── docs/
 ```
-
-**Стало:**
-```
-SendMessageBot/
-├── broadcaster/              # Broadcaster Service
-│   ├── main.py
-│   ├── core/
-│   ├── config/
-│   ├── monitoring/
-│   └── utils/
-├── google_sheets_updater/    # Google Sheets Updater Service
-│   ├── main.py
-│   ├── updater/
-│   ├── config/
-│   └── utils/
-└── shared/                   # Общие компоненты
-    └── google_sheets/
-```
-
-### 2. Обновлены импорты
-
-Все импорты в `broadcaster/` обновлены для использования префикса `broadcaster.`:
-
-- `from config.settings` → `from broadcaster.config.settings`
-- `from core.broadcaster` → `from broadcaster.core.broadcaster`
-- `from utils.logger` → `from broadcaster.utils.logger`
-- `from utils.google_sheets` → `from shared.google_sheets.fetcher`
-
-### 3. Обновлены скрипты запуска
-
-- `scripts/start_all.sh` - запуск обоих сервисов
-- `scripts/start_all.bat` - запуск обоих сервисов (Windows)
-- `scripts/start_broadcaster.sh` - запуск только broadcaster
-- `scripts/start_broadcaster.bat` - запуск только broadcaster (Windows)
-- `scripts/stop_all.sh` - остановка всех сервисов
-- `scripts/stop_all.bat` - остановка всех сервисов (Windows)
-
-### 4. Созданы общие компоненты
-
-- `shared/google_sheets/client.py` - базовый клиент (для записи)
-- `shared/google_sheets/fetcher.py` - для чтения (broadcaster)
 
 ---
 
-## 🚀 Запуск после миграции
+## 🔄 Изменения в импортах
 
-### Запуск Broadcaster Service
+### Broadcaster Service
+
+Все импорты обновлены на абсолютные с префиксом `broadcaster.`:
+
+```python
+# Было:
+from config.settings import AppConfig
+from utils.logger import get_logger
+from core.broadcaster import EnhancedBroadcaster
+from utils.google_sheets import GoogleSheetsFetcher
+
+# Стало:
+from broadcaster.config.settings import AppConfig
+from broadcaster.utils.logger import get_logger
+from broadcaster.core.broadcaster import EnhancedBroadcaster
+from shared.google_sheets.fetcher import GoogleSheetsFetcher
+```
+
+### Google Sheets Updater Service
+
+Использует общий клиент из `shared/`:
+
+```python
+from shared.google_sheets.client import GoogleSheetsClient
+```
+
+---
+
+## 🚀 Запуск сервисов
+
+### 1. Запуск Broadcaster Service
 
 ```bash
 # Linux/Mac
@@ -79,7 +117,7 @@ python broadcaster\main.py
 scripts\start_broadcaster.bat
 ```
 
-### Запуск Google Sheets Updater
+### 2. Запуск Google Sheets Updater Service
 
 ```bash
 # Linux/Mac
@@ -93,7 +131,7 @@ python google_sheets_updater\main.py
 scripts\start_updater.bat
 ```
 
-### Запуск обоих сервисов
+### 3. Запуск обоих сервисов
 
 ```bash
 # Linux/Mac
@@ -103,93 +141,156 @@ scripts/start_all.sh
 scripts\start_all.bat
 ```
 
----
+### 4. Обратная совместимость
 
-## ⚠️ Важные изменения
-
-### 1. Пути к файлам
-
-- **Конфигурация:** `broadcaster/config/` вместо `config/`
-- **Логи:** остаются в корне (`bot.log`) или `logs/broadcaster.log`
-- **Сессии:** остаются в `sessions/` (общие для обоих сервисов)
-
-### 2. Импорты в скриптах
-
-Если у вас есть собственные скрипты, обновите импорты:
-
-```python
-# Было:
-from config.settings import config_manager
-
-# Стало:
-from broadcaster.config.settings import config_manager
-```
-
-### 3. Автообновление сообщений
-
-Пути к файлам сообщений обновлены:
-- `config/messages_aaa.py` → `broadcaster/config/messages_aaa.py`
-- `config/messages_gus.py` → `broadcaster/config/messages_gus.py`
-- и т.д.
-
----
-
-## 🔍 Проверка после миграции
-
-### 1. Проверка структуры
+Старый способ запуска все еще работает:
 
 ```bash
-# Проверить наличие всех файлов
-ls broadcaster/main.py
-ls broadcaster/core/broadcaster.py
-ls broadcaster/config/settings.py
-ls google_sheets_updater/main.py
-ls shared/google_sheets/fetcher.py
-```
-
-### 2. Проверка импортов
-
-```bash
-# Проверить синтаксис
-python -m py_compile broadcaster/main.py
-python -m py_compile google_sheets_updater/main.py
-```
-
-### 3. Тестовый запуск
-
-```bash
-# Запустить broadcaster (должен запуститься без ошибок импорта)
-python broadcaster/main.py
-
-# Запустить updater (должен запуститься без ошибок импорта)
-python google_sheets_updater/main.py
+python main.py  # Автоматически запускает broadcaster/main.py
 ```
 
 ---
 
-## 📝 Обратная совместимость
+## 📝 Конфигурация
 
-### Старые файлы
+### Broadcaster Service
 
-Старые файлы в корне проекта (`main.py`, `core/`, `config/`, и т.д.) **остаются** для обратной совместимости, но рекомендуется использовать новую структуру.
+Конфигурация в `.env` или переменных окружения:
 
-### Миграция существующих установок
+```env
+# Telegram
+API_ID=...
+API_HASH=...
 
-Если у вас уже работает проект:
+# Google Sheets (для чтения)
+BUY_SELL_PRICE_AAA_SHEET_URL=...
+BUY_SELL_PRICE_GUS_SHEET_URL=...
+ADS_AAA_SHEET_URL=...
+ADS_GUS_SHEET_URL=...
+```
 
-1. **Обновите код:**
-   ```bash
-   git pull origin master
-   ```
+### Google Sheets Updater Service
 
-2. **Обновите скрипты запуска:**
-   - Используйте новые скрипты из `scripts/`
-   - Или обновите пути в существующих скриптах
+Конфигурация в `.env.updater` или переменных окружения:
 
-3. **Проверьте работу:**
-   ```bash
-   python broadcaster/main.py
-   ```
+```env
+# Google Sheets
+GOOGLE_CREDENTIALS_FILE=credentials.json
+
+# Telegram (для получения сообщений)
+TELEGRAM_API_ID=...
+TELEGRAM_API_HASH=...
+TELEGRAM_SOURCE_CHANNEL_ID=...
+
+# Таблицы для обновления
+BUY_SELL_PRICE_AAA_SHEET_URL=...
+BUY_SELL_PRICE_GUS_SHEET_URL=...
+```
+
+---
+
+## 🔧 Обновление существующей установки
+
+### Шаг 1: Обновить код
+
+```bash
+git pull origin master
+```
+
+### Шаг 2: Проверить структуру
+
+Убедитесь, что все файлы на месте:
+
+```bash
+ls broadcaster/
+ls google_sheets_updater/
+ls shared/
+```
+
+### Шаг 3: Обновить скрипты запуска
+
+Скрипты уже обновлены, но можно проверить:
+
+```bash
+# Проверить скрипты
+cat scripts/start_broadcaster.sh
+cat scripts/start_updater.sh
+```
+
+### Шаг 4: Перезапустить сервисы
+
+```bash
+# Остановить старые процессы
+scripts/stop_all.sh  # или stop_all.bat
+
+# Запустить новые
+scripts/start_all.sh  # или start_all.bat
+```
+
+---
+
+## ⚠️ Важные замечания
+
+### 1. Импорты
+
+- Все импорты в `broadcaster/` должны использовать префикс `broadcaster.`
+- Общие компоненты импортируются из `shared/`
+- Не используйте относительные импорты (`from config`, `from utils`)
+
+### 2. Пути к файлам
+
+- Файлы сессий: `sessions/` (в корне проекта)
+- Логи: `logs/` (в корне проекта)
+- Конфигурация: `.env` для broadcaster, `.env.updater` для updater
+
+### 3. Обратная совместимость
+
+- `main.py` в корне работает как обертка
+- Старые скрипты могут продолжать работать
+- Рекомендуется использовать новые скрипты
+
+---
+
+## 🐛 Решение проблем
+
+### Проблема: "ModuleNotFoundError: No module named 'broadcaster'"
+
+**Решение:**
+- Убедитесь, что запускаете из корневой директории проекта
+- Проверьте, что `broadcaster/` существует
+- Проверьте `PYTHONPATH`
+
+### Проблема: "ModuleNotFoundError: No module named 'shared'"
+
+**Решение:**
+- Убедитесь, что `shared/` существует в корне проекта
+- Проверьте импорты в файлах
+
+### Проблема: Старые скрипты не работают
+
+**Решение:**
+- Используйте новые скрипты из `scripts/`
+- Или обновите пути в старых скриптах
+
+---
+
+## 📊 Преимущества новой архитектуры
+
+1. **Четкое разделение:**
+   - Каждый сервис в своей директории
+   - Общие компоненты в `shared/`
+
+2. **Независимость:**
+   - Сервисы можно запускать отдельно
+   - Легче тестировать и отлаживать
+
+3. **Масштабируемость:**
+   - Легко добавить новые сервисы
+   - Легко разделить на контейнеры (Docker)
+
+4. **Поддерживаемость:**
+   - Четкая структура
+   - Легче найти нужный код
 
 ---
 
@@ -197,11 +298,9 @@ python google_sheets_updater/main.py
 
 - [MICROSERVICES_ARCHITECTURE.md](MICROSERVICES_ARCHITECTURE.md) - архитектура микросервисов
 - [RUNNING_MICROSERVICES.md](RUNNING_MICROSERVICES.md) - запуск сервисов
-- [broadcaster/README.md](../broadcaster/README.md) - документация Broadcaster Service
-- [google_sheets_updater/README.md](../google_sheets_updater/README.md) - документация Updater Service
+- [README.md](../README.md) - общая документация
 
 ---
 
 **Дата создания:** 2025-12-10  
 **Версия:** 1.0
-

@@ -12,4 +12,3 @@ REM Запуск сервиса
 python broadcaster\main.py
 
 pause
-

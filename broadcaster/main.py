@@ -11,13 +11,14 @@ from typing import List
 from datetime import datetime
 
 # Добавляем корневую директорию проекта в путь для импорта shared компонентов
-project_root = Path(__file__).parent.parent
+project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
-# Импорты из broadcaster
+# Импорты из broadcaster (относительные импорты)
 from broadcaster.config.settings import config_manager, AppConfig
 from broadcaster.utils.logger import get_logger
 from broadcaster.core.broadcaster import EnhancedBroadcaster
+from shared.google_sheets.fetcher import GoogleSheetsFetcher
 from broadcaster.config.message_updater import MessageConfigUpdater
 from broadcaster.monitoring.reports import TelegramReporter
 from broadcaster.core.queue import queue_manager, Priority, QueueItem
@@ -27,9 +28,6 @@ from broadcaster.monitoring.notifications import (
     TelegramNotificationChannel, WebhookNotificationChannel
 )
 from broadcaster.utils.security import security_manager
-
-# Импорт общих компонентов
-from shared.google_sheets.fetcher import GoogleSheetsFetcher
 
 class SendMessageBotApp:
     """Основной класс приложения"""

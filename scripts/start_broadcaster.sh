@@ -10,4 +10,3 @@ fi
 
 # Запуск сервиса
 python broadcaster/main.py
-

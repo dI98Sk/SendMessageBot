@@ -1,1 +1,1 @@
-"""Мониторинг и отчеты Broadcaster Service"""
+# Monitoring package
