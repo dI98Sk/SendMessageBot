@@ -89,6 +89,7 @@
 #### Специфичные проблемы
 - **[DATABASE_LOCKED_SOLUTION.md](DATABASE_LOCKED_SOLUTION.md)** ⭐ - решение проблемы "database is locked"
 - **[BROADCASTER_CONNECTION_FIX.md](BROADCASTER_CONNECTION_FIX.md)** ⭐ - исправление проблем с подключением
+- **[CYCLE_DEBUGGING_GUIDE.md](CYCLE_DEBUGGING_GUIDE.md)** ⭐ - диагностика циклов рассылки (0 отправлено, 0 циклов)
 - **[INVALID_CHAT_ID_FIX.md](INVALID_CHAT_ID_FIX.md)** - решение проблемы InvalidChatId
 - **[WINDOWS_LOG_ROTATION_FIX.md](WINDOWS_LOG_ROTATION_FIX.md)** - решение проблемы ротации логов на Windows
 - **[LOG_ANALYSIS_STARTUP_ISSUES.md](LOG_ANALYSIS_STARTUP_ISSUES.md)** - анализ проблем при запуске
