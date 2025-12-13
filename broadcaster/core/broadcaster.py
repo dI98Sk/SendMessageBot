@@ -1084,10 +1084,22 @@ class EnhancedBroadcaster:
                     self._coordinator = await get_coordinator()
                 
                 if self._coordinator:
+                    self.logger.debug(f"🔒 [{self.name}] Получение блокировки подключения...")
                     await self._coordinator.acquire_connection_lock()
                     connection_lock_acquired = True
+                    self.logger.debug(f"✅ [{self.name}] Блокировка подключения получена")
                 
-                await self._client.start()
+                self.logger.debug(f"🚀 [{self.name}] Запуск Telegram клиента...")
+                try:
+                    # Добавляем таймаут для start() чтобы не зависать
+                    await asyncio.wait_for(self._client.start(), timeout=30.0)
+                    self.logger.debug(f"✅ [{self.name}] Telegram клиент запущен успешно")
+                except asyncio.TimeoutError:
+                    self.logger.error(f"❌ [{self.name}] Таймаут при запуске клиента (30 секунд)")
+                    raise Exception(f"Таймаут при запуске Telegram клиента")
+                except Exception as start_err:
+                    self.logger.error(f"❌ [{self.name}] Ошибка при запуске клиента: {start_err}")
+                    raise
             except Exception as start_error:
                 error_msg = str(start_error).lower()
                 if "database is locked" in error_msg or "locked" in error_msg:
@@ -1110,11 +1122,20 @@ class EnhancedBroadcaster:
                     self._coordinator.release_connection_lock()
             
             # Получаем информацию о текущем пользователе
-            me = await self._client.get_me()
-            account_id = me.id
-            self._account_id = str(account_id)  # Сохраняем для координатора
-            account_name = f"{me.first_name or ''} {me.last_name or ''}".strip()
-            username = me.username or "без username"
+            self.logger.debug(f"👤 [{self.name}] Получение информации о пользователе...")
+            try:
+                me = await asyncio.wait_for(self._client.get_me(), timeout=10.0)
+                account_id = me.id
+                self._account_id = str(account_id)  # Сохраняем для координатора
+                account_name = f"{me.first_name or ''} {me.last_name or ''}".strip()
+                username = me.username or "без username"
+                self.logger.debug(f"✅ [{self.name}] Информация о пользователе получена: {account_name} (@{username})")
+            except asyncio.TimeoutError:
+                self.logger.error(f"❌ [{self.name}] Таймаут при получении информации о пользователе")
+                raise Exception("Таймаут при получении информации о пользователе")
+            except Exception as get_me_err:
+                self.logger.error(f"❌ [{self.name}] Ошибка при получении информации о пользователе: {get_me_err}")
+                raise
             
             # Определяем тип аккаунта по имени broadcaster'а
             account_type = "ОПТОВЫЙ" if "B2B" in self.name or "AAA" in self.name else "РОЗНИЧНЫЙ"
@@ -1199,16 +1220,20 @@ class EnhancedBroadcaster:
                         await asyncio.sleep(quiet_wait_time)
                         continue  # После окончания тихого часа начинаем новый цикл
                     
+                    self.logger.debug(f"🔌 [{self.name}] Проверка подключения перед циклом...")
                     await self._ensure_connection()
+                    self.logger.debug(f"✅ [{self.name}] Подключение подтверждено, начинаем цикл...")
+                    
                     await self._send_messages_cycle()
                     
                     self.logger.info(
-                        f"Цикл завершён. Ждём {self.cycle_delay} секунд ({self.cycle_delay/60:.0f} минут)..."
+                        f"✅ [{self.name}] Цикл завершён. Ждём {self.cycle_delay} секунд ({self.cycle_delay/60:.0f} минут)..."
                     )
                     await asyncio.sleep(self.cycle_delay)
                     
                 except Exception as e:
-                    self.logger.exception(f"Ошибка в цикле рассылки: {e}")
+                    self.logger.exception(f"❌ [{self.name}] Ошибка в цикле рассылки: {e}")
+                    self.logger.error(f"❌ [{self.name}] Traceback: {traceback.format_exc()}")
                     await asyncio.sleep(self.config.broadcasting.retry_delay)
                     
         except asyncio.CancelledError:
