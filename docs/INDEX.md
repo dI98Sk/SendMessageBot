@@ -82,6 +82,7 @@
 - **[PRODUCTION_CHECKLIST.md](PRODUCTION_CHECKLIST.md)** - чек-лист перед продакшеном
 - **[FINAL_CHECKLIST.md](FINAL_CHECKLIST.md)** - финальный чек-лист
 - **[ANACONDA_UPDATE_AND_RUN.md](ANACONDA_UPDATE_AND_RUN.md)** ⭐ - обновление и запуск в Anaconda Prompt
+- **[QUICK_START_GUIDE.md](QUICK_START_GUIDE.md)** ⭐⭐ - **БЫСТРЫЙ СТАРТ** - гайд по запуску с командами
 - **[RUNNING_MICROSERVICES.md](RUNNING_MICROSERVICES.md)** ⭐ - запуск обоих микросервисов
 - **[MICROSERVICES_ARCHITECTURE.md](MICROSERVICES_ARCHITECTURE.md)** ⭐ - архитектура микросервисов
 - **[MICROSERVICES_MIGRATION.md](MICROSERVICES_MIGRATION.md)** ⭐ - миграция на микросервисную архитектуру
