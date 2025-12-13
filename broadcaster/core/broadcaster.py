@@ -1091,6 +1091,11 @@ class EnhancedBroadcaster:
                     except:
                         pass
                 except Exception as e:
+                    # Если это database is locked, не переподключаемся - просто ждем
+                    error_msg = str(e).lower()
+                    if "database is locked" in error_msg or "locked" in error_msg:
+                        self.logger.warning(f"⚠️ [{self.name}] Database locked при проверке соединения, но соединение активно. Пропускаем переподключение.")
+                        return  # Соединение активно, просто database locked - это нормально
                     self.logger.warning(f"⚠️ [{self.name}] Соединение не работает, переподключаемся: {e}")
                     try:
                         await self._client.disconnect()
@@ -1141,16 +1146,21 @@ class EnhancedBroadcaster:
                 error_msg = str(start_error).lower()
                 if "database is locked" in error_msg or "locked" in error_msg:
                     # Если database is locked при start(), ждем и повторяем
-                    wait_time = min(5 * (retry_count + 1), 15)  # Увеличено до 15 секунд максимум
+                    # Увеличиваем задержку экспоненциально, но не более 20 секунд
+                    wait_time = min(5 * (retry_count + 1), 20)  # Увеличено до 20 секунд максимум
                     self.logger.warning(
                         f"⚠️ [{self.name}] База данных заблокирована при запуске, "
-                        f"ожидание {wait_time}с... (попытка {retry_count + 1}/{max_retries + 3})"
+                        f"ожидание {wait_time}с... (попытка {retry_count + 1}/{max_retries + 4})"
                     )
-                    await asyncio.sleep(wait_time)
-                    if retry_count < max_retries + 3:  # Увеличено количество попыток
-                        return await self._ensure_connection(retry_count + 1, max_retries + 3)
+                    try:
+                        await asyncio.sleep(wait_time)
+                    except asyncio.CancelledError:
+                        self.logger.warning(f"⚠️ [{self.name}] Ожидание прервано (CancelledError)")
+                        raise
+                    if retry_count < max_retries + 4:  # Увеличено количество попыток до 4 дополнительных
+                        return await self._ensure_connection(retry_count + 1, max_retries + 4)
                     else:
-                        raise Exception(f"Не удалось запустить клиент из-за блокировки базы данных после {max_retries + 2} попыток")
+                        raise Exception(f"Не удалось запустить клиент из-за блокировки базы данных после {max_retries + 4} попыток")
                 else:
                     raise  # Пробрасываем другие ошибки
             finally:
