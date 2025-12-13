@@ -1079,8 +1079,16 @@ class EnhancedBroadcaster:
             if self._client and self._client.is_connected():
                 # Проверяем, что соединение действительно работает
                 try:
-                    await self._client.get_me()
+                    self.logger.debug(f"🔍 [{self.name}] Проверка работоспособности соединения (get_me)...")
+                    await asyncio.wait_for(self._client.get_me(), timeout=10.0)
+                    self.logger.debug(f"✅ [{self.name}] Соединение работает, возвращаемся")
                     return  # Соединение работает
+                except asyncio.TimeoutError:
+                    self.logger.warning(f"⚠️ [{self.name}] Таймаут при проверке соединения, переподключаемся...")
+                    try:
+                        await self._client.disconnect()
+                    except:
+                        pass
                 except Exception as e:
                     self.logger.warning(f"⚠️ [{self.name}] Соединение не работает, переподключаемся: {e}")
                     try:

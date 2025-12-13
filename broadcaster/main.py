@@ -670,17 +670,26 @@ class SendMessageBotApp:
             # Это предотвращает ошибки "database is locked" при одновременном подключении
             broadcaster_tasks = []
             for idx, broadcaster in enumerate(self.broadcasters, 1):
-                self.logger.info(f"Запуск broadcaster {idx}/{len(self.broadcasters)}: {broadcaster.name}")
+                self.logger.info(f"🚀 Запуск broadcaster {idx}/{len(self.broadcasters)}: {broadcaster.name}")
+                print(f"🚀 Запуск broadcaster {idx}/{len(self.broadcasters)}: {broadcaster.name}")
                 
                 # Добавляем задержку между запусками (кроме первого)
                 # Увеличено до 10 секунд для предотвращения "database is locked"
                 # Это позволяет избежать конфликтов при подключении к базам данных сессий
                 if idx > 1:
+                    self.logger.info(f"⏳ Задержка 10 секунд перед запуском {broadcaster.name}...")
                     await asyncio.sleep(10)  # 10 секунд между подключениями (увеличено для избежания database locked)
                 
-                task = asyncio.create_task(broadcaster.start())
-                broadcaster_tasks.append(task)
-                self.tasks.append(task)
+                self.logger.info(f"📝 Создание задачи для {broadcaster.name}...")
+                try:
+                    task = asyncio.create_task(broadcaster.start())
+                    broadcaster_tasks.append(task)
+                    self.tasks.append(task)
+                    self.logger.info(f"✅ Задача для {broadcaster.name} создана успешно (task={task})")
+                except Exception as e:
+                    self.logger.error(f"❌ Ошибка при создании задачи для {broadcaster.name}: {e}")
+                    import traceback
+                    self.logger.error(f"❌ Traceback: {traceback.format_exc()}")
 
             # Запуск фоновых задач
             health_task = asyncio.create_task(self._health_check_task())
