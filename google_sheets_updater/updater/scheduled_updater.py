@@ -3,7 +3,7 @@
 """
 import asyncio
 from datetime import datetime, time
-from typing import Optional
+from typing import Optional, List
 import pytz
 
 from google_sheets_updater.config.settings import UpdaterConfig

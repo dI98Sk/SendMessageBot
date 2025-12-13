@@ -11,7 +11,7 @@ from typing import List
 from datetime import datetime
 
 # Добавляем корневую директорию проекта в путь для импорта shared компонентов
-project_root = Path(__file__).parent
+project_root = Path(__file__).parent.parent  # broadcaster -> корень проекта
 sys.path.insert(0, str(project_root))
 
 # Импорты из broadcaster (относительные импорты)
