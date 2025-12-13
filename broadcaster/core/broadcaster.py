@@ -1273,12 +1273,22 @@ class EnhancedBroadcaster:
                         continue  # После окончания тихого часа начинаем новый цикл
                     
                     self.logger.info(f"🔌 [{self.name}] Проверка подключения перед циклом...")
-                    await self._ensure_connection()
-                    self.logger.info(f"✅ [{self.name}] Подключение подтверждено, начинаем цикл отправки...")
+                    try:
+                        await self._ensure_connection()
+                        self.logger.info(f"✅ [{self.name}] Подключение подтверждено, начинаем цикл отправки...")
+                    except Exception as conn_err:
+                        self.logger.error(f"❌ [{self.name}] Ошибка подключения: {conn_err}")
+                        self.logger.error(f"❌ [{self.name}] Traceback: {traceback.format_exc()}")
+                        raise
                     
                     self.logger.info(f"📨 [{self.name}] Вызов _send_messages_cycle()...")
-                    await self._send_messages_cycle()
-                    self.logger.info(f"✅ [{self.name}] _send_messages_cycle() завершен успешно")
+                    try:
+                        await self._send_messages_cycle()
+                        self.logger.info(f"✅ [{self.name}] _send_messages_cycle() завершен успешно")
+                    except Exception as cycle_err:
+                        self.logger.error(f"❌ [{self.name}] Ошибка в _send_messages_cycle(): {cycle_err}")
+                        self.logger.error(f"❌ [{self.name}] Traceback: {traceback.format_exc()}")
+                        raise
                     
                     self.logger.info(
                         f"✅ [{self.name}] Цикл #{cycle_number} завершён. Ждём {self.cycle_delay} секунд ({self.cycle_delay/60:.0f} минут)..."
