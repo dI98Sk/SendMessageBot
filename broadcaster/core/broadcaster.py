@@ -1202,13 +1202,18 @@ class EnhancedBroadcaster:
             return
         
         self._running = True
-        self.logger.info(f"Запуск broadcaster {self.name}")
+        self.logger.info(f"🚀 [{self.name}] Запуск broadcaster начат")
+        self.logger.info(f"📊 [{self.name}] Статус: running={self._running}, targets={len(self.targets)}, messages={len(self.messages)}")
         
         try:
             # Ожидание времени начала
+            self.logger.info(f"⏰ [{self.name}] Проверка времени старта...")
             wait_time = self._wait_until_start_time()
+            self.logger.info(f"⏰ [{self.name}] Время старта: wait_time={wait_time}с, enable_scheduling={self.config.broadcasting.enable_scheduling}")
             if wait_time > 0:
+                self.logger.info(f"⏰ [{self.name}] Ожидание времени старта: {wait_time}с ({wait_time/60:.1f} мин)")
                 await asyncio.sleep(wait_time)
+                self.logger.info(f"⏰ [{self.name}] Время старта наступило, продолжаем...")
             
             # Добавляем смещение времени старта (для распределения нагрузки)
             if self._start_offset_seconds > 0:
@@ -1216,30 +1221,45 @@ class EnhancedBroadcaster:
                     f"⏰ [{self.name}] Применяется смещение времени старта: {self._start_offset_seconds}с"
                 )
                 await asyncio.sleep(self._start_offset_seconds)
+                self.logger.info(f"⏰ [{self.name}] Смещение времени старта завершено")
             
             # Основной цикл
+            cycle_number = 0
+            self.logger.info(f"🔄 [{self.name}] Вход в основной цикл рассылки...")
             while self._running:
+                cycle_number += 1
+                self.logger.info(f"🔄 [{self.name}] === НАЧАЛО ЦИКЛА #{cycle_number} ===")
                 try:
                     # Проверка тихого часа перед началом цикла
+                    self.logger.info(f"🌙 [{self.name}] Проверка тихого часа...")
+                    is_quiet = self._is_quiet_hour()
+                    self.logger.info(f"🌙 [{self.name}] Тихий час: is_quiet={is_quiet}, enable_quiet_hours={self.config.broadcasting.enable_quiet_hours}")
                     quiet_wait_time = self._wait_until_quiet_hour_ends()
+                    self.logger.info(f"🌙 [{self.name}] Время ожидания тихого часа: {quiet_wait_time}с")
                     if quiet_wait_time > 0:
+                        self.logger.info(f"🌙 [{self.name}] Тихий час активен, ожидание {quiet_wait_time}с...")
                         await asyncio.sleep(quiet_wait_time)
+                        self.logger.info(f"🌙 [{self.name}] Тихий час завершен, продолжаем цикл...")
                         continue  # После окончания тихого часа начинаем новый цикл
                     
-                    self.logger.debug(f"🔌 [{self.name}] Проверка подключения перед циклом...")
+                    self.logger.info(f"🔌 [{self.name}] Проверка подключения перед циклом...")
                     await self._ensure_connection()
-                    self.logger.debug(f"✅ [{self.name}] Подключение подтверждено, начинаем цикл...")
+                    self.logger.info(f"✅ [{self.name}] Подключение подтверждено, начинаем цикл отправки...")
                     
+                    self.logger.info(f"📨 [{self.name}] Вызов _send_messages_cycle()...")
                     await self._send_messages_cycle()
+                    self.logger.info(f"✅ [{self.name}] _send_messages_cycle() завершен успешно")
                     
                     self.logger.info(
-                        f"✅ [{self.name}] Цикл завершён. Ждём {self.cycle_delay} секунд ({self.cycle_delay/60:.0f} минут)..."
+                        f"✅ [{self.name}] Цикл #{cycle_number} завершён. Ждём {self.cycle_delay} секунд ({self.cycle_delay/60:.0f} минут)..."
                     )
                     await asyncio.sleep(self.cycle_delay)
+                    self.logger.info(f"⏰ [{self.name}] Ожидание между циклами завершено, начинаем следующий цикл...")
                     
                 except Exception as e:
-                    self.logger.exception(f"❌ [{self.name}] Ошибка в цикле рассылки: {e}")
+                    self.logger.exception(f"❌ [{self.name}] Ошибка в цикле #{cycle_number}: {e}")
                     self.logger.error(f"❌ [{self.name}] Traceback: {traceback.format_exc()}")
+                    self.logger.info(f"⏳ [{self.name}] Ожидание {self.config.broadcasting.retry_delay}с перед повтором...")
                     await asyncio.sleep(self.config.broadcasting.retry_delay)
                     
         except asyncio.CancelledError:
