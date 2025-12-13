@@ -752,17 +752,21 @@ class EnhancedBroadcaster:
                     self._defer_message(target, selected_message, 0)
                     continue
                 
+                self.logger.info(f"📤 [{self.name}] Отправка сообщения в чат {target} ({target_idx}/{len(self.targets)})...")
                 success = await self._send_single_message(target, selected_message, 0)
                 
                 # Обновляем время последней отправки и статистику только при успехе
                 if success:
                     self._update_chat_send_time(target)
                     successful_messages += 1
+                    self.logger.info(f"✅ [{self.name}] Сообщение успешно отправлено в чат {target} ({successful_messages} успешных из {target_idx})")
                 else:
                     failed_messages += 1
+                    self.logger.warning(f"❌ [{self.name}] Не удалось отправить сообщение в чат {target} ({failed_messages} неудачных из {target_idx})")
                 
                 # 🕐 АДАПТИВНАЯ ЗАДЕРЖКА МЕЖДУ ЧАТАМИ
                 if self._current_delay_between_chats > 0:
+                    self.logger.debug(f"⏳ [{self.name}] Задержка {self._current_delay_between_chats:.1f}с перед следующим чатом...")
                     await asyncio.sleep(self._current_delay_between_chats)
         else:
             # Стандартная логика: все сообщения во все чаты
