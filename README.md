@@ -7,7 +7,7 @@
 
 **Версия:** 2.1 Microservices Architecture  
 **Статус:** ✅ Готово к использованию  
-**Дата:** 2025-12-10
+**Дата:** 2025-12-13
 
 ---
 
@@ -17,7 +17,7 @@
 
 Проект состоит из двух независимых сервисов:
 
-- **Broadcaster Service** (`main.py`) - рассылка сообщений в Telegram
+- **Broadcaster Service** (`broadcaster/main.py`) - рассылка сообщений в Telegram
 - **Google Sheets Updater Service** (`google_sheets_updater/main.py`) - обновление таблиц
 
 **Подробнее:** [docs/MICROSERVICES_ARCHITECTURE.md](docs/MICROSERVICES_ARCHITECTURE.md)
@@ -92,7 +92,10 @@ scripts\stop_all.bat    # Windows
 scripts/stop_all.sh     # Linux/Mac
 ```
 
-**Подробнее:** [docs/RUNNING_MICROSERVICES.md](docs/RUNNING_MICROSERVICES.md)
+**Подробнее:** 
+- [docs/QUICK_START_GUIDE.md](docs/QUICK_START_GUIDE.md) ⭐⭐ - **БЫСТРЫЙ СТАРТ** с командами
+- [QUICK_COMMANDS.md](QUICK_COMMANDS.md) - краткая шпаргалка
+- [docs/RUNNING_MICROSERVICES.md](docs/RUNNING_MICROSERVICES.md) - подробное руководство
 
 ---
 
