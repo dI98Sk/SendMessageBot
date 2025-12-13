@@ -1274,8 +1274,12 @@ class EnhancedBroadcaster:
                     
                     self.logger.info(f"🔌 [{self.name}] Проверка подключения перед циклом...")
                     try:
-                        await self._ensure_connection()
+                        # Добавляем таймаут для _ensure_connection, чтобы не зависать
+                        await asyncio.wait_for(self._ensure_connection(), timeout=120.0)
                         self.logger.info(f"✅ [{self.name}] Подключение подтверждено, начинаем цикл отправки...")
+                    except asyncio.TimeoutError:
+                        self.logger.error(f"❌ [{self.name}] Таймаут при проверке подключения (120 секунд)")
+                        raise Exception(f"Таймаут при проверке подключения")
                     except Exception as conn_err:
                         self.logger.error(f"❌ [{self.name}] Ошибка подключения: {conn_err}")
                         self.logger.error(f"❌ [{self.name}] Traceback: {traceback.format_exc()}")
