@@ -1285,16 +1285,36 @@ class EnhancedBroadcaster:
                     
                     self.logger.info(f"🔌 [{self.name}] Проверка подключения перед циклом...")
                     try:
+                        # Проверяем, может быть уже подключены
+                        if self._client and self._client.is_connected():
+                            try:
+                                # Быстрая проверка без переподключения
+                                await asyncio.wait_for(self._client.get_me(), timeout=5.0)
+                                self.logger.debug(f"✅ [{self.name}] Соединение активно, пропускаем _ensure_connection")
+                            except:
+                                # Если проверка не прошла, делаем полную проверку
+                                pass
+                        
                         # Добавляем таймаут для _ensure_connection, чтобы не зависать
-                        await asyncio.wait_for(self._ensure_connection(), timeout=120.0)
+                        # Увеличено до 180 секунд, так как database locked может долго ждать
+                        await asyncio.wait_for(self._ensure_connection(), timeout=180.0)
                         self.logger.info(f"✅ [{self.name}] Подключение подтверждено, начинаем цикл отправки...")
                     except asyncio.TimeoutError:
-                        self.logger.error(f"❌ [{self.name}] Таймаут при проверке подключения (120 секунд)")
-                        raise Exception(f"Таймаут при проверке подключения")
+                        self.logger.error(f"❌ [{self.name}] Таймаут при проверке подключения (180 секунд)")
+                        # Если таймаут, но соединение активно - продолжаем
+                        if self._client and self._client.is_connected():
+                            self.logger.warning(f"⚠️ [{self.name}] Таймаут, но соединение активно. Продолжаем цикл.")
+                        else:
+                            raise Exception(f"Таймаут при проверке подключения")
                     except Exception as conn_err:
-                        self.logger.error(f"❌ [{self.name}] Ошибка подключения: {conn_err}")
-                        self.logger.error(f"❌ [{self.name}] Traceback: {traceback.format_exc()}")
-                        raise
+                        error_msg = str(conn_err).lower()
+                        # Если database is locked, но соединение активно - продолжаем
+                        if ("database is locked" in error_msg or "locked" in error_msg) and self._client and self._client.is_connected():
+                            self.logger.warning(f"⚠️ [{self.name}] Database locked, но соединение активно. Продолжаем цикл.")
+                        else:
+                            self.logger.error(f"❌ [{self.name}] Ошибка подключения: {conn_err}")
+                            self.logger.error(f"❌ [{self.name}] Traceback: {traceback.format_exc()}")
+                            raise
                     
                     self.logger.info(f"📨 [{self.name}] Вызов _send_messages_cycle()...")
                     try:
