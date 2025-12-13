@@ -624,6 +624,7 @@ class EnhancedBroadcaster:
         cycle_start = datetime.now()
         self._cycle_start_time = cycle_start
 
+        self.logger.info(f"🔄 [{self.name}] ========== НАЧАЛО ЦИКЛА РАССЫЛКИ ==========")
         self.logger.info(
             f"🔄 [{self.name}] Начинаем цикл рассылки | "
             f"Целевых чатов: {len(self.targets)} | "
@@ -632,6 +633,18 @@ class EnhancedBroadcaster:
             f"Отложенных: {len(self._deferred_messages)} | "
             f"Текущая задержка: {self._current_delay_between_chats:.1f}с"
         )
+        self.logger.info(f"🔄 [{self.name}] Время начала цикла: {cycle_start.strftime('%Y-%m-%d %H:%M:%S')}")
+        
+        # Проверка наличия целей и сообщений
+        if not self.targets:
+            self.logger.warning(f"⚠️ [{self.name}] Нет целевых чатов для рассылки!")
+            return
+        
+        if not self.messages:
+            self.logger.warning(f"⚠️ [{self.name}] Нет сообщений для рассылки!")
+            return
+        
+        self.logger.info(f"✅ [{self.name}] Проверка пройдена: есть {len(self.targets)} чатов и {len(self.messages)} сообщений")
 
         # 📬 Обработка отложенных сообщений из предыдущего цикла
         if self._deferred_messages:
@@ -697,10 +710,15 @@ class EnhancedBroadcaster:
             )
             
             # Отправляем одно сообщение во все чаты
+            self.logger.info(f"📨 [{self.name}] Начинаем отправку в {len(self.targets)} чатов...")
+            target_idx = 0
             for target in self.targets:
+                target_idx += 1
+                self.logger.info(f"📨 [{self.name}] Обработка чата {target_idx}/{len(self.targets)}: {target}")
+                
                 # Проверяем тихий час перед каждым сообщением
                 if self._is_quiet_hour():
-                    self.logger.info(f"🌙 Наступил тихий час. Останавливаем рассылку.")
+                    self.logger.info(f"🌙 [{self.name}] Наступил тихий час. Останавливаем рассылку.")
                     break
                 
                 # 🕐 Проверка rate limiting
