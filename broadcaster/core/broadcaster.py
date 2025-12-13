@@ -1091,8 +1091,14 @@ class EnhancedBroadcaster:
                 
                 self.logger.debug(f"🚀 [{self.name}] Запуск Telegram клиента...")
                 try:
+                    # Проверяем, что сессия существует перед запуском
+                    session_file = Path(f"{self.session_name}.session")
+                    if not session_file.exists():
+                        raise Exception(f"Файл сессии не найден: {session_file}. Запустите broadcaster в интерактивном режиме для создания сессии.")
+                    
                     # Добавляем таймаут для start() чтобы не зависать
-                    await asyncio.wait_for(self._client.start(), timeout=30.0)
+                    # Увеличено до 60 секунд, так как start() может долго ждать при database locked
+                    await asyncio.wait_for(self._client.start(), timeout=60.0)
                     self.logger.debug(f"✅ [{self.name}] Telegram клиент запущен успешно")
                 except asyncio.TimeoutError:
                     self.logger.error(f"❌ [{self.name}] Таймаут при запуске клиента (30 секунд)")
@@ -1104,14 +1110,14 @@ class EnhancedBroadcaster:
                 error_msg = str(start_error).lower()
                 if "database is locked" in error_msg or "locked" in error_msg:
                     # Если database is locked при start(), ждем и повторяем
-                    wait_time = min(3 * (retry_count + 1), 10)
+                    wait_time = min(5 * (retry_count + 1), 15)  # Увеличено до 15 секунд максимум
                     self.logger.warning(
                         f"⚠️ [{self.name}] База данных заблокирована при запуске, "
-                        f"ожидание {wait_time}с... (попытка {retry_count + 1}/{max_retries + 2})"
+                        f"ожидание {wait_time}с... (попытка {retry_count + 1}/{max_retries + 3})"
                     )
                     await asyncio.sleep(wait_time)
-                    if retry_count < max_retries + 2:
-                        return await self._ensure_connection(retry_count + 1, max_retries + 2)
+                    if retry_count < max_retries + 3:  # Увеличено количество попыток
+                        return await self._ensure_connection(retry_count + 1, max_retries + 3)
                     else:
                         raise Exception(f"Не удалось запустить клиент из-за блокировки базы данных после {max_retries + 2} попыток")
                 else:
@@ -1170,15 +1176,15 @@ class EnhancedBroadcaster:
             if is_database_locked:
                 # Специальная обработка для database is locked
                 # Увеличиваем задержку и количество попыток для этой ошибки
-                wait_time = min(3 * (retry_count + 1), 10)  # От 3 до 10 секунд
+                wait_time = min(5 * (retry_count + 1), 15)  # От 5 до 15 секунд (увеличено)
                 self.logger.warning(
                     f"⚠️ [{self.name}] База данных заблокирована (возможно, другой broadcaster подключается), "
-                    f"ожидание {wait_time}с перед повторной попыткой (попытка {retry_count + 1}/{max_retries + 2})..."
+                    f"ожидание {wait_time}с перед повторной попыткой (попытка {retry_count + 1}/{max_retries + 3})..."
                 )
                 await asyncio.sleep(wait_time)
                 # Увеличиваем max_retries для database is locked
-                if retry_count < max_retries + 2:
-                    return await self._ensure_connection(retry_count + 1, max_retries + 2)
+                if retry_count < max_retries + 3:
+                    return await self._ensure_connection(retry_count + 1, max_retries + 3)
                 else:
                     raise Exception(f"Не удалось подключиться из-за блокировки базы данных после {max_retries + 2} попыток")
             else:

@@ -18105,3 +18105,314 @@ ConnectionError: Connection to Telegram failed 5 time(s)
 2025-11-06 00:23:25 [INFO] broadcaster.GUS_PRICE_TEST_Broadcaster: Цикл завершён. Ждём 1200 секунд (20 минут)...
 2025-11-06 01:36:48 [ERROR] update_ads: Ошибка обновления AAA ADS: object list can't be used in 'await' expression
 2025-11-06 01:36:51 [ERROR] update_ads: Ошибка обновления GUS ADS: object list can't be used in 'await' expression
+2025-12-13 16:04:42 [INFO] main: Инициализация SendMessageBot...
+2025-12-13 16:04:42 [WARNING] main: Файл сессии production_session.session не найден
+2025-12-13 16:04:42 [INFO] main: Настройка системы уведомлений...
+2025-12-13 16:04:42 [INFO] main: Создание Telegram клиента для уведомлений...
+2025-12-13 16:04:44 [ERROR] main: ❌ Ошибка настройки Telegram уведомлений: EOF when reading a line
+2025-12-13 16:04:44 [WARNING] main: Продолжаем работу без Telegram уведомлений
+2025-12-13 16:04:44 [INFO] main: 📡 Webhook уведомления отключены в конфигурации
+2025-12-13 16:04:44 [INFO] main: ✅ Система алертов настроена
+2025-12-13 16:04:44 [WARNING] main: ⚠️ Система уведомлений не настроена - ни одного канала не добавлено
+2025-12-13 16:04:44 [INFO] main: ✅ Автоматический обновлятель сообщений настроен
+2025-12-13 16:04:44 [INFO] main: Система отчетов настроена
+2025-12-13 16:04:44 [INFO] main: Создание broadcaster'ов... (текущее количество: 0)
+2025-12-13 16:04:44 [INFO] broadcaster.AAA_PRICE_Broadcaster: Директория для сессий: sessions
+2025-12-13 16:04:44 [INFO] broadcaster.AAA_PRICE_Broadcaster: ✅ Файл сессии найден: sessions/acc2_price.session
+2025-12-13 16:04:44 [INFO] broadcaster.AAA_PRICE_Broadcaster: Клиент AAA_PRICE_Broadcaster инициализирован с сессией sessions/acc2_price
+2025-12-13 16:04:44 [INFO] broadcaster.GUS_PRICE_Broadcaster: Директория для сессий: sessions
+2025-12-13 16:04:44 [INFO] broadcaster.GUS_PRICE_Broadcaster: ✅ Файл сессии найден: sessions/acc1_price.session
+2025-12-13 16:04:44 [INFO] broadcaster.GUS_PRICE_Broadcaster: Клиент GUS_PRICE_Broadcaster инициализирован с сессией sessions/acc1_price
+2025-12-13 16:04:44 [INFO] broadcaster.AAA_ADS_Broadcaster: Директория для сессий: sessions
+2025-12-13 16:04:44 [INFO] broadcaster.AAA_ADS_Broadcaster: ✅ Файл сессии найден: sessions/acc2_ads.session
+2025-12-13 16:04:44 [INFO] broadcaster.AAA_ADS_Broadcaster: Клиент AAA_ADS_Broadcaster инициализирован с сессией sessions/acc2_ads
+2025-12-13 16:04:44 [INFO] broadcaster.GUS_ADS_Broadcaster: Директория для сессий: sessions
+2025-12-13 16:04:44 [INFO] broadcaster.GUS_ADS_Broadcaster: ✅ Файл сессии найден: sessions/acc1_ads.session
+2025-12-13 16:04:44 [INFO] broadcaster.GUS_ADS_Broadcaster: Клиент GUS_ADS_Broadcaster инициализирован с сессией sessions/acc1_ads
+2025-12-13 16:04:44 [INFO] broadcaster.GUS_B2C_Broadcaster: Директория для сессий: sessions
+2025-12-13 16:04:44 [WARNING] broadcaster.GUS_B2C_Broadcaster: ⚠️  Файл сессии sessions/acc1_b2c.session не найден
+2025-12-13 16:04:44 [WARNING] broadcaster.GUS_B2C_Broadcaster: При первом запуске потребуется авторизация
+2025-12-13 16:04:44 [INFO] broadcaster.GUS_B2C_Broadcaster: Клиент GUS_B2C_Broadcaster инициализирован с сессией sessions/acc1_b2c
+2025-12-13 16:04:44 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: Директория для сессий: sessions
+2025-12-13 16:04:44 [WARNING] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: ⚠️  Файл сессии sessions/acc1_b2c_midslow.session не найден
+2025-12-13 16:04:44 [WARNING] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: При первом запуске потребуется авторизация
+2025-12-13 16:04:44 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: Клиент GUS_B2C_MIDSLOW_Broadcaster инициализирован с сессией sessions/acc1_b2c_midslow
+2025-12-13 16:04:44 [INFO] main: Всего broadcaster'ов после создания: 6
+2025-12-13 16:04:44 [INFO] main: Инициализация завершена успешно
+2025-12-13 16:04:44 [INFO] main: Запуск SendMessageBot...
+2025-12-13 16:04:44 [INFO] main: Количество broadcaster'ов для запуска: 6
+2025-12-13 16:04:44 [INFO] main: Запуск broadcaster 1/6: AAA_PRICE_Broadcaster
+2025-12-13 16:04:44 [INFO] main: Запуск broadcaster 2/6: GUS_PRICE_Broadcaster
+2025-12-13 16:04:44 [INFO] broadcaster.AAA_PRICE_Broadcaster: Запуск broadcaster AAA_PRICE_Broadcaster
+2025-12-13 16:04:44 [INFO] broadcaster.AAA_PRICE_Broadcaster: 🔌 [AAA_PRICE_Broadcaster] Подключаемся к Telegram... (попытка 1/3)
+2025-12-13 16:04:45 [INFO] broadcaster.AAA_PRICE_Broadcaster: ✅ Broadcaster 'AAA_PRICE_Broadcaster' зарегистрирован в координаторе
+2025-12-13 16:04:45 [INFO] broadcaster.AAA_PRICE_Broadcaster: ✅ Подключено как Анна Макарова (@annamkarova)
+2025-12-13 16:04:45 [INFO] broadcaster.AAA_PRICE_Broadcaster: 📱 ID аккаунта: 8224785057
+2025-12-13 16:04:45 [INFO] broadcaster.AAA_PRICE_Broadcaster: 🏷️  Тип аккаунта: ОПТОВЫЙ
+2025-12-13 16:04:45 [INFO] broadcaster.AAA_PRICE_Broadcaster: 📊 Broadcaster: AAA_PRICE_Broadcaster
+2025-12-13 16:04:45 [INFO] broadcaster.AAA_PRICE_Broadcaster: 🎯 Целевых чатов: 25
+2025-12-13 16:04:45 [INFO] broadcaster.AAA_PRICE_Broadcaster: 💬 Сообщений: 13
+2025-12-13 16:04:45 [INFO] broadcaster.AAA_PRICE_Broadcaster: 🔄 [AAA_PRICE_Broadcaster] Начинаем цикл рассылки | Целевых чатов: 25 | Сообщений: 13 | Заблокированных: 0 | Отложенных: 0 | Текущая задержка: 60.0с
+2025-12-13 16:04:45 [INFO] broadcaster.AAA_PRICE_Broadcaster: 📨 [AAA_PRICE_Broadcaster] Отправляем одно случайное сообщение (из 13) в каждый из 25 чатов
+2025-12-13 16:04:45 [INFO] broadcaster.AAA_PRICE_Broadcaster: ✅ [AAA_PRICE_Broadcaster] Отправлено сообщение №0 в -1002424091888 | Время ответа: 0.20с | Всего отправлено: 1 | Задержка: 60.0с
+2025-12-13 16:04:49 [INFO] main: Запуск broadcaster 3/6: AAA_ADS_Broadcaster
+2025-12-13 16:04:49 [INFO] broadcaster.GUS_PRICE_Broadcaster: Запуск broadcaster GUS_PRICE_Broadcaster
+2025-12-13 16:04:49 [INFO] broadcaster.GUS_PRICE_Broadcaster: 🔌 [GUS_PRICE_Broadcaster] Подключаемся к Telegram... (попытка 1/3)
+2025-12-13 16:04:49 [INFO] broadcaster.GUS_PRICE_Broadcaster: ✅ Broadcaster 'GUS_PRICE_Broadcaster' зарегистрирован в координаторе
+2025-12-13 16:04:49 [INFO] broadcaster.GUS_PRICE_Broadcaster: ✅ Подключено как Яблочный Гусь Менеджер (@gusYabloch)
+2025-12-13 16:04:49 [INFO] broadcaster.GUS_PRICE_Broadcaster: 📱 ID аккаунта: 8446089540
+2025-12-13 16:04:49 [INFO] broadcaster.GUS_PRICE_Broadcaster: 🏷️  Тип аккаунта: РОЗНИЧНЫЙ
+2025-12-13 16:04:49 [INFO] broadcaster.GUS_PRICE_Broadcaster: 📊 Broadcaster: GUS_PRICE_Broadcaster
+2025-12-13 16:04:49 [INFO] broadcaster.GUS_PRICE_Broadcaster: 🎯 Целевых чатов: 25
+2025-12-13 16:04:49 [INFO] broadcaster.GUS_PRICE_Broadcaster: 💬 Сообщений: 13
+2025-12-13 16:04:49 [INFO] broadcaster.GUS_PRICE_Broadcaster: 🔄 [GUS_PRICE_Broadcaster] Начинаем цикл рассылки | Целевых чатов: 25 | Сообщений: 13 | Заблокированных: 0 | Отложенных: 0 | Текущая задержка: 60.0с
+2025-12-13 16:04:49 [INFO] broadcaster.GUS_PRICE_Broadcaster: 📨 [GUS_PRICE_Broadcaster] Отправляем одно случайное сообщение (из 13) в каждый из 25 чатов
+2025-12-13 16:04:49 [INFO] broadcaster.GUS_PRICE_Broadcaster: 📬 Сообщение для чата -1002424091888 отложено. Всего отложенных: 1
+2025-12-13 16:04:49 [INFO] broadcaster.GUS_PRICE_Broadcaster: ✅ [GUS_PRICE_Broadcaster] Отправлено сообщение №0 в -1001202385106 | Время ответа: 0.18с | Всего отправлено: 1 | Задержка: 60.0с
+2025-12-13 16:04:54 [INFO] main: Запуск broadcaster 4/6: GUS_ADS_Broadcaster
+2025-12-13 16:04:54 [INFO] broadcaster.AAA_ADS_Broadcaster: Запуск broadcaster AAA_ADS_Broadcaster
+2025-12-13 16:04:54 [INFO] broadcaster.AAA_ADS_Broadcaster: 🔌 [AAA_ADS_Broadcaster] Подключаемся к Telegram... (попытка 1/3)
+2025-12-13 16:04:54 [INFO] broadcaster.AAA_ADS_Broadcaster: ✅ Broadcaster 'AAA_ADS_Broadcaster' зарегистрирован в координаторе
+2025-12-13 16:04:54 [INFO] broadcaster.AAA_ADS_Broadcaster: ✅ Подключено как Анна Макарова (@annamkarova)
+2025-12-13 16:04:54 [INFO] broadcaster.AAA_ADS_Broadcaster: 📱 ID аккаунта: 8224785057
+2025-12-13 16:04:54 [INFO] broadcaster.AAA_ADS_Broadcaster: 🏷️  Тип аккаунта: ОПТОВЫЙ
+2025-12-13 16:04:54 [INFO] broadcaster.AAA_ADS_Broadcaster: 📊 Broadcaster: AAA_ADS_Broadcaster
+2025-12-13 16:04:54 [INFO] broadcaster.AAA_ADS_Broadcaster: 🎯 Целевых чатов: 15
+2025-12-13 16:04:54 [INFO] broadcaster.AAA_ADS_Broadcaster: 💬 Сообщений: 21
+2025-12-13 16:04:54 [INFO] broadcaster.AAA_ADS_Broadcaster: 🔄 [AAA_ADS_Broadcaster] Начинаем цикл рассылки | Целевых чатов: 15 | Сообщений: 21 | Заблокированных: 0 | Отложенных: 0 | Текущая задержка: 60.0с
+2025-12-13 16:04:54 [INFO] broadcaster.AAA_ADS_Broadcaster: 📨 [AAA_ADS_Broadcaster] Отправляем одно случайное сообщение (из 21) в каждый из 15 чатов
+2025-12-13 16:04:54 [INFO] broadcaster.AAA_ADS_Broadcaster: ✅ [AAA_ADS_Broadcaster] Отправлено сообщение №0 в -1001055908983 | Время ответа: 0.18с | Всего отправлено: 1 | Задержка: 60.0с
+2025-12-13 16:04:59 [INFO] main: Запуск broadcaster 5/6: GUS_B2C_Broadcaster
+2025-12-13 16:04:59 [INFO] broadcaster.GUS_ADS_Broadcaster: Запуск broadcaster GUS_ADS_Broadcaster
+2025-12-13 16:04:59 [INFO] broadcaster.GUS_ADS_Broadcaster: 🔌 [GUS_ADS_Broadcaster] Подключаемся к Telegram... (попытка 1/3)
+2025-12-13 16:04:59 [INFO] broadcaster.GUS_ADS_Broadcaster: ✅ Broadcaster 'GUS_ADS_Broadcaster' зарегистрирован в координаторе
+2025-12-13 16:04:59 [INFO] broadcaster.GUS_ADS_Broadcaster: ✅ Подключено как Яблочный Гусь Менеджер (@gusYabloch)
+2025-12-13 16:04:59 [INFO] broadcaster.GUS_ADS_Broadcaster: 📱 ID аккаунта: 8446089540
+2025-12-13 16:04:59 [INFO] broadcaster.GUS_ADS_Broadcaster: 🏷️  Тип аккаунта: РОЗНИЧНЫЙ
+2025-12-13 16:04:59 [INFO] broadcaster.GUS_ADS_Broadcaster: 📊 Broadcaster: GUS_ADS_Broadcaster
+2025-12-13 16:04:59 [INFO] broadcaster.GUS_ADS_Broadcaster: 🎯 Целевых чатов: 15
+2025-12-13 16:04:59 [INFO] broadcaster.GUS_ADS_Broadcaster: 💬 Сообщений: 16
+2025-12-13 16:04:59 [INFO] broadcaster.GUS_ADS_Broadcaster: 🔄 [GUS_ADS_Broadcaster] Начинаем цикл рассылки | Целевых чатов: 15 | Сообщений: 16 | Заблокированных: 0 | Отложенных: 0 | Текущая задержка: 60.0с
+2025-12-13 16:04:59 [INFO] broadcaster.GUS_ADS_Broadcaster: 📨 [GUS_ADS_Broadcaster] Отправляем одно случайное сообщение (из 16) в каждый из 15 чатов
+2025-12-13 16:04:59 [INFO] broadcaster.GUS_ADS_Broadcaster: 📬 Сообщение для чата -1001055908983 отложено. Всего отложенных: 1
+2025-12-13 16:05:00 [INFO] broadcaster.GUS_ADS_Broadcaster: ✅ [GUS_ADS_Broadcaster] Отправлено сообщение №0 в -1001774846066 | Время ответа: 0.28с | Всего отправлено: 1 | Задержка: 60.0с
+2025-12-13 16:05:04 [INFO] main: Запуск broadcaster 6/6: GUS_B2C_MIDSLOW_Broadcaster
+2025-12-13 16:05:04 [INFO] broadcaster.GUS_B2C_Broadcaster: Запуск broadcaster GUS_B2C_Broadcaster
+2025-12-13 16:05:04 [INFO] broadcaster.GUS_B2C_Broadcaster: ⏰ [GUS_B2C_Broadcaster] Применяется смещение времени старта: 300с
+2025-12-13 16:05:09 [INFO] main: SendMessageBot запущен успешно
+2025-12-13 16:05:09 [INFO] auto_updater: ✅ Автоматический обновлятель запущен
+2025-12-13 16:05:09 [INFO] main: 🔄 Автообновление сообщений запущено (интервал: 1.0 часов)
+2025-12-13 16:05:09 [INFO] main: Система отчетов запущена (интервал: 0.17 часов)
+2025-12-13 16:05:09 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: Запуск broadcaster GUS_B2C_MIDSLOW_Broadcaster
+2025-12-13 16:05:09 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: ⏰ [GUS_B2C_MIDSLOW_Broadcaster] Применяется смещение времени старта: 600с
+2025-12-13 16:05:09 [WARNING] main: ⚠️ [GUS_B2C_Broadcaster] Клиент не подключен, пытаемся переподключить...
+2025-12-13 16:05:09 [INFO] broadcaster.GUS_B2C_Broadcaster: 🔌 [GUS_B2C_Broadcaster] Подключаемся к Telegram... (попытка 1/3)
+2025-12-13 16:05:09 [INFO] auto_updater: 🔄 Запущен автоматический обновлятель сообщений
+2025-12-13 16:05:09 [INFO] auto_updater: ⏰ Интервал обновления: 1.0 часов
+2025-12-13 16:05:09 [INFO] auto_updater: 📊 Выполняем первоначальное обновление...
+2025-12-13 16:05:09 [INFO] auto_updater: 🔄 Начинаем обновление всех сообщений из Google Sheets...
+2025-12-13 16:05:09 [INFO] auto_updater: 📥 Загрузка прайсов AAA...
+2025-12-13 16:05:11 [INFO] auto_updater: ✅ Прайсы AAA обновлены: 23 сообщений
+2025-12-13 16:05:11 [INFO] auto_updater: 📥 Загрузка прайсов GUS...
+2025-12-13 16:05:13 [INFO] auto_updater: ✅ Прайсы GUS обновлены: 14 сообщений
+2025-12-13 16:05:13 [INFO] auto_updater: 📥 Загрузка рекламы AAA...
+2025-12-13 16:05:15 [INFO] auto_updater: ✅ Реклама AAA обновлена: 30 сообщений
+2025-12-13 16:05:15 [INFO] auto_updater: 📥 Загрузка рекламы GUS...
+2025-12-13 16:05:17 [INFO] auto_updater: ✅ Реклама GUS обновлена: 16 сообщений
+2025-12-13 16:05:17 [INFO] main: 📊 Получены обновленные сообщения из Google Sheets
+2025-12-13 16:05:17 [INFO] main: ✅ Обновлено типов: aaa_price=23, gus_price=14, aaa_ads=30, gus_ads=16
+2025-12-13 16:05:17 [INFO] main: 🔄 Пересоздание broadcaster'ов с новыми сообщениями...
+2025-12-13 16:05:17 [INFO] main: Пересоздание broadcaster'ов: было 6 шт.
+2025-12-13 16:05:17 [INFO] main: Остановка broadcaster: AAA_PRICE_Broadcaster
+2025-12-13 16:05:17 [INFO] broadcaster.AAA_PRICE_Broadcaster: Остановка broadcaster AAA_PRICE_Broadcaster
+2025-12-13 16:05:17 [INFO] telegram_reporter: Система отчетов запущена
+2025-12-13 16:05:17 [INFO] telegram_reporter: 🚀 Запуск системы отчетов (интервал: 0.17 часов)
+2025-12-13 16:05:17 [INFO] telegram_reporter: 📊 Канал для отчетов: -1003060449819
+2025-12-13 16:05:17 [INFO] telegram_reporter: ⏰ Проверка каждые 5.0 минут
+2025-12-13 16:05:17 [INFO] telegram_reporter: 📈 Пора отправлять отчет...
+2025-12-13 16:05:17 [INFO] telegram_reporter: 📡 Broadcaster'ов активно: 5/6
+2025-12-13 16:05:17 [INFO] telegram_reporter: Формирование отчета...
+2025-12-13 16:05:17 [INFO] telegram_reporter: Отправка отчета: 4 отправлено, 0 ошибок
+2025-12-13 16:05:17 [INFO] broadcaster.AAA_PRICE_Broadcaster: Broadcaster AAA_PRICE_Broadcaster отключен
+2025-12-13 16:05:17 [INFO] broadcaster.AAA_PRICE_Broadcaster: 📊 [AAA_PRICE_Broadcaster] Статистика цикла: ✅ отправлено: 1 | ❌ ошибок: 0 | ⏳ FloodWait: 0 | 📬 отложенных: 0 | 📈 Успешность: 100.0%
+2025-12-13 16:05:17 [INFO] broadcaster.AAA_PRICE_Broadcaster: 🎯 [AAA_PRICE_Broadcaster] Адаптивная задержка: текущая=60.0с | базовая=40с | серия ошибок=0 | серия успехов=1
+2025-12-13 16:05:17 [INFO] main: Остановка broadcaster: GUS_PRICE_Broadcaster
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_PRICE_Broadcaster: Остановка broadcaster GUS_PRICE_Broadcaster
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_PRICE_Broadcaster: Broadcaster GUS_PRICE_Broadcaster отключен
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_PRICE_Broadcaster: 📊 [GUS_PRICE_Broadcaster] Статистика цикла: ✅ отправлено: 1 | ❌ ошибок: 0 | ⏳ FloodWait: 0 | 📬 отложенных: 1 | 📈 Успешность: 100.0%
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_PRICE_Broadcaster: 🎯 [GUS_PRICE_Broadcaster] Адаптивная задержка: текущая=60.0с | базовая=40с | серия ошибок=0 | серия успехов=1
+2025-12-13 16:05:17 [INFO] main: Остановка broadcaster: AAA_ADS_Broadcaster
+2025-12-13 16:05:17 [INFO] broadcaster.AAA_ADS_Broadcaster: Остановка broadcaster AAA_ADS_Broadcaster
+2025-12-13 16:05:17 [INFO] broadcaster.AAA_ADS_Broadcaster: Broadcaster AAA_ADS_Broadcaster отключен
+2025-12-13 16:05:17 [INFO] broadcaster.AAA_ADS_Broadcaster: 📊 [AAA_ADS_Broadcaster] Статистика цикла: ✅ отправлено: 1 | ❌ ошибок: 0 | ⏳ FloodWait: 0 | 📬 отложенных: 0 | 📈 Успешность: 100.0%
+2025-12-13 16:05:17 [INFO] broadcaster.AAA_ADS_Broadcaster: 🎯 [AAA_ADS_Broadcaster] Адаптивная задержка: текущая=60.0с | базовая=40с | серия ошибок=0 | серия успехов=1
+2025-12-13 16:05:17 [INFO] main: Остановка broadcaster: GUS_ADS_Broadcaster
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_ADS_Broadcaster: Остановка broadcaster GUS_ADS_Broadcaster
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_ADS_Broadcaster: Broadcaster GUS_ADS_Broadcaster отключен
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_ADS_Broadcaster: 📊 [GUS_ADS_Broadcaster] Статистика цикла: ✅ отправлено: 1 | ❌ ошибок: 0 | ⏳ FloodWait: 0 | 📬 отложенных: 1 | 📈 Успешность: 100.0%
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_ADS_Broadcaster: 🎯 [GUS_ADS_Broadcaster] Адаптивная задержка: текущая=60.0с | базовая=40с | серия ошибок=0 | серия успехов=1
+2025-12-13 16:05:17 [INFO] main: Остановка broadcaster: GUS_B2C_Broadcaster
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_B2C_Broadcaster: Остановка broadcaster GUS_B2C_Broadcaster
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_B2C_Broadcaster: 📊 [GUS_B2C_Broadcaster] Статистика цикла: ✅ отправлено: 0 | ❌ ошибок: 0 | ⏳ FloodWait: 0 | 📬 отложенных: 0 | 📈 Успешность: 0.0%
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_B2C_Broadcaster: 🎯 [GUS_B2C_Broadcaster] Адаптивная задержка: текущая=60.0с | базовая=40с | серия ошибок=0 | серия успехов=0
+2025-12-13 16:05:17 [INFO] main: Остановка broadcaster: GUS_B2C_MIDSLOW_Broadcaster
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: Остановка broadcaster GUS_B2C_MIDSLOW_Broadcaster
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: 📊 [GUS_B2C_MIDSLOW_Broadcaster] Статистика цикла: ✅ отправлено: 0 | ❌ ошибок: 0 | ⏳ FloodWait: 0 | 📬 отложенных: 0 | 📈 Успешность: 0.0%
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: 🎯 [GUS_B2C_MIDSLOW_Broadcaster] Адаптивная задержка: текущая=60.0с | базовая=40с | серия ошибок=0 | серия успехов=0
+2025-12-13 16:05:17 [INFO] main: Список broadcaster'ов очищен
+2025-12-13 16:05:17 [INFO] main: 💾 Сохранена задача системы отчетов
+2025-12-13 16:05:17 [INFO] main: Активных задач после очистки: 2
+2025-12-13 16:05:17 [INFO] main: Создание broadcaster'ов... (текущее количество: 0)
+2025-12-13 16:05:17 [INFO] broadcaster.AAA_PRICE_Broadcaster: Директория для сессий: sessions
+2025-12-13 16:05:17 [INFO] broadcaster.AAA_PRICE_Broadcaster: ✅ Файл сессии найден: sessions/acc2_price.session
+2025-12-13 16:05:17 [INFO] broadcaster.AAA_PRICE_Broadcaster: Клиент AAA_PRICE_Broadcaster инициализирован с сессией sessions/acc2_price
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_PRICE_Broadcaster: Директория для сессий: sessions
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_PRICE_Broadcaster: ✅ Файл сессии найден: sessions/acc1_price.session
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_PRICE_Broadcaster: Клиент GUS_PRICE_Broadcaster инициализирован с сессией sessions/acc1_price
+2025-12-13 16:05:17 [INFO] broadcaster.AAA_ADS_Broadcaster: Директория для сессий: sessions
+2025-12-13 16:05:17 [INFO] broadcaster.AAA_ADS_Broadcaster: ✅ Файл сессии найден: sessions/acc2_ads.session
+2025-12-13 16:05:17 [INFO] broadcaster.AAA_ADS_Broadcaster: Клиент AAA_ADS_Broadcaster инициализирован с сессией sessions/acc2_ads
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_ADS_Broadcaster: Директория для сессий: sessions
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_ADS_Broadcaster: ✅ Файл сессии найден: sessions/acc1_ads.session
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_ADS_Broadcaster: Клиент GUS_ADS_Broadcaster инициализирован с сессией sessions/acc1_ads
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_B2C_Broadcaster: Директория для сессий: sessions
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_B2C_Broadcaster: ✅ Файл сессии найден: sessions/acc1_b2c.session
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_B2C_Broadcaster: Клиент GUS_B2C_Broadcaster инициализирован с сессией sessions/acc1_b2c
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: Директория для сессий: sessions
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: ✅ Файл сессии найден: sessions/acc1_b2c_midslow.session
+2025-12-13 16:05:17 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: Клиент GUS_B2C_MIDSLOW_Broadcaster инициализирован с сессией sessions/acc1_b2c_midslow
+2025-12-13 16:05:17 [INFO] main: Всего broadcaster'ов после создания: 6
+2025-12-13 16:05:17 [INFO] main: Broadcaster'ы пересозданы: теперь 6 шт.
+2025-12-13 16:05:17 [INFO] main: Запуск пересозданных broadcaster'ов...
+2025-12-13 16:05:17 [INFO] main: Запуск broadcaster 1/6: AAA_PRICE_Broadcaster
+2025-12-13 16:05:17 [INFO] main: Запуск broadcaster 2/6: GUS_PRICE_Broadcaster
+2025-12-13 16:05:17 [INFO] broadcaster.AAA_PRICE_Broadcaster: Запуск broadcaster AAA_PRICE_Broadcaster
+2025-12-13 16:05:17 [INFO] broadcaster.AAA_PRICE_Broadcaster: 🔌 [AAA_PRICE_Broadcaster] Подключаемся к Telegram... (попытка 1/3)
+2025-12-13 16:05:17 [INFO] telegram_reporter: ✅ Отчет успешно отправлен в Telegram
+2025-12-13 16:05:17 [INFO] telegram_reporter: ✅ Отчет #1 отправлен успешно в канал -1003060449819
+2025-12-13 16:05:18 [ERROR] broadcaster.GUS_B2C_Broadcaster: ❌ [GUS_B2C_Broadcaster] Ошибка при запуске клиента: EOF when reading a line
+2025-12-13 16:05:18 [ERROR] broadcaster.GUS_B2C_Broadcaster: ❌ [GUS_B2C_Broadcaster] Ошибка подключения: EOF when reading a line
+2025-12-13 16:05:18 [WARNING] main: 🔄 [GUS_B2C_MIDSLOW_Broadcaster] Обнаружен остановленный broadcaster, перезапускаем...
+2025-12-13 16:05:19 [INFO] broadcaster.AAA_PRICE_Broadcaster: ✅ Broadcaster 'AAA_PRICE_Broadcaster' зарегистрирован в координаторе
+2025-12-13 16:05:19 [INFO] broadcaster.AAA_PRICE_Broadcaster: ✅ Подключено как Анна Макарова (@annamkarova)
+2025-12-13 16:05:19 [INFO] broadcaster.AAA_PRICE_Broadcaster: 📱 ID аккаунта: 8224785057
+2025-12-13 16:05:19 [INFO] broadcaster.AAA_PRICE_Broadcaster: 🏷️  Тип аккаунта: ОПТОВЫЙ
+2025-12-13 16:05:19 [INFO] broadcaster.AAA_PRICE_Broadcaster: 📊 Broadcaster: AAA_PRICE_Broadcaster
+2025-12-13 16:05:19 [INFO] broadcaster.AAA_PRICE_Broadcaster: 🎯 Целевых чатов: 25
+2025-12-13 16:05:19 [INFO] broadcaster.AAA_PRICE_Broadcaster: 💬 Сообщений: 13
+2025-12-13 16:05:19 [INFO] broadcaster.AAA_PRICE_Broadcaster: 🔄 [AAA_PRICE_Broadcaster] Начинаем цикл рассылки | Целевых чатов: 25 | Сообщений: 13 | Заблокированных: 0 | Отложенных: 0 | Текущая задержка: 60.0с
+2025-12-13 16:05:19 [INFO] broadcaster.AAA_PRICE_Broadcaster: 📨 [AAA_PRICE_Broadcaster] Отправляем одно случайное сообщение (из 13) в каждый из 25 чатов
+2025-12-13 16:05:19 [INFO] broadcaster.AAA_PRICE_Broadcaster: 📬 Сообщение для чата -1002424091888 отложено. Всего отложенных: 1
+2025-12-13 16:05:19 [INFO] broadcaster.AAA_PRICE_Broadcaster: 📬 Сообщение для чата -1001202385106 отложено. Всего отложенных: 2
+2025-12-13 16:05:19 [INFO] broadcaster.AAA_PRICE_Broadcaster: 📬 Сообщение для чата -1001055908983 отложено. Всего отложенных: 3
+2025-12-13 16:05:19 [INFO] broadcaster.AAA_PRICE_Broadcaster: ✅ [AAA_PRICE_Broadcaster] Отправлено сообщение №0 в -1002323347764 | Время ответа: 0.22с | Всего отправлено: 1 | Задержка: 60.0с
+2025-12-13 16:05:22 [INFO] main: Запуск broadcaster 3/6: AAA_ADS_Broadcaster
+2025-12-13 16:05:22 [INFO] broadcaster.GUS_PRICE_Broadcaster: Запуск broadcaster GUS_PRICE_Broadcaster
+2025-12-13 16:05:22 [INFO] broadcaster.GUS_PRICE_Broadcaster: 🔌 [GUS_PRICE_Broadcaster] Подключаемся к Telegram... (попытка 1/3)
+2025-12-13 16:05:23 [INFO] broadcaster.GUS_PRICE_Broadcaster: ✅ Broadcaster 'GUS_PRICE_Broadcaster' зарегистрирован в координаторе
+2025-12-13 16:05:23 [INFO] broadcaster.GUS_PRICE_Broadcaster: ✅ Подключено как Яблочный Гусь Менеджер (@gusYabloch)
+2025-12-13 16:05:23 [INFO] broadcaster.GUS_PRICE_Broadcaster: 📱 ID аккаунта: 8446089540
+2025-12-13 16:05:23 [INFO] broadcaster.GUS_PRICE_Broadcaster: 🏷️  Тип аккаунта: РОЗНИЧНЫЙ
+2025-12-13 16:05:23 [INFO] broadcaster.GUS_PRICE_Broadcaster: 📊 Broadcaster: GUS_PRICE_Broadcaster
+2025-12-13 16:05:23 [INFO] broadcaster.GUS_PRICE_Broadcaster: 🎯 Целевых чатов: 25
+2025-12-13 16:05:23 [INFO] broadcaster.GUS_PRICE_Broadcaster: 💬 Сообщений: 13
+2025-12-13 16:05:23 [INFO] broadcaster.GUS_PRICE_Broadcaster: 🔄 [GUS_PRICE_Broadcaster] Начинаем цикл рассылки | Целевых чатов: 25 | Сообщений: 13 | Заблокированных: 0 | Отложенных: 0 | Текущая задержка: 60.0с
+2025-12-13 16:05:23 [INFO] broadcaster.GUS_PRICE_Broadcaster: 📨 [GUS_PRICE_Broadcaster] Отправляем одно случайное сообщение (из 13) в каждый из 25 чатов
+2025-12-13 16:05:23 [INFO] broadcaster.GUS_PRICE_Broadcaster: 📬 Сообщение для чата -1002424091888 отложено. Всего отложенных: 1
+2025-12-13 16:05:23 [INFO] broadcaster.GUS_PRICE_Broadcaster: 📬 Сообщение для чата -1001202385106 отложено. Всего отложенных: 2
+2025-12-13 16:05:23 [INFO] broadcaster.GUS_PRICE_Broadcaster: 📬 Сообщение для чата -1001055908983 отложено. Всего отложенных: 3
+2025-12-13 16:05:23 [INFO] broadcaster.GUS_PRICE_Broadcaster: 📬 Сообщение для чата -1002323347764 отложено. Всего отложенных: 4
+2025-12-13 16:05:23 [INFO] broadcaster.GUS_PRICE_Broadcaster: ✅ [GUS_PRICE_Broadcaster] Отправлено сообщение №0 в -1001650533724 | Время ответа: 0.16с | Всего отправлено: 1 | Задержка: 60.0с
+2025-12-13 16:05:23 [INFO] main: ✅ [GUS_B2C_MIDSLOW_Broadcaster] Broadcaster перезапущен
+2025-12-13 16:05:23 [ERROR] main: ❌ Ошибка проверки здоровья системы отчетов: can't subtract offset-naive and offset-aware datetimes
+2025-12-13 16:05:23 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: Запуск broadcaster GUS_B2C_MIDSLOW_Broadcaster
+2025-12-13 16:05:23 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: ⏰ [GUS_B2C_MIDSLOW_Broadcaster] Применяется смещение времени старта: 600с
+2025-12-13 16:05:27 [INFO] main: Запуск broadcaster 4/6: GUS_ADS_Broadcaster
+2025-12-13 16:05:27 [INFO] broadcaster.AAA_ADS_Broadcaster: Запуск broadcaster AAA_ADS_Broadcaster
+2025-12-13 16:05:27 [INFO] broadcaster.AAA_ADS_Broadcaster: 🔌 [AAA_ADS_Broadcaster] Подключаемся к Telegram... (попытка 1/3)
+2025-12-13 16:05:27 [INFO] broadcaster.AAA_ADS_Broadcaster: ✅ Broadcaster 'AAA_ADS_Broadcaster' зарегистрирован в координаторе
+2025-12-13 16:05:27 [INFO] broadcaster.AAA_ADS_Broadcaster: ✅ Подключено как Анна Макарова (@annamkarova)
+2025-12-13 16:05:27 [INFO] broadcaster.AAA_ADS_Broadcaster: 📱 ID аккаунта: 8224785057
+2025-12-13 16:05:27 [INFO] broadcaster.AAA_ADS_Broadcaster: 🏷️  Тип аккаунта: ОПТОВЫЙ
+2025-12-13 16:05:27 [INFO] broadcaster.AAA_ADS_Broadcaster: 📊 Broadcaster: AAA_ADS_Broadcaster
+2025-12-13 16:05:27 [INFO] broadcaster.AAA_ADS_Broadcaster: 🎯 Целевых чатов: 15
+2025-12-13 16:05:27 [INFO] broadcaster.AAA_ADS_Broadcaster: 💬 Сообщений: 21
+2025-12-13 16:05:27 [INFO] broadcaster.AAA_ADS_Broadcaster: 🔄 [AAA_ADS_Broadcaster] Начинаем цикл рассылки | Целевых чатов: 15 | Сообщений: 21 | Заблокированных: 0 | Отложенных: 0 | Текущая задержка: 60.0с
+2025-12-13 16:05:27 [INFO] broadcaster.AAA_ADS_Broadcaster: 📨 [AAA_ADS_Broadcaster] Отправляем одно случайное сообщение (из 21) в каждый из 15 чатов
+2025-12-13 16:05:27 [INFO] broadcaster.AAA_ADS_Broadcaster: 📬 Сообщение для чата -1001055908983 отложено. Всего отложенных: 1
+2025-12-13 16:05:27 [INFO] broadcaster.AAA_ADS_Broadcaster: 📬 Сообщение для чата -1001774846066 отложено. Всего отложенных: 2
+2025-12-13 16:05:27 [INFO] broadcaster.AAA_ADS_Broadcaster: ✅ [AAA_ADS_Broadcaster] Отправлено сообщение №0 в -1001605401722 | Время ответа: 0.16с | Всего отправлено: 1 | Задержка: 60.0с
+2025-12-13 16:05:32 [INFO] main: Запуск broadcaster 5/6: GUS_B2C_Broadcaster
+2025-12-13 16:05:32 [INFO] broadcaster.GUS_ADS_Broadcaster: Запуск broadcaster GUS_ADS_Broadcaster
+2025-12-13 16:05:32 [INFO] broadcaster.GUS_ADS_Broadcaster: 🔌 [GUS_ADS_Broadcaster] Подключаемся к Telegram... (попытка 1/3)
+2025-12-13 16:05:32 [INFO] broadcaster.GUS_ADS_Broadcaster: ✅ Broadcaster 'GUS_ADS_Broadcaster' зарегистрирован в координаторе
+2025-12-13 16:05:32 [INFO] broadcaster.GUS_ADS_Broadcaster: ✅ Подключено как Яблочный Гусь Менеджер (@gusYabloch)
+2025-12-13 16:05:32 [INFO] broadcaster.GUS_ADS_Broadcaster: 📱 ID аккаунта: 8446089540
+2025-12-13 16:05:32 [INFO] broadcaster.GUS_ADS_Broadcaster: 🏷️  Тип аккаунта: РОЗНИЧНЫЙ
+2025-12-13 16:05:32 [INFO] broadcaster.GUS_ADS_Broadcaster: 📊 Broadcaster: GUS_ADS_Broadcaster
+2025-12-13 16:05:32 [INFO] broadcaster.GUS_ADS_Broadcaster: 🎯 Целевых чатов: 15
+2025-12-13 16:05:32 [INFO] broadcaster.GUS_ADS_Broadcaster: 💬 Сообщений: 16
+2025-12-13 16:05:32 [INFO] broadcaster.GUS_ADS_Broadcaster: 🔄 [GUS_ADS_Broadcaster] Начинаем цикл рассылки | Целевых чатов: 15 | Сообщений: 16 | Заблокированных: 0 | Отложенных: 0 | Текущая задержка: 60.0с
+2025-12-13 16:05:32 [INFO] broadcaster.GUS_ADS_Broadcaster: 📨 [GUS_ADS_Broadcaster] Отправляем одно случайное сообщение (из 16) в каждый из 15 чатов
+2025-12-13 16:05:32 [INFO] broadcaster.GUS_ADS_Broadcaster: 📬 Сообщение для чата -1001055908983 отложено. Всего отложенных: 1
+2025-12-13 16:05:32 [INFO] broadcaster.GUS_ADS_Broadcaster: 📬 Сообщение для чата -1001774846066 отложено. Всего отложенных: 2
+2025-12-13 16:05:32 [INFO] broadcaster.GUS_ADS_Broadcaster: 📬 Сообщение для чата -1001605401722 отложено. Всего отложенных: 3
+2025-12-13 16:05:32 [INFO] broadcaster.GUS_ADS_Broadcaster: ✅ [GUS_ADS_Broadcaster] Отправлено сообщение №0 в -1001438892351 | Время ответа: 0.15с | Всего отправлено: 1 | Задержка: 60.0с
+2025-12-13 16:05:37 [INFO] main: Запуск broadcaster 6/6: GUS_B2C_MIDSLOW_Broadcaster
+2025-12-13 16:05:37 [INFO] broadcaster.GUS_B2C_Broadcaster: Запуск broadcaster GUS_B2C_Broadcaster
+2025-12-13 16:05:37 [INFO] broadcaster.GUS_B2C_Broadcaster: ⏰ [GUS_B2C_Broadcaster] Применяется смещение времени старта: 300с
+2025-12-13 16:05:42 [INFO] main: ✅ Все broadcaster'ы запущены после пересоздания
+2025-12-13 16:05:42 [INFO] main: ✅ Система отчетов продолжает работать
+2025-12-13 16:05:42 [INFO] main: ✅ Автообновление завершено успешно
+2025-12-13 16:05:42 [INFO] auto_updater: ✅ Первоначальное обновление завершено: 4/4 типов
+2025-12-13 16:05:42 [WARNING] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: Broadcaster GUS_B2C_MIDSLOW_Broadcaster уже запущен
+2025-12-13 16:05:45 [INFO] broadcaster.AAA_PRICE_Broadcaster: 📬 Сообщение для чата -1001202385106 отложено. Всего отложенных: 1
+2025-12-13 16:05:45 [INFO] broadcaster.AAA_PRICE_Broadcaster: 📬 Сообщение для чата -1001055908983 отложено. Всего отложенных: 2
+2025-12-13 16:05:45 [INFO] broadcaster.AAA_PRICE_Broadcaster: 📬 Сообщение для чата -1002323347764 отложено. Всего отложенных: 3
+2025-12-13 16:05:45 [INFO] broadcaster.AAA_PRICE_Broadcaster: 📬 Сообщение для чата -1001650533724 отложено. Всего отложенных: 4
+2025-12-13 16:05:45 [WARNING] broadcaster.AAA_PRICE_Broadcaster: ⚠️ [AAA_PRICE_Broadcaster] Клиент не подключен для чата -1001205203973, пытаемся переподключиться...
+2025-12-13 16:05:45 [INFO] broadcaster.AAA_PRICE_Broadcaster: 🔌 [AAA_PRICE_Broadcaster] Подключаемся к Telegram... (попытка 1/3)
+2025-12-13 16:05:50 [ERROR] broadcaster.AAA_PRICE_Broadcaster: ❌ [AAA_PRICE_Broadcaster] Ошибка при запуске клиента: database is locked
+2025-12-13 16:05:50 [WARNING] broadcaster.AAA_PRICE_Broadcaster: ⚠️ [AAA_PRICE_Broadcaster] База данных заблокирована при запуске, ожидание 3с... (попытка 1/5)
+2025-12-13 16:05:50 [INFO] broadcaster.GUS_PRICE_Broadcaster: 📬 Сообщение для чата -1001055908983 отложено. Всего отложенных: 2
+2025-12-13 16:05:50 [INFO] broadcaster.GUS_PRICE_Broadcaster: 📬 Сообщение для чата -1002323347764 отложено. Всего отложенных: 3
+2025-12-13 16:05:50 [INFO] broadcaster.GUS_PRICE_Broadcaster: 📬 Сообщение для чата -1001650533724 отложено. Всего отложенных: 4
+2025-12-13 16:05:50 [WARNING] broadcaster.GUS_PRICE_Broadcaster: ⚠️ [GUS_PRICE_Broadcaster] Клиент не подключен для чата -1001205203973, пытаемся переподключиться...
+2025-12-13 16:05:50 [INFO] broadcaster.GUS_PRICE_Broadcaster: 🔌 [GUS_PRICE_Broadcaster] Подключаемся к Telegram... (попытка 1/3)
+2025-12-13 16:05:58 [INFO] broadcaster.AAA_ADS_Broadcaster: 📬 Сообщение для чата -1001774846066 отложено. Всего отложенных: 1
+2025-12-13 16:05:58 [INFO] broadcaster.AAA_ADS_Broadcaster: 📬 Сообщение для чата -1001605401722 отложено. Всего отложенных: 2
+2025-12-13 16:05:58 [INFO] broadcaster.AAA_ADS_Broadcaster: 📬 Сообщение для чата -1001438892351 отложено. Всего отложенных: 3
+2025-12-13 16:05:58 [WARNING] broadcaster.AAA_ADS_Broadcaster: ⚠️ [AAA_ADS_Broadcaster] Клиент не подключен для чата -1001176964113, пытаемся переподключиться...
+2025-12-13 16:05:58 [INFO] broadcaster.AAA_ADS_Broadcaster: 🔌 [AAA_ADS_Broadcaster] Подключаемся к Telegram... (попытка 1/3)
+2025-12-13 16:06:03 [WARNING] broadcaster.AAA_PRICE_Broadcaster: ⚠️ [AAA_PRICE_Broadcaster] Соединение не работает, переподключаемся: database is locked
+2025-12-13 16:06:03 [INFO] broadcaster.GUS_ADS_Broadcaster: 📬 Сообщение для чата -1001605401722 отложено. Всего отложенных: 2
+2025-12-13 16:06:03 [INFO] broadcaster.GUS_ADS_Broadcaster: 📬 Сообщение для чата -1001438892351 отложено. Всего отложенных: 3
+2025-12-13 16:06:03 [WARNING] broadcaster.GUS_ADS_Broadcaster: ⚠️ [GUS_ADS_Broadcaster] Клиент не подключен для чата -1001176964113, пытаемся переподключиться...
+2025-12-13 16:06:03 [INFO] broadcaster.GUS_ADS_Broadcaster: 🔌 [GUS_ADS_Broadcaster] Подключаемся к Telegram... (попытка 1/3)
+2025-12-13 16:06:08 [INFO] broadcaster.AAA_PRICE_Broadcaster: ⏳ [AAA_PRICE_Broadcaster] Ожидание 2с перед переподключением (попытка 2/5)...
+2025-12-13 16:06:10 [INFO] broadcaster.AAA_PRICE_Broadcaster: 🔌 [AAA_PRICE_Broadcaster] Подключаемся к Telegram... (попытка 2/5)
+2025-12-13 16:06:19 [INFO] broadcaster.AAA_PRICE_Broadcaster: 📬 Сообщение для чата -1001650533724 отложено. Всего отложенных: 4
+2025-12-13 16:06:19 [INFO] broadcaster.AAA_PRICE_Broadcaster: ✅ [AAA_PRICE_Broadcaster] Отправлено сообщение №0 в -1001205203973 | Время ответа: 0.19с | Всего отправлено: 2 | Задержка: 60.0с
+2025-12-13 16:06:23 [INFO] broadcaster.GUS_PRICE_Broadcaster: 📬 Сообщение для чата -1001205203973 отложено. Всего отложенных: 5
+2025-12-13 16:06:23 [INFO] broadcaster.GUS_PRICE_Broadcaster: ✅ [GUS_PRICE_Broadcaster] Отправлено сообщение №0 в -1001741002498 | Время ответа: 0.20с | Всего отправлено: 2 | Задержка: 60.0с
+2025-12-13 16:06:27 [INFO] broadcaster.AAA_ADS_Broadcaster: 📬 Сообщение для чата -1001438892351 отложено. Всего отложенных: 3
+2025-12-13 16:06:28 [INFO] broadcaster.AAA_ADS_Broadcaster: ✅ [AAA_ADS_Broadcaster] Отправлено сообщение №0 в -1001176964113 | Время ответа: 0.39с | Всего отправлено: 2 | Задержка: 60.0с
+2025-12-13 16:06:32 [INFO] broadcaster.GUS_ADS_Broadcaster: 📬 Сообщение для чата -1001176964113 отложено. Всего отложенных: 4
+2025-12-13 16:06:33 [INFO] broadcaster.GUS_ADS_Broadcaster: ✅ [GUS_ADS_Broadcaster] Отправлено сообщение №0 в -1001274869765 | Время ответа: 0.50с | Всего отправлено: 2 | Задержка: 60.0с
+2025-12-13 16:06:50 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: Получен сигнал 2, завершаем работу...
+2025-12-13 16:06:50 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: Получен сигнал 15, завершаем работу...
+2025-12-13 16:06:50 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: Остановка broadcaster GUS_B2C_MIDSLOW_Broadcaster
+2025-12-13 16:06:50 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: 📊 [GUS_B2C_MIDSLOW_Broadcaster] Статистика цикла: ✅ отправлено: 0 | ❌ ошибок: 0 | ⏳ FloodWait: 0 | 📬 отложенных: 0 | 📈 Успешность: 0.0%
+2025-12-13 16:06:50 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: 🎯 [GUS_B2C_MIDSLOW_Broadcaster] Адаптивная задержка: текущая=60.0с | базовая=40с | серия ошибок=0 | серия успехов=0
+2025-12-13 16:06:59 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: Получен сигнал 2, завершаем работу...
+2025-12-13 16:07:00 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: Получен сигнал 2, завершаем работу...
+2025-12-13 16:07:00 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: Получен сигнал 2, завершаем работу...
+2025-12-13 16:07:00 [INFO] broadcaster.GUS_B2C_MIDSLOW_Broadcaster: Получен сигнал 2, завершаем работу...
+2025-12-13 16:07:19 [INFO] broadcaster.AAA_PRICE_Broadcaster: 📬 Сообщение для чата -1001741002498 отложено. Всего отложенных: 5
+2025-12-13 16:07:19 [INFO] broadcaster.AAA_PRICE_Broadcaster: ✅ [AAA_PRICE_Broadcaster] Отправлено сообщение №0 в -1001247724666 | Время ответа: 0.18с | Всего отправлено: 3 | Задержка: 60.0с
+2025-12-13 16:07:23 [INFO] broadcaster.GUS_PRICE_Broadcaster: 📬 Сообщение для чата -1001247724666 отложено. Всего отложенных: 6
+2025-12-13 16:07:23 [INFO] broadcaster.GUS_PRICE_Broadcaster: ✅ [GUS_PRICE_Broadcaster] Отправлено сообщение №0 в -1001459724536 | Время ответа: 0.19с | Всего отправлено: 3 | Задержка: 60.0с
+2025-12-13 16:07:28 [INFO] broadcaster.AAA_ADS_Broadcaster: 📬 Сообщение для чата -1001274869765 отложено. Всего отложенных: 4
+2025-12-13 16:07:28 [INFO] broadcaster.AAA_ADS_Broadcaster: ✅ [AAA_ADS_Broadcaster] Отправлено сообщение №0 в -1001344677793 | Время ответа: 0.16с | Всего отправлено: 3 | Задержка: 60.0с
+2025-12-13 16:07:33 [INFO] broadcaster.GUS_ADS_Broadcaster: 📬 Сообщение для чата -1001344677793 отложено. Всего отложенных: 5
+2025-12-13 16:07:33 [INFO] broadcaster.GUS_ADS_Broadcaster: ✅ [GUS_ADS_Broadcaster] Отправлено сообщение №0 в -1001264785143 | Время ответа: 0.17с | Всего отправлено: 3 | Задержка: 60.0с

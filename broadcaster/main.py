@@ -468,7 +468,7 @@ class SendMessageBotApp:
                     
                     # Добавляем задержку между запусками (кроме первого)
                     if idx > 1:
-                        await asyncio.sleep(5)  # 5 секунд между подключениями (увеличено с 2)
+                        await asyncio.sleep(10)  # 10 секунд между подключениями (увеличено для избежания database locked)
                     
                     task = asyncio.create_task(broadcaster.start())
                     self.tasks.append(task)
@@ -673,10 +673,10 @@ class SendMessageBotApp:
                 self.logger.info(f"Запуск broadcaster {idx}/{len(self.broadcasters)}: {broadcaster.name}")
                 
                 # Добавляем задержку между запусками (кроме первого)
-                # Увеличено до 5 секунд для предотвращения "database is locked"
+                # Увеличено до 10 секунд для предотвращения "database is locked"
                 # Это позволяет избежать конфликтов при подключении к базам данных сессий
                 if idx > 1:
-                    await asyncio.sleep(5)  # 5 секунд между подключениями (увеличено с 2)
+                    await asyncio.sleep(10)  # 10 секунд между подключениями (увеличено для избежания database locked)
                 
                 task = asyncio.create_task(broadcaster.start())
                 broadcaster_tasks.append(task)
