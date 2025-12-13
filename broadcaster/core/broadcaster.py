@@ -1133,13 +1133,19 @@ class EnhancedBroadcaster:
                         raise Exception(f"Файл сессии не найден: {session_file}. Запустите broadcaster в интерактивном режиме для создания сессии.")
                     
                     # Добавляем таймаут для start() чтобы не зависать
-                    # Увеличено до 60 секунд, так как start() может долго ждать при database locked
-                    await asyncio.wait_for(self._client.start(), timeout=60.0)
+                    # Увеличено до 90 секунд, так как start() может долго ждать при database locked
+                    # Используем более длинный таймаут, чтобы дать время на освобождение блокировки
+                    await asyncio.wait_for(self._client.start(), timeout=90.0)
                     self.logger.debug(f"✅ [{self.name}] Telegram клиент запущен успешно")
                 except asyncio.TimeoutError:
-                    self.logger.error(f"❌ [{self.name}] Таймаут при запуске клиента (30 секунд)")
+                    self.logger.error(f"❌ [{self.name}] Таймаут при запуске клиента (90 секунд)")
                     raise Exception(f"Таймаут при запуске Telegram клиента")
                 except Exception as start_err:
+                    error_msg = str(start_err).lower()
+                    # Если database is locked, это временная проблема - не критично
+                    if "database is locked" in error_msg or "locked" in error_msg:
+                        self.logger.warning(f"⚠️ [{self.name}] Database locked при запуске клиента (временная проблема)")
+                        # Пробрасываем дальше для retry логики
                     self.logger.error(f"❌ [{self.name}] Ошибка при запуске клиента: {start_err}")
                     raise
             except Exception as start_error:
