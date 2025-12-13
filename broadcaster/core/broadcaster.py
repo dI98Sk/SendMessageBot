@@ -1122,6 +1122,7 @@ class EnhancedBroadcaster:
                 self.logger.debug(f"🚀 [{self.name}] Запуск Telegram клиента...")
                 try:
                     # Проверяем, что сессия существует перед запуском
+                    from pathlib import Path
                     session_file = Path(f"{self.session_name}.session")
                     if not session_file.exists():
                         raise Exception(f"Файл сессии не найден: {session_file}. Запустите broadcaster в интерактивном режиме для создания сессии.")
