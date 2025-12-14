@@ -162,11 +162,19 @@ class EnhancedBroadcaster:
             self.logger.info(f"Клиент {self.name} инициализирован с сессией {self.session_name}")
             
         except Exception as e:
-            self.logger.error(f"Ошибка инициализации клиента {self.name}: {e}")
-            self.logger.error(f"Проверьте:")
-            self.logger.error(f"  1. Существует ли директория для сессии")
-            self.logger.error(f"  2. Есть ли права на запись в директорию")
-            self.logger.error(f"  3. Правильно ли указан путь к сессии: {self.session_name}")
+            error_msg = str(e).lower()
+            # Если это database is locked, это временная проблема
+            if "database is locked" in error_msg or "locked" in error_msg:
+                self.logger.warning(
+                    f"⚠️ Database locked при инициализации клиента {self.name}: {e}\n"
+                    f"Это временная проблема, клиент будет пересоздан при следующей попытке."
+                )
+            else:
+                self.logger.error(f"Ошибка инициализации клиента {self.name}: {e}")
+                self.logger.error(f"Проверьте:")
+                self.logger.error(f"  1. Существует ли директория для сессии")
+                self.logger.error(f"  2. Есть ли права на запись в директорию")
+                self.logger.error(f"  3. Правильно ли указан путь к сессии: {self.session_name}")
             raise BroadcastingError(f"Не удалось инициализировать клиент: {e}")
     
     def _setup_signal_handlers(self):

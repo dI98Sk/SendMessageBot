@@ -6,6 +6,7 @@
 import asyncio
 import signal
 import sys
+import traceback
 from pathlib import Path
 from typing import List
 from datetime import datetime
@@ -437,6 +438,10 @@ class SendMessageBotApp:
             self.broadcasters.clear()
             self.logger.info("Список broadcaster'ов очищен")
             
+            # ⚠️ ВАЖНО: Ждем дополнительное время после остановки, чтобы база данных освободилась
+            self.logger.info("⏳ Ожидание освобождения базы данных после остановки broadcaster'ов (15 секунд)...")
+            await asyncio.sleep(15)  # Увеличено с 0 до 15 секунд
+            
             # Удаляем завершенные задачи из списка (кроме задачи отчетов!)
             # ⚠️ ВАЖНО: Сохраняем задачу telegram_reporter
             reporter_task = None
@@ -455,10 +460,38 @@ class SendMessageBotApp:
             self.tasks = new_tasks
             self.logger.info(f"Активных задач после очистки: {len(self.tasks)}")
 
-            # Создаем новые broadcaster'ы
-            await self._create_broadcasters()
+            # Создаем новые broadcaster'ы с retry логикой для database is locked
+            max_retries = 3
+            retry_count = 0
+            while retry_count < max_retries:
+                try:
+                    await self._create_broadcasters()
+                    self.logger.info(f"Broadcaster'ы пересозданы: теперь {len(self.broadcasters)} шт.")
+                    break  # Успешно созданы
+                except Exception as create_err:
+                    error_msg = str(create_err).lower()
+                    if "database is locked" in error_msg or "locked" in error_msg:
+                        retry_count += 1
+                        wait_time = 10 * retry_count  # Экспоненциальная задержка: 10, 20, 30 секунд
+                        self.logger.warning(
+                            f"⚠️ Database locked при создании broadcaster'ов, "
+                            f"ожидание {wait_time}с перед повтором (попытка {retry_count}/{max_retries})..."
+                        )
+                        await asyncio.sleep(wait_time)
+                        # Очищаем частично созданные broadcaster'ы перед повтором
+                        for b in self.broadcasters:
+                            try:
+                                await b.stop()
+                            except:
+                                pass
+                        self.broadcasters.clear()
+                    else:
+                        # Другие ошибки пробрасываем дальше
+                        raise
 
-            self.logger.info(f"Broadcaster'ы пересозданы: теперь {len(self.broadcasters)} шт.")
+            if retry_count >= max_retries:
+                self.logger.error(f"❌ Не удалось создать broadcaster'ы после {max_retries} попыток из-за database is locked")
+                raise Exception(f"Не удалось создать broadcaster'ы после {max_retries} попыток: database is locked")
 
             # ВАЖНО: Запускаем новые broadcaster'ы с задержкой между подключениями
             if self.running:
@@ -468,7 +501,7 @@ class SendMessageBotApp:
                     
                     # Добавляем задержку между запусками (кроме первого)
                     if idx > 1:
-                        await asyncio.sleep(10)  # 10 секунд между подключениями (увеличено для избежания database locked)
+                        await asyncio.sleep(15)  # Увеличено с 10 до 15 секунд между подключениями
                     
                     task = asyncio.create_task(broadcaster.start())
                     self.tasks.append(task)
@@ -482,6 +515,7 @@ class SendMessageBotApp:
 
         except Exception as e:
             self.logger.error(f"Ошибка пересоздания broadcaster'ов: {e}")
+            self.logger.error(f"Traceback: {traceback.format_exc()}")
 
     async def _setup_reports(self):
         """Настройка системы отчетов"""
