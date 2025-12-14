@@ -234,17 +234,29 @@ class SendMessageBotApp:
         # GUS Прайсы - использует аккаунт acc1 (Яблочный Гусь) - РОЗНИЧНЫЙ
         # УНИКАЛЬНЫЙ файл сессии чтобы избежать database locked!
         # ОПТИМИЗИРОВАНО: одно случайное сообщение на чат, цикл 30 минут
-        gus_broadcaster = EnhancedBroadcaster(
-            config=self.config,
-            name="GUS_PRICE_Broadcaster",
-            targets=self.config.targets_prices,
-            messages=self.config.gus_messages,
-            session_name="sessions/acc1_price",  # Яблочный Гусь
-            cycle_delay=PRICE_CYCLE_DELAY,  # 30 минут между циклами
-            delay_between_chats=PRICE_DELAY_BETWEEN_CHATS  # 1 минута между чатами
-        )
-        self.broadcasters.append(gus_broadcaster)
-        print(f"✅ GUS PRICE Broadcaster создан (acc1_price/Яблочный Гусь): {len(self.config.targets_prices)} чатов, {len(self.config.gus_messages)} сообщений (случайное на чат), цикл: 30 мин, задержка: {PRICE_DELAY_BETWEEN_CHATS}с")
+        try:
+            gus_broadcaster = EnhancedBroadcaster(
+                config=self.config,
+                name="GUS_PRICE_Broadcaster",
+                targets=self.config.targets_prices,
+                messages=self.config.gus_messages,
+                session_name="sessions/acc1_price",  # Яблочный Гусь
+                cycle_delay=PRICE_CYCLE_DELAY,  # 30 минут между циклами
+                delay_between_chats=PRICE_DELAY_BETWEEN_CHATS  # 1 минута между чатами
+            )
+            self.broadcasters.append(gus_broadcaster)
+            print(f"✅ GUS PRICE Broadcaster создан (acc1_price/Яблочный Гусь): {len(self.config.targets_prices)} чатов, {len(self.config.gus_messages)} сообщений (случайное на чат), цикл: 30 мин, задержка: {PRICE_DELAY_BETWEEN_CHATS}с")
+            if self.logger:
+                self.logger.info(f"✅ GUS PRICE Broadcaster создан успешно")
+        except Exception as e:
+            error_msg = str(e).lower()
+            if "database is locked" in error_msg or "locked" in error_msg:
+                if self.logger:
+                    self.logger.warning(f"⚠️ GUS PRICE Broadcaster: database locked, пропускаем (будет создан при следующем обновлении)")
+            else:
+                if self.logger:
+                    self.logger.error(f"❌ Ошибка создания GUS PRICE Broadcaster: {e}")
+            # Продолжаем создавать остальные broadcaster'ы
         
         # ========================================
         # РЕКЛАМА (targets_ads) - цикл каждые 50 минут (оптимизировано)
@@ -257,32 +269,56 @@ class SendMessageBotApp:
         # AAA Реклама - использует аккаунт acc2 (Анна Макарова) - ОПТОВЫЙ
         # УНИКАЛЬНЫЙ файл сессии чтобы избежать database locked!
         # ОПТИМИЗИРОВАНО: одно случайное сообщение на чат, цикл 50 минут
-        aaa_ads_broadcaster = EnhancedBroadcaster(
-            config=self.config,
-            name="AAA_ADS_Broadcaster",
-            targets=self.config.targets_ads,
-            messages=self.config.aaa_ads_messages,
-            session_name="sessions/acc2_ads",  # Анна Макарова
-            cycle_delay=ADS_CYCLE_DELAY,  # 50 минут между циклами
-            delay_between_chats=ADS_DELAY_BETWEEN_CHATS  # 1 минута между чатами
-        )
-        self.broadcasters.append(aaa_ads_broadcaster)
-        print(f"✅ AAA ADS Broadcaster создан (acc2_ads/Анна): {len(self.config.targets_ads)} чатов, {len(self.config.aaa_ads_messages)} сообщений (случайное на чат), цикл: 50 мин, задержка: {ADS_DELAY_BETWEEN_CHATS}с")
+        try:
+            aaa_ads_broadcaster = EnhancedBroadcaster(
+                config=self.config,
+                name="AAA_ADS_Broadcaster",
+                targets=self.config.targets_ads,
+                messages=self.config.aaa_ads_messages,
+                session_name="sessions/acc2_ads",  # Анна Макарова
+                cycle_delay=ADS_CYCLE_DELAY,  # 50 минут между циклами
+                delay_between_chats=ADS_DELAY_BETWEEN_CHATS  # 1 минута между чатами
+            )
+            self.broadcasters.append(aaa_ads_broadcaster)
+            print(f"✅ AAA ADS Broadcaster создан (acc2_ads/Анна): {len(self.config.targets_ads)} чатов, {len(self.config.aaa_ads_messages)} сообщений (случайное на чат), цикл: 50 мин, задержка: {ADS_DELAY_BETWEEN_CHATS}с")
+            if self.logger:
+                self.logger.info(f"✅ AAA ADS Broadcaster создан успешно")
+        except Exception as e:
+            error_msg = str(e).lower()
+            if "database is locked" in error_msg or "locked" in error_msg:
+                if self.logger:
+                    self.logger.warning(f"⚠️ AAA ADS Broadcaster: database locked, пропускаем (будет создан при следующем обновлении)")
+            else:
+                if self.logger:
+                    self.logger.error(f"❌ Ошибка создания AAA ADS Broadcaster: {e}")
+            # Продолжаем создавать остальные broadcaster'ы
         
         # GUS Реклама - использует аккаунт acc1 (Яблочный Гусь) - РОЗНИЧНЫЙ
         # УНИКАЛЬНЫЙ файл сессии чтобы избежать database locked!
         # ОПТИМИЗИРОВАНО: одно случайное сообщение на чат, цикл 50 минут
-        gus_ads_broadcaster = EnhancedBroadcaster(
-            config=self.config,
-            name="GUS_ADS_Broadcaster",
-            targets=self.config.targets_ads,
-            messages=self.config.gus_ads_messages,
-            session_name="sessions/acc1_ads",  # Яблочный Гусь
-            cycle_delay=ADS_CYCLE_DELAY,  # 50 минут между циклами
-            delay_between_chats=ADS_DELAY_BETWEEN_CHATS  # 1 минута между чатами
-        )
-        self.broadcasters.append(gus_ads_broadcaster)
-        print(f"✅ GUS ADS Broadcaster создан (acc1_ads/Яблочный Гусь): {len(self.config.targets_ads)} чатов, {len(self.config.gus_ads_messages)} сообщений (случайное на чат), цикл: 50 мин, задержка: {ADS_DELAY_BETWEEN_CHATS}с")
+        try:
+            gus_ads_broadcaster = EnhancedBroadcaster(
+                config=self.config,
+                name="GUS_ADS_Broadcaster",
+                targets=self.config.targets_ads,
+                messages=self.config.gus_ads_messages,
+                session_name="sessions/acc1_ads",  # Яблочный Гусь
+                cycle_delay=ADS_CYCLE_DELAY,  # 50 минут между циклами
+                delay_between_chats=ADS_DELAY_BETWEEN_CHATS  # 1 минута между чатами
+            )
+            self.broadcasters.append(gus_ads_broadcaster)
+            print(f"✅ GUS ADS Broadcaster создан (acc1_ads/Яблочный Гусь): {len(self.config.targets_ads)} чатов, {len(self.config.gus_ads_messages)} сообщений (случайное на чат), цикл: 50 мин, задержка: {ADS_DELAY_BETWEEN_CHATS}с")
+            if self.logger:
+                self.logger.info(f"✅ GUS ADS Broadcaster создан успешно")
+        except Exception as e:
+            error_msg = str(e).lower()
+            if "database is locked" in error_msg or "locked" in error_msg:
+                if self.logger:
+                    self.logger.warning(f"⚠️ GUS ADS Broadcaster: database locked, пропускаем (будет создан при следующем обновлении)")
+            else:
+                if self.logger:
+                    self.logger.error(f"❌ Ошибка создания GUS ADS Broadcaster: {e}")
+            # Продолжаем создавать остальные broadcaster'ы
         
         # ========================================
         # B2C РОЗНИЧНЫЙ (targets_b2c) - цикл каждые 1.5 часа (оптимизировано)
@@ -299,17 +335,29 @@ class SendMessageBotApp:
         # Использует сообщения из ДВУХ таблиц: прайсы GUS + реклама GUS
         gus_b2c_messages = self.config.gus_messages + self.config.gus_ads_messages
         
-        gus_b2c_broadcaster = EnhancedBroadcaster(
-            config=self.config,
-            name="GUS_B2C_Broadcaster",
-            targets=self.config.targets_b2c,
-            messages=gus_b2c_messages,  # Объединенные сообщения из прайсов и рекламы
-            session_name="sessions/acc1_b2c",  # Яблочный Гусь
-            cycle_delay=B2C_CYCLE_DELAY,  # 2 часа между циклами
-            delay_between_chats=B2C_DELAY_BETWEEN_CHATS,  # 2 минуты между чатами
-            start_offset_seconds=B2C_START_OFFSET  # 5 минут смещение старта
-        )
-        self.broadcasters.append(gus_b2c_broadcaster)
+        try:
+            gus_b2c_broadcaster = EnhancedBroadcaster(
+                config=self.config,
+                name="GUS_B2C_Broadcaster",
+                targets=self.config.targets_b2c,
+                messages=gus_b2c_messages,  # Объединенные сообщения из прайсов и рекламы
+                session_name="sessions/acc1_b2c",  # Яблочный Гусь
+                cycle_delay=B2C_CYCLE_DELAY,  # 2 часа между циклами
+                delay_between_chats=B2C_DELAY_BETWEEN_CHATS,  # 2 минуты между чатами
+                start_offset_seconds=B2C_START_OFFSET  # 5 минут смещение старта
+            )
+            self.broadcasters.append(gus_b2c_broadcaster)
+            if self.logger:
+                self.logger.info(f"✅ GUS B2C Broadcaster создан успешно")
+        except Exception as e:
+            error_msg = str(e).lower()
+            if "database is locked" in error_msg or "locked" in error_msg:
+                if self.logger:
+                    self.logger.warning(f"⚠️ GUS B2C Broadcaster: database locked, пропускаем (будет создан при следующем обновлении)")
+            else:
+                if self.logger:
+                    self.logger.error(f"❌ Ошибка создания GUS B2C Broadcaster: {e}")
+            # Продолжаем создавать остальные broadcaster'ы
         print(
             f"✅ GUS B2C Broadcaster создан (acc1_b2c/Яблочный Гусь): "
             f"{len(self.config.targets_b2c)} чатов, "
@@ -335,17 +383,29 @@ class SendMessageBotApp:
             # Использует сообщения из ДВУХ таблиц: прайсы GUS + реклама GUS
             gus_b2c_midslow_messages = self.config.gus_messages + self.config.gus_ads_messages
             
-            gus_b2c_midslow_broadcaster = EnhancedBroadcaster(
-                config=self.config,
-                name="GUS_B2C_MIDSLOW_Broadcaster",
-                targets=self.config.targets_b2c_midslow,
-                messages=gus_b2c_midslow_messages,  # Объединенные сообщения из прайсов и рекламы
-                session_name="sessions/acc1_b2c_midslow",  # Яблочный Гусь
-                cycle_delay=B2C_MIDSLOW_CYCLE_DELAY,  # 2.67 часа между циклами
-                delay_between_chats=B2C_MIDSLOW_DELAY_BETWEEN_CHATS,  # 1 минута между чатами
-                start_offset_seconds=B2C_MIDSLOW_START_OFFSET  # 10 минут смещение старта
-            )
-            self.broadcasters.append(gus_b2c_midslow_broadcaster)
+            try:
+                gus_b2c_midslow_broadcaster = EnhancedBroadcaster(
+                    config=self.config,
+                    name="GUS_B2C_MIDSLOW_Broadcaster",
+                    targets=self.config.targets_b2c_midslow,
+                    messages=gus_b2c_midslow_messages,  # Объединенные сообщения из прайсов и рекламы
+                    session_name="sessions/acc1_b2c_midslow",  # Яблочный Гусь
+                    cycle_delay=B2C_MIDSLOW_CYCLE_DELAY,  # 2.67 часа между циклами
+                    delay_between_chats=B2C_MIDSLOW_DELAY_BETWEEN_CHATS,  # 1 минута между чатами
+                    start_offset_seconds=B2C_MIDSLOW_START_OFFSET  # 10 минут смещение старта
+                )
+                self.broadcasters.append(gus_b2c_midslow_broadcaster)
+                if self.logger:
+                    self.logger.info(f"✅ GUS B2C MIDSLOW Broadcaster создан успешно")
+            except Exception as e:
+                error_msg = str(e).lower()
+                if "database is locked" in error_msg or "locked" in error_msg:
+                    if self.logger:
+                        self.logger.warning(f"⚠️ GUS B2C MIDSLOW Broadcaster: database locked, пропускаем (будет создан при следующем обновлении)")
+                else:
+                    if self.logger:
+                        self.logger.error(f"❌ Ошибка создания GUS B2C MIDSLOW Broadcaster: {e}")
+                # Продолжаем - это не критично
             print(
                 f"✅ GUS B2C MIDSLOW Broadcaster создан (acc1_b2c_midslow/Яблочный Гусь): "
                 f"{len(self.config.targets_b2c_midslow)} чатов, "
@@ -460,38 +520,30 @@ class SendMessageBotApp:
             self.tasks = new_tasks
             self.logger.info(f"Активных задач после очистки: {len(self.tasks)}")
 
-            # Создаем новые broadcaster'ы с retry логикой для database is locked
-            max_retries = 3
-            retry_count = 0
-            while retry_count < max_retries:
-                try:
-                    await self._create_broadcasters()
-                    self.logger.info(f"Broadcaster'ы пересозданы: теперь {len(self.broadcasters)} шт.")
-                    break  # Успешно созданы
-                except Exception as create_err:
-                    error_msg = str(create_err).lower()
-                    if "database is locked" in error_msg or "locked" in error_msg:
-                        retry_count += 1
-                        wait_time = 10 * retry_count  # Экспоненциальная задержка: 10, 20, 30 секунд
-                        self.logger.warning(
-                            f"⚠️ Database locked при создании broadcaster'ов, "
-                            f"ожидание {wait_time}с перед повтором (попытка {retry_count}/{max_retries})..."
-                        )
-                        await asyncio.sleep(wait_time)
-                        # Очищаем частично созданные broadcaster'ы перед повтором
-                        for b in self.broadcasters:
-                            try:
-                                await b.stop()
-                            except:
-                                pass
-                        self.broadcasters.clear()
+            # Создаем новые broadcaster'ы по одному с обработкой ошибок
+            # Это позволяет создать хотя бы часть broadcaster'ов, даже если некоторые не создадутся
+            try:
+                await self._create_broadcasters_with_error_handling()
+                created_count = len(self.broadcasters)
+                self.logger.info(f"Broadcaster'ы пересозданы: теперь {created_count} шт.")
+                
+                # Если не удалось создать ни одного broadcaster'а, это критическая ошибка
+                if created_count == 0:
+                    self.logger.error("❌ Не удалось создать ни одного broadcaster'а!")
+                    raise Exception("Не удалось создать ни одного broadcaster'а")
+                    
+            except Exception as create_err:
+                error_msg = str(create_err).lower()
+                # Если это не критическая ошибка (не "не удалось создать ни одного"), логируем и продолжаем
+                if "не удалось создать ни одного" not in error_msg:
+                    self.logger.error(f"❌ Ошибка при создании broadcaster'ов: {create_err}")
+                    # Если есть хотя бы частично созданные broadcaster'ы, продолжаем с ними
+                    if len(self.broadcasters) > 0:
+                        self.logger.warning(f"⚠️ Продолжаем с {len(self.broadcasters)} созданными broadcaster'ами")
                     else:
-                        # Другие ошибки пробрасываем дальше
                         raise
-
-            if retry_count >= max_retries:
-                self.logger.error(f"❌ Не удалось создать broadcaster'ы после {max_retries} попыток из-за database is locked")
-                raise Exception(f"Не удалось создать broadcaster'ы после {max_retries} попыток: database is locked")
+                else:
+                    raise
 
             # ВАЖНО: Запускаем новые broadcaster'ы с задержкой между подключениями
             if self.running:
