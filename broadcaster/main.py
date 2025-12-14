@@ -235,7 +235,7 @@ class SendMessageBotApp:
         # УНИКАЛЬНЫЙ файл сессии чтобы избежать database locked!
         # ОПТИМИЗИРОВАНО: одно случайное сообщение на чат, цикл 30 минут
         try:
-        gus_broadcaster = EnhancedBroadcaster(
+            gus_broadcaster = EnhancedBroadcaster(
             config=self.config,
             name="GUS_PRICE_Broadcaster",
             targets=self.config.targets_prices,
@@ -384,17 +384,17 @@ class SendMessageBotApp:
             gus_b2c_midslow_messages = self.config.gus_messages + self.config.gus_ads_messages
             
             try:
-            gus_b2c_midslow_broadcaster = EnhancedBroadcaster(
-                config=self.config,
-                name="GUS_B2C_MIDSLOW_Broadcaster",
-                targets=self.config.targets_b2c_midslow,
-                messages=gus_b2c_midslow_messages,  # Объединенные сообщения из прайсов и рекламы
-                session_name="sessions/acc1_b2c_midslow",  # Яблочный Гусь
-                cycle_delay=B2C_MIDSLOW_CYCLE_DELAY,  # 2.67 часа между циклами
-                delay_between_chats=B2C_MIDSLOW_DELAY_BETWEEN_CHATS,  # 1 минута между чатами
-                start_offset_seconds=B2C_MIDSLOW_START_OFFSET  # 10 минут смещение старта
-            )
-            self.broadcasters.append(gus_b2c_midslow_broadcaster)
+                gus_b2c_midslow_broadcaster = EnhancedBroadcaster(
+                    config=self.config,
+                    name="GUS_B2C_MIDSLOW_Broadcaster",
+                    targets=self.config.targets_b2c_midslow,
+                    messages=gus_b2c_midslow_messages,  # Объединенные сообщения из прайсов и рекламы
+                    session_name="sessions/acc1_b2c_midslow",  # Яблочный Гусь
+                    cycle_delay=B2C_MIDSLOW_CYCLE_DELAY,  # 2.67 часа между циклами
+                    delay_between_chats=B2C_MIDSLOW_DELAY_BETWEEN_CHATS,  # 1 минута между чатами
+                    start_offset_seconds=B2C_MIDSLOW_START_OFFSET  # 10 минут смещение старта
+                )
+                self.broadcasters.append(gus_b2c_midslow_broadcaster)
                 if self.logger:
                     self.logger.info(f"✅ GUS B2C MIDSLOW Broadcaster создан успешно")
             except Exception as e:
@@ -529,7 +529,7 @@ class SendMessageBotApp:
             # Создаем новые broadcaster'ы (с обработкой ошибок для каждого)
             # Метод _create_broadcasters уже имеет обработку ошибок для каждого broadcaster'а
             try:
-            await self._create_broadcasters()
+                await self._create_broadcasters()
                 created_count = len(self.broadcasters)
                 self.logger.info(f"Broadcaster'ы пересозданы: теперь {created_count} шт.")
                 
