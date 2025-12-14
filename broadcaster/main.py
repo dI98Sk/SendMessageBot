@@ -516,6 +516,7 @@ class SendMessageBotApp:
         except Exception as e:
             self.logger.error(f"Ошибка пересоздания broadcaster'ов: {e}")
             self.logger.error(f"Traceback: {traceback.format_exc()}")
+            self.logger.error(f"Traceback: {traceback.format_exc()}")
 
     async def _setup_reports(self):
         """Настройка системы отчетов"""
