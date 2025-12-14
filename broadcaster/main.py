@@ -236,16 +236,16 @@ class SendMessageBotApp:
         # ОПТИМИЗИРОВАНО: одно случайное сообщение на чат, цикл 30 минут
         try:
             gus_broadcaster = EnhancedBroadcaster(
-            config=self.config,
-            name="GUS_PRICE_Broadcaster",
-            targets=self.config.targets_prices,
-            messages=self.config.gus_messages,
-            session_name="sessions/acc1_price",  # Яблочный Гусь
-            cycle_delay=PRICE_CYCLE_DELAY,  # 30 минут между циклами
-            delay_between_chats=PRICE_DELAY_BETWEEN_CHATS  # 1 минута между чатами
-        )
-        self.broadcasters.append(gus_broadcaster)
-        print(f"✅ GUS PRICE Broadcaster создан (acc1_price/Яблочный Гусь): {len(self.config.targets_prices)} чатов, {len(self.config.gus_messages)} сообщений (случайное на чат), цикл: 30 мин, задержка: {PRICE_DELAY_BETWEEN_CHATS}с")
+                config=self.config,
+                name="GUS_PRICE_Broadcaster",
+                targets=self.config.targets_prices,
+                messages=self.config.gus_messages,
+                session_name="sessions/acc1_price",  # Яблочный Гусь
+                cycle_delay=PRICE_CYCLE_DELAY,  # 30 минут между циклами
+                delay_between_chats=PRICE_DELAY_BETWEEN_CHATS  # 1 минута между чатами
+            )
+            self.broadcasters.append(gus_broadcaster)
+            print(f"✅ GUS PRICE Broadcaster создан (acc1_price/Яблочный Гусь): {len(self.config.targets_prices)} чатов, {len(self.config.gus_messages)} сообщений (случайное на чат), цикл: 30 мин, задержка: {PRICE_DELAY_BETWEEN_CHATS}с")
             if self.logger:
                 self.logger.info(f"✅ GUS PRICE Broadcaster создан успешно")
         except Exception as e:
@@ -346,9 +346,16 @@ class SendMessageBotApp:
             delay_between_chats=B2C_DELAY_BETWEEN_CHATS,  # 2 минуты между чатами
             start_offset_seconds=B2C_START_OFFSET  # 5 минут смещение старта
         )
-        self.broadcasters.append(gus_b2c_broadcaster)
+            self.broadcasters.append(gus_b2c_broadcaster)
             if self.logger:
                 self.logger.info(f"✅ GUS B2C Broadcaster создан успешно")
+            print(
+                f"✅ GUS B2C Broadcaster создан (acc1_b2c/Яблочный Гусь): "
+                f"{len(self.config.targets_b2c)} чатов, "
+                f"{len(gus_b2c_messages)} сообщений (случайное на чат) "
+                f"(прайсы: {len(self.config.gus_messages)}, реклама: {len(self.config.gus_ads_messages)}), "
+                f"цикл: 1.5 часа, задержка: {B2C_DELAY_BETWEEN_CHATS}с"
+            )
         except Exception as e:
             error_msg = str(e).lower()
             if "database is locked" in error_msg or "locked" in error_msg:
@@ -358,13 +365,6 @@ class SendMessageBotApp:
                 if self.logger:
                     self.logger.error(f"❌ Ошибка создания GUS B2C Broadcaster: {e}")
             # Продолжаем создавать остальные broadcaster'ы
-        print(
-            f"✅ GUS B2C Broadcaster создан (acc1_b2c/Яблочный Гусь): "
-            f"{len(self.config.targets_b2c)} чатов, "
-            f"{len(gus_b2c_messages)} сообщений (случайное на чат) "
-            f"(прайсы: {len(self.config.gus_messages)}, реклама: {len(self.config.gus_ads_messages)}), "
-            f"цикл: 1.5 часа, задержка: {B2C_DELAY_BETWEEN_CHATS}с"
-        )
         
         # ========================================
         # B2C MIDSLOW РОЗНИЧНЫЙ (targets_b2c_midslow) - цикл каждые 2.67 часа
