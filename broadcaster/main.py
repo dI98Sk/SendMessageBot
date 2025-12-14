@@ -235,17 +235,17 @@ class SendMessageBotApp:
         # УНИКАЛЬНЫЙ файл сессии чтобы избежать database locked!
         # ОПТИМИЗИРОВАНО: одно случайное сообщение на чат, цикл 30 минут
         try:
-            gus_broadcaster = EnhancedBroadcaster(
-                config=self.config,
-                name="GUS_PRICE_Broadcaster",
-                targets=self.config.targets_prices,
-                messages=self.config.gus_messages,
-                session_name="sessions/acc1_price",  # Яблочный Гусь
-                cycle_delay=PRICE_CYCLE_DELAY,  # 30 минут между циклами
-                delay_between_chats=PRICE_DELAY_BETWEEN_CHATS  # 1 минута между чатами
-            )
-            self.broadcasters.append(gus_broadcaster)
-            print(f"✅ GUS PRICE Broadcaster создан (acc1_price/Яблочный Гусь): {len(self.config.targets_prices)} чатов, {len(self.config.gus_messages)} сообщений (случайное на чат), цикл: 30 мин, задержка: {PRICE_DELAY_BETWEEN_CHATS}с")
+        gus_broadcaster = EnhancedBroadcaster(
+            config=self.config,
+            name="GUS_PRICE_Broadcaster",
+            targets=self.config.targets_prices,
+            messages=self.config.gus_messages,
+            session_name="sessions/acc1_price",  # Яблочный Гусь
+            cycle_delay=PRICE_CYCLE_DELAY,  # 30 минут между циклами
+            delay_between_chats=PRICE_DELAY_BETWEEN_CHATS  # 1 минута между чатами
+        )
+        self.broadcasters.append(gus_broadcaster)
+        print(f"✅ GUS PRICE Broadcaster создан (acc1_price/Яблочный Гусь): {len(self.config.targets_prices)} чатов, {len(self.config.gus_messages)} сообщений (случайное на чат), цикл: 30 мин, задержка: {PRICE_DELAY_BETWEEN_CHATS}с")
             if self.logger:
                 self.logger.info(f"✅ GUS PRICE Broadcaster создан успешно")
         except Exception as e:
@@ -270,17 +270,17 @@ class SendMessageBotApp:
         # УНИКАЛЬНЫЙ файл сессии чтобы избежать database locked!
         # ОПТИМИЗИРОВАНО: одно случайное сообщение на чат, цикл 50 минут
         try:
-            aaa_ads_broadcaster = EnhancedBroadcaster(
-                config=self.config,
-                name="AAA_ADS_Broadcaster",
-                targets=self.config.targets_ads,
-                messages=self.config.aaa_ads_messages,
-                session_name="sessions/acc2_ads",  # Анна Макарова
-                cycle_delay=ADS_CYCLE_DELAY,  # 50 минут между циклами
-                delay_between_chats=ADS_DELAY_BETWEEN_CHATS  # 1 минута между чатами
-            )
-            self.broadcasters.append(aaa_ads_broadcaster)
-            print(f"✅ AAA ADS Broadcaster создан (acc2_ads/Анна): {len(self.config.targets_ads)} чатов, {len(self.config.aaa_ads_messages)} сообщений (случайное на чат), цикл: 50 мин, задержка: {ADS_DELAY_BETWEEN_CHATS}с")
+        aaa_ads_broadcaster = EnhancedBroadcaster(
+            config=self.config,
+            name="AAA_ADS_Broadcaster",
+            targets=self.config.targets_ads,
+            messages=self.config.aaa_ads_messages,
+            session_name="sessions/acc2_ads",  # Анна Макарова
+            cycle_delay=ADS_CYCLE_DELAY,  # 50 минут между циклами
+            delay_between_chats=ADS_DELAY_BETWEEN_CHATS  # 1 минута между чатами
+        )
+        self.broadcasters.append(aaa_ads_broadcaster)
+        print(f"✅ AAA ADS Broadcaster создан (acc2_ads/Анна): {len(self.config.targets_ads)} чатов, {len(self.config.aaa_ads_messages)} сообщений (случайное на чат), цикл: 50 мин, задержка: {ADS_DELAY_BETWEEN_CHATS}с")
             if self.logger:
                 self.logger.info(f"✅ AAA ADS Broadcaster создан успешно")
         except Exception as e:
@@ -297,17 +297,17 @@ class SendMessageBotApp:
         # УНИКАЛЬНЫЙ файл сессии чтобы избежать database locked!
         # ОПТИМИЗИРОВАНО: одно случайное сообщение на чат, цикл 50 минут
         try:
-            gus_ads_broadcaster = EnhancedBroadcaster(
-                config=self.config,
-                name="GUS_ADS_Broadcaster",
-                targets=self.config.targets_ads,
-                messages=self.config.gus_ads_messages,
-                session_name="sessions/acc1_ads",  # Яблочный Гусь
-                cycle_delay=ADS_CYCLE_DELAY,  # 50 минут между циклами
-                delay_between_chats=ADS_DELAY_BETWEEN_CHATS  # 1 минута между чатами
-            )
-            self.broadcasters.append(gus_ads_broadcaster)
-            print(f"✅ GUS ADS Broadcaster создан (acc1_ads/Яблочный Гусь): {len(self.config.targets_ads)} чатов, {len(self.config.gus_ads_messages)} сообщений (случайное на чат), цикл: 50 мин, задержка: {ADS_DELAY_BETWEEN_CHATS}с")
+        gus_ads_broadcaster = EnhancedBroadcaster(
+            config=self.config,
+            name="GUS_ADS_Broadcaster",
+            targets=self.config.targets_ads,
+            messages=self.config.gus_ads_messages,
+            session_name="sessions/acc1_ads",  # Яблочный Гусь
+            cycle_delay=ADS_CYCLE_DELAY,  # 50 минут между циклами
+            delay_between_chats=ADS_DELAY_BETWEEN_CHATS  # 1 минута между чатами
+        )
+        self.broadcasters.append(gus_ads_broadcaster)
+        print(f"✅ GUS ADS Broadcaster создан (acc1_ads/Яблочный Гусь): {len(self.config.targets_ads)} чатов, {len(self.config.gus_ads_messages)} сообщений (случайное на чат), цикл: 50 мин, задержка: {ADS_DELAY_BETWEEN_CHATS}с")
             if self.logger:
                 self.logger.info(f"✅ GUS ADS Broadcaster создан успешно")
         except Exception as e:
@@ -336,17 +336,17 @@ class SendMessageBotApp:
         gus_b2c_messages = self.config.gus_messages + self.config.gus_ads_messages
         
         try:
-            gus_b2c_broadcaster = EnhancedBroadcaster(
-                config=self.config,
-                name="GUS_B2C_Broadcaster",
-                targets=self.config.targets_b2c,
-                messages=gus_b2c_messages,  # Объединенные сообщения из прайсов и рекламы
-                session_name="sessions/acc1_b2c",  # Яблочный Гусь
-                cycle_delay=B2C_CYCLE_DELAY,  # 2 часа между циклами
-                delay_between_chats=B2C_DELAY_BETWEEN_CHATS,  # 2 минуты между чатами
-                start_offset_seconds=B2C_START_OFFSET  # 5 минут смещение старта
-            )
-            self.broadcasters.append(gus_b2c_broadcaster)
+        gus_b2c_broadcaster = EnhancedBroadcaster(
+            config=self.config,
+            name="GUS_B2C_Broadcaster",
+            targets=self.config.targets_b2c,
+            messages=gus_b2c_messages,  # Объединенные сообщения из прайсов и рекламы
+            session_name="sessions/acc1_b2c",  # Яблочный Гусь
+            cycle_delay=B2C_CYCLE_DELAY,  # 2 часа между циклами
+            delay_between_chats=B2C_DELAY_BETWEEN_CHATS,  # 2 минуты между чатами
+            start_offset_seconds=B2C_START_OFFSET  # 5 минут смещение старта
+        )
+        self.broadcasters.append(gus_b2c_broadcaster)
             if self.logger:
                 self.logger.info(f"✅ GUS B2C Broadcaster создан успешно")
         except Exception as e:
@@ -384,17 +384,17 @@ class SendMessageBotApp:
             gus_b2c_midslow_messages = self.config.gus_messages + self.config.gus_ads_messages
             
             try:
-                gus_b2c_midslow_broadcaster = EnhancedBroadcaster(
-                    config=self.config,
-                    name="GUS_B2C_MIDSLOW_Broadcaster",
-                    targets=self.config.targets_b2c_midslow,
-                    messages=gus_b2c_midslow_messages,  # Объединенные сообщения из прайсов и рекламы
-                    session_name="sessions/acc1_b2c_midslow",  # Яблочный Гусь
-                    cycle_delay=B2C_MIDSLOW_CYCLE_DELAY,  # 2.67 часа между циклами
-                    delay_between_chats=B2C_MIDSLOW_DELAY_BETWEEN_CHATS,  # 1 минута между чатами
-                    start_offset_seconds=B2C_MIDSLOW_START_OFFSET  # 10 минут смещение старта
-                )
-                self.broadcasters.append(gus_b2c_midslow_broadcaster)
+            gus_b2c_midslow_broadcaster = EnhancedBroadcaster(
+                config=self.config,
+                name="GUS_B2C_MIDSLOW_Broadcaster",
+                targets=self.config.targets_b2c_midslow,
+                messages=gus_b2c_midslow_messages,  # Объединенные сообщения из прайсов и рекламы
+                session_name="sessions/acc1_b2c_midslow",  # Яблочный Гусь
+                cycle_delay=B2C_MIDSLOW_CYCLE_DELAY,  # 2.67 часа между циклами
+                delay_between_chats=B2C_MIDSLOW_DELAY_BETWEEN_CHATS,  # 1 минута между чатами
+                start_offset_seconds=B2C_MIDSLOW_START_OFFSET  # 10 минут смещение старта
+            )
+            self.broadcasters.append(gus_b2c_midslow_broadcaster)
                 if self.logger:
                     self.logger.info(f"✅ GUS B2C MIDSLOW Broadcaster создан успешно")
             except Exception as e:
@@ -441,7 +441,11 @@ class SendMessageBotApp:
             self.logger.info("ℹ️  Продолжаем работу без автообновления")
 
     async def _on_auto_messages_updated(self, results):
-        """Callback для автоматического обновления всех сообщений"""
+        """Callback для автоматического обновления всех сообщений
+        
+        ⚠️ ВРЕМЕННО ОТКЛЮЧЕНО: Автообновление отключено для стабильности.
+        Сообщения обновляются только при запуске приложения.
+        """
         try:
             self.logger.info("📊 Получены обновленные сообщения из Google Sheets")
             
@@ -460,27 +464,29 @@ class SendMessageBotApp:
             
             self.logger.info(f"✅ Обновлено типов: {', '.join(update_info)}")
             
-            # Перезагружаем конфигурацию
-            self.config = config_manager.load_config()
+            # ⚠️ ВРЕМЕННО ОТКЛЮЧЕНО: Не пересоздаем broadcaster'ы
+            # Это отключено для стабильности - broadcaster'ы продолжают работать
+            # с сообщениями, загруженными при запуске
+            self.logger.info("⚠️ Автообновление broadcaster'ов временно отключено для стабильности")
+            self.logger.info("ℹ️ Сообщения обновлены в файлах, но broadcaster'ы продолжат использовать старые сообщения до перезапуска")
             
-            # Пересоздаем broadcaster'ы с новыми сообщениями
-            self.logger.info("🔄 Пересоздание broadcaster'ов с новыми сообщениями...")
-            await self._recreate_broadcasters()
+            # Перезагружаем конфигурацию (но не применяем к работающим broadcaster'ам)
+            self.config = config_manager.load_config()
             
             # Отправляем уведомление
             await notification_manager.send_info(
-                "🔄 Сообщения автоматически обновлены",
+                "📊 Сообщения обновлены в файлах",
                 f"Обновлено: {', '.join(update_info)}\n" +
-                f"Broadcaster'ы перезапущены с новыми сообщениями"
+                f"⚠️ Broadcaster'ы продолжат использовать старые сообщения до перезапуска"
             )
             
-            self.logger.info("✅ Автообновление завершено успешно")
+            self.logger.info("✅ Автообновление завершено (broadcaster'ы не пересозданы)")
 
         except Exception as e:
             self.logger.error(f"❌ Ошибка в callback автообновления: {e}")
             await notification_manager.send_error(
                 "Ошибка автообновления",
-                f"Не удалось применить обновленные сообщения: {e}"
+                f"Не удалось обновить сообщения: {e}"
             )
 
     async def _recreate_broadcasters(self):
@@ -520,10 +526,10 @@ class SendMessageBotApp:
             self.tasks = new_tasks
             self.logger.info(f"Активных задач после очистки: {len(self.tasks)}")
 
-            # Создаем новые broadcaster'ы по одному с обработкой ошибок
-            # Это позволяет создать хотя бы часть broadcaster'ов, даже если некоторые не создадутся
+            # Создаем новые broadcaster'ы (с обработкой ошибок для каждого)
+            # Метод _create_broadcasters уже имеет обработку ошибок для каждого broadcaster'а
             try:
-                await self._create_broadcasters_with_error_handling()
+            await self._create_broadcasters()
                 created_count = len(self.broadcasters)
                 self.logger.info(f"Broadcaster'ы пересозданы: теперь {created_count} шт.")
                 
@@ -769,9 +775,9 @@ class SendMessageBotApp:
                 
                 self.logger.info(f"📝 Создание задачи для {broadcaster.name}...")
                 try:
-                    task = asyncio.create_task(broadcaster.start())
-                    broadcaster_tasks.append(task)
-                    self.tasks.append(task)
+                task = asyncio.create_task(broadcaster.start())
+                broadcaster_tasks.append(task)
+                self.tasks.append(task)
                     self.logger.info(f"✅ Задача для {broadcaster.name} создана успешно (task={task})")
                 except Exception as e:
                     self.logger.error(f"❌ Ошибка при создании задачи для {broadcaster.name}: {e}")
